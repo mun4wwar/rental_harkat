@@ -45,7 +45,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->merk }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->tahun }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                Rp{{ number_format($mobil->harga_sewa, 0, ',', '.') }}</td>
+                                Rp. {{ number_format($mobil->harga_sewa, 0, ',', '.') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <span
                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
@@ -54,8 +54,10 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                                <a href="{{ route('mobil.show', $mobil->id) }}"
+                                    class="text-indigo-600 hover:text-indigo-900 font-medium">Lihat Detail</a>
                                 <a href="{{ route('mobil.edit', $mobil->id) }}"
-                                    class="text-indigo-600 hover:text-indigo-900 font-medium">Edit</a>
+                                    class="text-yellow-600 hover:text-indigo-900 font-medium">Edit</a>
                                 <form action="{{ route('mobil.destroy', $mobil->id) }}" method="POST" class="inline-block"
                                     onsubmit="return confirm('Yakin ingin menghapus mobil ini?')">
                                     @csrf

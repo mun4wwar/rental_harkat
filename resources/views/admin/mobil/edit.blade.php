@@ -4,7 +4,7 @@
     <div class="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Edit Mobil</h2>
 
-        <form action="{{ route('mobil.update', $mobil->id) }}" method="POST" class="space-y-6 bg-white p-6 shadow-md rounded">
+        <form action="{{ route('mobil.update', $mobil->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white p-6 shadow-md rounded">
             @csrf
             @method('PUT')
 
@@ -56,6 +56,14 @@
                     <option value="1" {{ $mobil->status == 1 ? 'selected' : '' }}>Tersedia</option>
                     <option value="0" {{ $mobil->status == 0 ? 'selected' : '' }}>Disewa</option>
                 </select>
+            </div>
+
+            {{-- Gambar Mobil --}}
+            <div>
+                <label for="gambar" class="block text-sm font-medium text-gray-700">Foto Mobil</label>
+                <input type="file" name="gambar" id="gambar"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    value="{{ old('gambar') }}" required>
             </div>
 
             {{-- Tombol Submit --}}

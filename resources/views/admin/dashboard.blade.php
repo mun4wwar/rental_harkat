@@ -18,6 +18,18 @@
                 <h3 class="font-semibold text-yellow-800">Mobil Disewa</h3>
                 <p class="text-2xl font-bold text-yellow-600">{{ $mobilDisewa }}</p>
             </div>
+            <div class="bg-blue-100 p-4 rounded-lg">
+                <h3 class="font-semibold text-blue-800">Total Supir</h3>
+                <p class="text-2xl font-bold text-blue-600">{{ $totalSupir }}</p>
+            </div>
+            <div class="bg-green-100 p-4 rounded-lg">
+                <h3 class="font-semibold text-green-800">Supir Siap</h3>
+                <p class="text-2xl font-bold text-green-600">{{ $supirSiap }}</p>
+            </div>
+            <div class="bg-yellow-100 p-4 rounded-lg">
+                <h3 class="font-semibold text-yellow-800">Supir bertugas</h3>
+                <p class="text-2xl font-bold text-yellow-600">{{ $supirBertugas }}</p>
+            </div>
         </div>
     </div>
 @endsection

@@ -14,6 +14,7 @@ class Supir extends Model
         'nama',
         'no_hp',
         'alamat',
-        'status'
+        'status',
+        'gambar'
     ];
 }

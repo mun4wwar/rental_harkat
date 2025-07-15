@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Mobil;
 
@@ -36,10 +37,16 @@ class MobilController extends Controller
             'merk' => 'required',
             'tahun' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
             'harga_sewa' => 'required|numeric',
-            'status' => 'required|in:0,1',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
-        Mobil::create($request->all());
+        $data = $request->except('gambar');
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('gambar_mobil', 'public');
+        }
+
+        Mobil::create($data);
 
         return redirect()->route('mobil.index')->with('success', "Mobil berhasil di tambahkan");
     }
@@ -72,9 +79,20 @@ class MobilController extends Controller
             'tahun' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
             'harga_sewa' => 'required|numeric',
             'status' => 'required|in:0,1',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
-        $mobil->update($request->all());
+        $data = $request->except('gambar');
+
+        if ($request->hasFile('gambar')) {
+            // Optional: Hapus gambar lama kalau ada
+            if ($mobil->gambar) {
+                Storage::disk('public')->delete($mobil->gambar);
+            }
+            $data['gambar'] = $request->file('gambar')->store('gambar_mobil', 'public');
+        }
+
+        $mobil->update($data);
 
         return redirect()->route('mobil.index')->with('success', "Mobil berhasil diupdate");
     }

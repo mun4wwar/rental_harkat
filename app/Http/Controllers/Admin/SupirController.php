@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Supir;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use App\Models\Supir;
 
 class SupirController extends Controller
 {
@@ -34,10 +35,16 @@ class SupirController extends Controller
             'nama' => 'required|string|max:255',
             'no_hp' => 'required|string|max:20',
             'alamat' => 'required|string',
-            'status' => 'required|in:0,1',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
-        Supir::create($request->all());
+        $data = $request->except('gambar');
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('gambar_supir', 'public');
+        }
+
+        Supir::create($data);
 
         return redirect()->route('supir.index')->with('success', 'Supir berhasil ditambahkan.');
     }
@@ -47,7 +54,7 @@ class SupirController extends Controller
      */
     public function show(Supir $supir)
     {
-        return view('admin.supir.show', compact('mobil'));
+        return view('admin.supir.show', compact('supir'));
     }
 
     /**
@@ -68,9 +75,20 @@ class SupirController extends Controller
             'no_hp' => 'required|string|max:20',
             'alamat' => 'required|string',
             'status' => 'required|in:0,1',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
-        $supir->update($request->all());
+        $data = $request->except('gambar');
+
+        if ($request->hasFile('gambar')) {
+            // Optional: Hapus gambar lama kalau ada
+            if ($supir->gambar) {
+                Storage::disk('public')->delete($supir->gambar);
+            }
+            $data['gambar'] = $request->file('gambar')->store('gambar_supir', 'public');
+        }
+
+        $supir->update($data);
 
         return redirect()->route('supir.index')->with('success', 'Data supir berhasil diupdate.');
     }

@@ -11,7 +11,8 @@
         @endif
 
         <a href="{{ route('supir.create') }}"
-            class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mb-4">+ Tambah Supir</a>
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow">+
+            Tambah Supir</a>
 
         <div class="overflow-x-auto bg-white shadow-md rounded-lg">
             <table class="min-w-full text-sm text-left text-gray-700">
@@ -40,13 +41,15 @@
                                 </span>
                             </td>
                             <td class="px-4 py-2 space-x-2">
+                                <a href="{{ route('supir.show', $supir->id) }}"
+                                    class="text-indigo-600 hover:text-indigo-900 font-medium">Lihat Detail</a>
                                 <a href="{{ route('supir.edit', $supir->id) }}"
-                                    class="text-blue-500 hover:underline">Edit</a>
+                                    class="text-yellow-600 hover:text-indigo-900 font-medium">Edit</a>
                                 <form action="{{ route('supir.destroy', $supir->id) }}" method="POST" class="inline-block"
                                     onsubmit="return confirm('Yakin hapus supir?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="text-red-500 hover:underline">Hapus</button>
+                                    <button class="text-red-600 hover:text-red-800 font-medium">Hapus</button>
                                 </form>
                             </td>
                         </tr>

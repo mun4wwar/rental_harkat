@@ -16,6 +16,7 @@ class Mobil extends Model
         'merk',
         'tahun',
         'harga_sewa',
-        'status'
+        'status',
+        'gambar',
     ];
 }
