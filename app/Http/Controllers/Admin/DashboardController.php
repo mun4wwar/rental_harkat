@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $totalSupir = Supir::count();
         $mobilTersedia = Mobil::where('status', 1)->count();
         $supirBertugas = Supir::where('status', 0)->count();
-        $mobilDisewa = Mobil::where('status', 0)->count();
+        $mobilDisewa = Mobil::where('status', 3)->count();
         $supirSiap = Supir::where('status', 1)->count();
 
         return view('admin.dashboard', compact('totalMobil', 'mobilTersedia', 'mobilDisewa', 'totalSupir', 'supirBertugas', 'supirSiap'));

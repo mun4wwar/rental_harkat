@@ -39,8 +39,8 @@
                             <td class="px-4 py-2 whitespace-nowrap text-sm">
                                 <span
                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                {{ $supir->status == 1 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                    {{ $supir->status == 1 ? 'Siap' : 'Sedang Bertugas' }}
+                                {{ $supir->status_badge_class }}">
+                                    {{ $supir->status_text }}
                                 </span>
                             </td>
                             <td class="px-4 py-2 whitespace-nowrap text-sm">
@@ -52,14 +52,8 @@
                                         class="text-yellow-600 hover:text-indigo-900 font-medium" title="Edit">
                                         <i data-lucide="pencil" class="w-5 h-5"></i>
                                     </a>
-                                    <form action="{{ route('supir.destroy', $supir->id) }}" method="POST"
-                                        class="inline-block" onsubmit="return confirm('Yakin hapus supir?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-500 hover:text-red-500" title="Hapus">
-                                            <i data-lucide="trash-2" class="w-5 h-5"></i>
-                                        </button>
-                                    </form>
+                                    {{-- Hapus --}}
+                                    <x-delete-button :id="$supir->id" :route="route('supir.destroy', $supir->id)" :item="$supir->nama" />
                                 </div>
 
                             </td>

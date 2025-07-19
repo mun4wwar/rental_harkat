@@ -14,6 +14,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property int $harga_sewa
  * @property int $harga_all_in
  * @property string $gambar
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $status_badge_class
+ * @property-read mixed $status_text
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereGambar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereHargaAllIn($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereHargaSewa($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereMerk($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereNamaMobil($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil wherePlatNomor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereTahun($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Transaksi> $transaksis
+ * @property-read int|null $transaksis_count
+ * @mixin \Eloquent
  */
 
 class Mobil extends Model
@@ -54,5 +76,15 @@ class Mobil extends Model
             4 => 'bg-gray-100 text-gray-800',
             default => 'bg-gray-100 text-gray-400',
         };
+    }
+
+    public function getHargaPerHari(bool $pakaiSupir = false): int
+    {
+        return $pakaiSupir ? ($this->harga_all_in ?? 0) : ($this->harga_sewa ?? 0);
+    }
+
+    public function transaksis()
+    {
+        return $this->hasMany(Transaksi::class);
     }
 }

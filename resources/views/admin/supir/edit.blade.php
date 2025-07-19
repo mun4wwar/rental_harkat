@@ -1,10 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
     <div class="max-w-xl mx-auto py-6 px-4">
         <h2 class="text-xl font-bold mb-4">Edit Supir</h2>
 
-        <form action="{{ route('supir.update', $supir->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white p-6 shadow-md rounded">
+        <form action="{{ route('supir.update', $supir->id) }}" method="POST" enctype="multipart/form-data"
+            class="space-y-6 bg-white p-6 shadow-md rounded">
             @csrf
             @method('PUT')
 
@@ -28,8 +29,7 @@
             <div>
                 <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat</label>
                 <textarea type="text" name="alamat" id="alamat"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value="{{ old('alamat', $supir->alamat) }}" required></textarea>
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('alamat', $supir->alamat) }}</textarea>
             </div>
 
             {{-- Status --}}
@@ -37,8 +37,9 @@
                 <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
                 <select name="status" id="status"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                    <option value="1" {{ $supir->status == 1 ? 'selected' : '' }}>Tersedia</option>
                     <option value="0" {{ $supir->status == 0 ? 'selected' : '' }}>Bertugas</option>
+                    <option value="1" {{ $supir->status == 1 ? 'selected' : '' }}>Tersedia</option>
+                    <option value="2" {{ $supir->status == 2 ? 'selected' : '' }}>Izin</option>
                 </select>
             </div>
 

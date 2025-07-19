@@ -72,15 +72,7 @@
                                     </a>
 
                                     {{-- Hapus --}}
-                                    <form action="{{ route('mobil.destroy', $mobil->id) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Yakin ingin menghapus mobil ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-indigo-900 font-medium"
-                                            title="Hapus">
-                                            <i data-lucide="trash-2" class="w-5 h-5"></i>
-                                        </button>
-                                    </form>
+                                    <x-delete-button :id="$mobil->id" :route="route('mobil.destroy', $mobil->id)" :item="$mobil->nama_mobil" />
                                 </div>
                             </td>
 

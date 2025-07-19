@@ -74,7 +74,7 @@ class SupirController extends Controller
             'nama' => 'required|string|max:255',
             'no_hp' => 'required|string|max:20',
             'alamat' => 'required|string',
-            'status' => 'required|in:0,1',
+            'status' => 'required|in:0,1,2',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 

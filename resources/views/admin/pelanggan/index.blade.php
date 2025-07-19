@@ -34,12 +34,8 @@
                             <td class="px-4 py-2 space-x-2">
                                 <a href="{{ route('pelanggan.edit', $pelanggan->id) }}"
                                     class="text-blue-500 hover:underline">Edit</a>
-                                <form action="{{ route('pelanggan.destroy', $pelanggan->id) }}" method="POST" class="inline-block"
-                                    onsubmit="return confirm('Yakin hapus pelanggan?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="text-red-500 hover:underline">Hapus</button>
-                                </form>
+                                {{-- Hapus --}}
+                                <x-delete-button :id="$pelanggan->id" :route="route('pelanggan.destroy', $pelanggan->id)" :item="$pelanggan->nama" />
                             </td>
                         </tr>
                     @endforeach

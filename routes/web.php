@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\MobilController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\SupirController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,6 +29,7 @@ Route::middleware(['auth', 'role:1'])->prefix('admin')->group(function () {
     Route::resource('mobil', MobilController::class);
     Route::resource('supir', SupirController::class);
     Route::resource('pelanggan', PelangganController::class);
+    Route::resource('transaksi', TransaksiController::class);
     // dst...
 });
 // Route::resource('/mobil', MobilController::class);
