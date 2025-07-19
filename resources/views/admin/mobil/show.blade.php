@@ -8,7 +8,7 @@
             <!-- Gambar Mobil -->
             <div class="flex-shrink-0">
                 @if ($mobil->gambar)
-                    <img src="{{ asset('storage/' . $mobil->gambar) }}" alt="Gambar Mobil"
+                    <img src="{{ Storage::url($mobil->gambar) }}" alt="Gambar Mobil"
                         class="w-64 h-40 object-cover rounded shadow">
                 @else
                     <div class="w-64 h-40 bg-gray-200 flex items-center justify-center rounded">
@@ -20,10 +20,11 @@
             <!-- Detail Data -->
             <div class="flex-1 space-y-2">
                 <p><strong>Nama Mobil:</strong> {{ $mobil->nama_mobil }}</p>
-                <p><strong>Plat Nomor:</strong> {{ $mobil->plat_nomor }}</p>
+                {{-- <p><strong>Plat Nomor:</strong> {{ $mobil->plat_nomor }}</p> --}}
                 <p><strong>Merk:</strong> {{ $mobil->merk }}</p>
                 <p><strong>Tahun:</strong> {{ $mobil->tahun }}</p>
                 <p><strong>Harga Sewa:</strong> Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }}</p>
+                <p><strong>Harga Sewa ALL IN:</strong> Rp {{ number_format($mobil->harga_all_in, 0, ',', '.') }}</p>
                 <p><strong>Status:</strong>
                     @if ($mobil->status == 1)
                         <span class="text-green-600 font-semibold">Tersedia</span>

@@ -33,10 +33,11 @@ class MobilController extends Controller
     {
         $request->validate([
             'nama_mobil' => 'required',
-            'plat_nomor' => 'required|unique:mobils',
+            'plat_nomor' => 'nullable|unique:mobils',
             'merk' => 'required',
             'tahun' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
             'harga_sewa' => 'required|numeric',
+            'harga_all_in' => 'required|numeric',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
@@ -74,11 +75,12 @@ class MobilController extends Controller
     {
         $request->validate([
             'nama_mobil' => 'required',
-            'plat_nomor' => 'required|unique:mobils,plat_nomor,' . $mobil->id,
+            'plat_nomor' => 'nullable|unique:mobils,plat_nomor,' . $mobil->id,
             'merk' => 'required',
             'tahun' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
             'harga_sewa' => 'required|numeric',
-            'status' => 'required|in:0,1',
+            'harga_all_in' => 'required|numeric',
+            'status' => 'required|in:0,1,2,3,4',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
@@ -103,6 +105,6 @@ class MobilController extends Controller
     public function destroy(Mobil $mobil)
     {
         $mobil->delete();
-        return redirect()->route('admin.mobil.index')->with('success', 'Mobil berhasil dihapus!');
+        return redirect()->route('mobil.index')->with('success', 'Mobil berhasil dihapus!');
     }
 }

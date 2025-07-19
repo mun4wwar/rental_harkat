@@ -20,7 +20,7 @@
                 <label for="plat_nomor" class="block text-sm font-medium text-gray-700">Plat Nomor</label>
                 <input type="text" name="plat_nomor" id="plat_nomor"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    value="{{ old('plat_nomor') }}" required>
+                    value="{{ old('plat_nomor') }}">
             </div>
 
             {{-- Merk --}}
@@ -45,6 +45,14 @@
                 <input type="number" name="harga_sewa" id="harga_sewa"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                     value="{{ old('harga_sewa') }}" required>
+            </div>
+
+            {{-- Harga Sewa ALL IN --}}
+            <div>
+                <label for="harga_all_in" class="block text-sm font-medium text-gray-700">Harga Sewa ALL IN</label>
+                <input type="number" name="harga_all_in" id="harga_all_in"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    value="{{ old('harga_all_in') }}" required>
             </div>
 
             {{-- Gambar Mobil --}}

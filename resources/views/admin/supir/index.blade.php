@@ -2,28 +2,31 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold mb-4">Daftar Supir</h2>
+        <h2 class="text-2xl font-bold mb-6">Daftar Supir</h2>
 
         @if (session('success'))
-            <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+            <div class="mb-4 px-4 py-2 bg-green-100 text-green-800 rounded-md shadow">
                 {{ session('success') }}
             </div>
         @endif
 
-        <a href="{{ route('supir.create') }}"
-            class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow">+
-            Tambah Supir</a>
+        <div class="mb-4">
+            <a href="{{ route('supir.create') }}"
+                class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow">
+                + Tambah Supir
+            </a>
+        </div>
 
         <div class="overflow-x-auto bg-white shadow-md rounded-lg">
-            <table class="min-w-full text-sm text-left text-gray-700">
+            <table class="min-w-full divide-y divide-gray-200 text-sm text-left text-gray-700">
                 <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
                     <tr>
-                        <th class="px-4 py-3">No</th>
-                        <th class="px-4 py-3">Nama</th>
-                        <th class="px-4 py-3">No HP</th>
-                        <th class="px-4 py-3">Alamat</th>
-                        <th class="px-4 py-3">Status</th>
-                        <th class="px-4 py-3">Aksi</th>
+                        <th class="px-4 py-3 text-left tracking-wider">No</th>
+                        <th class="px-4 py-3 text-left tracking-wider">Nama</th>
+                        <th class="px-4 py-3 text-left tracking-wider">No HP</th>
+                        <th class="px-4 py-3 text-left tracking-wider">Alamat</th>
+                        <th class="px-4 py-3 text-left tracking-wider">Status</th>
+                        <th class="px-4 py-3 text-left tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,17 +43,25 @@
                                     {{ $supir->status == 1 ? 'Siap' : 'Sedang Bertugas' }}
                                 </span>
                             </td>
-                            <td class="px-4 py-2 space-x-2">
-                                <a href="{{ route('supir.show', $supir->id) }}"
-                                    class="text-indigo-600 hover:text-indigo-900 font-medium">Lihat Detail</a>
-                                <a href="{{ route('supir.edit', $supir->id) }}"
-                                    class="text-yellow-600 hover:text-indigo-900 font-medium">Edit</a>
-                                <form action="{{ route('supir.destroy', $supir->id) }}" method="POST" class="inline-block"
-                                    onsubmit="return confirm('Yakin hapus supir?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="text-red-600 hover:text-red-800 font-medium">Hapus</button>
-                                </form>
+                            <td class="px-4 py-2 whitespace-nowrap text-sm">
+                                <div class="flex items-center gap-2"><a href="{{ route('supir.show', $supir->id) }}"
+                                        class="text-indigo-600 hover:text-indigo-900 font-medium" title="Lihat Detail">
+                                        <i data-lucide="eye" class="w-5 h-5"></i>
+                                    </a>
+                                    <a href="{{ route('supir.edit', $supir->id) }}"
+                                        class="text-yellow-600 hover:text-indigo-900 font-medium" title="Edit">
+                                        <i data-lucide="pencil" class="w-5 h-5"></i>
+                                    </a>
+                                    <form action="{{ route('supir.destroy', $supir->id) }}" method="POST"
+                                        class="inline-block" onsubmit="return confirm('Yakin hapus supir?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-500" title="Hapus">
+                                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
                             </td>
                         </tr>
                     @endforeach

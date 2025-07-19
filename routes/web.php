@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Admin
-Route::prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:1'])->prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::resource('mobil', MobilController::class);
