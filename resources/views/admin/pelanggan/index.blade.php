@@ -5,7 +5,7 @@
         <h2 class="text-2xl font-bold mb-4">Daftar Pelanggan</h2>
 
         @if (session('success'))
-            <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+            <div class="mb-4 px-4 py-2 bg-green-100 text-green-800 rounded-md shadow">
                 {{ session('success') }}
             </div>
         @endif
