@@ -42,9 +42,10 @@ class Transaksi extends Model
 {
     use HasFactory;
 
+    const STATUS_CANCELED = 0;
     const STATUS_BOOKED = 1;
-    const STATUS_BERJALAN = 2;
-    const STATUS_SELESAI = 3;
+    const STATUS_ONGOING = 2;
+    const STATUS_DONE = 3;
 
     protected $fillable = [
         'pelanggan_id',
@@ -68,9 +69,10 @@ class Transaksi extends Model
     public static function getStatusLabel($status): string
     {
         return match ($status) {
+            self::STATUS_CANCELED => 'Canceled',
             self::STATUS_BOOKED => 'Booked',
-            self::STATUS_BERJALAN => 'Berjalan',
-            self::STATUS_SELESAI => 'Selesai',
+            self::STATUS_ONGOING => 'On going',
+            self::STATUS_DONE => 'Done',
             default => 'Unknown',
         };
     }
