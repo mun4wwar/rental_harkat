@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Supir;
+
 return [
 
     /*
@@ -36,9 +38,17 @@ return [
     */
 
     'guards' => [
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'users', // sama kayak customer
+        ],
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'supir' => [
+            'driver' => 'session',
+            'provider' => 'supirs',
         ],
     ],
 
@@ -65,10 +75,10 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'supirs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Supir::class,
+        ],
     ],
 
     /*
@@ -96,6 +106,11 @@ return [
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
+        ],
+        'supirs' => [
+            'provider' => 'supirs',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
         ],
     ],
 

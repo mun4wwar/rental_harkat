@@ -11,7 +11,7 @@
         @endif
 
         <div class="mb-4">
-            <a href="{{ route('supir.create') }}"
+            <a href="{{ route('admin.supir.create') }}"
                 class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow">
                 + Tambah Supir
             </a>
@@ -23,6 +23,7 @@
                     <tr>
                         <th class="px-4 py-3 text-left tracking-wider">No</th>
                         <th class="px-4 py-3 text-left tracking-wider">Nama</th>
+                        <th class="px-4 py-3 text-left tracking-wider">Email</th>
                         <th class="px-4 py-3 text-left tracking-wider">No HP</th>
                         <th class="px-4 py-3 text-left tracking-wider">Alamat</th>
                         <th class="px-4 py-3 text-left tracking-wider">Status</th>
@@ -34,6 +35,7 @@
                         <tr class="border-t">
                             <td class="px-4 py-2">{{ $index + 1 }}</td>
                             <td class="px-4 py-2">{{ $supir->nama }}</td>
+                            <td class="px-4 py-2">{{ $supir->email }}</td>
                             <td class="px-4 py-2">{{ $supir->no_hp }}</td>
                             <td class="px-4 py-2">{{ $supir->alamat }}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-sm">
@@ -44,16 +46,16 @@
                                 </span>
                             </td>
                             <td class="px-4 py-2 whitespace-nowrap text-sm">
-                                <div class="flex items-center gap-2"><a href="{{ route('supir.show', $supir->id) }}"
+                                <div class="flex items-center gap-2"><a href="{{ route('admin.supir.show', $supir->id) }}"
                                         class="text-indigo-600 hover:text-indigo-900 font-medium" title="Lihat Detail">
                                         <i data-lucide="eye" class="w-5 h-5"></i>
                                     </a>
-                                    <a href="{{ route('supir.edit', $supir->id) }}"
+                                    <a href="{{ route('admin.supir.edit', $supir->id) }}"
                                         class="text-yellow-600 hover:text-indigo-900 font-medium" title="Edit">
                                         <i data-lucide="pencil" class="w-5 h-5"></i>
                                     </a>
                                     {{-- Hapus --}}
-                                    <x-delete-button :id="$supir->id" :route="route('supir.destroy', $supir->id)" :item="$supir->nama" />
+                                    <x-delete-button :id="$supir->id" :route="route('admin.supir.destroy', $supir->id)" :item="$supir->nama" />
                                 </div>
 
                             </td>

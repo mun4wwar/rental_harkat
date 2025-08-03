@@ -33,11 +33,11 @@ class PelangganController extends Controller
         $request->validate([
             'nama' => 'required',
             'email' => 'required|email|unique:pelanggans,email',
-            'no_telp' => 'required',
+            'no_hp' => 'required',
         ]);
 
         Pelanggan::create($request->all());
-        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil ditambahkan!');
+        return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil ditambahkan!');
     }
 
     /**
@@ -64,11 +64,11 @@ class PelangganController extends Controller
         $request->validate([
             'nama' => 'required',
             'email' => 'required|email|unique:pelanggans,email,' . $pelanggan->id,
-            'no_telp' => 'required',
+            'no_hp' => 'required',
         ]);
 
         $pelanggan->update($request->all());
-        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil diupdate!');
+        return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil diupdate!');
     }
 
     /**
@@ -77,6 +77,6 @@ class PelangganController extends Controller
     public function destroy(Pelanggan $pelanggan)
     {
         $pelanggan->delete();
-        return redirect()->route('pelanggan.index')->with('success', 'Pelanggan berhasil dihapus!');
+        return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil dihapus!');
     }
 }

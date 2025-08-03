@@ -49,7 +49,7 @@ class MobilController extends Controller
 
         Mobil::create($data);
 
-        return redirect()->route('mobil.index')->with('success', "Mobil berhasil di tambahkan");
+        return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil di tambahkan");
     }
 
     /**
@@ -96,7 +96,7 @@ class MobilController extends Controller
 
         $mobil->update($data);
 
-        return redirect()->route('mobil.index')->with('success', "Mobil berhasil diupdate");
+        return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil diupdate");
     }
 
     /**
@@ -105,6 +105,6 @@ class MobilController extends Controller
     public function destroy(Mobil $mobil)
     {
         $mobil->delete();
-        return redirect()->route('mobil.index')->with('success', 'Mobil berhasil dihapus!');
+        return redirect()->route('admin.mobil.index')->with('success', 'Mobil berhasil dihapus!');
     }
 }

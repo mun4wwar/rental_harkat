@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * @property int $id
@@ -29,25 +30,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property-read int|null $transaksis_count
  * @mixin \Eloquent
  */
-class Supir extends Model
+class Supir extends Authenticatable
 {
     use HasFactory;
 
     protected $table = 'supirs'; // opsional sih, default-nya udah bener
     protected $fillable = [
         'nama',
+        'email',
+        'password',
         'no_hp',
         'alamat',
         'status',
         'gambar'
     ];
 
+    protected $hidden = ['password'];
+
     public function getStatusTextAttribute()
     {
         return match ($this->status) {
-            0 => 'Bertugas',
-            1 => 'Tersedia',
-            2 => 'Izin',
+            0 => 'Unavailable',
+            1 => 'Available',
+            2 => 'Bertugas',
             default => 'Status tidak diketahui',
         };
     }
@@ -55,9 +60,9 @@ class Supir extends Model
     public function getStatusBadgeClassAttribute()
     {
         return match ($this->status) {
-            0 => 'bg-amber-100 text-amber-800',
+            0 => 'bg-red-100 text-red-800',
             1 => 'bg-green-100 text-green-800',
-            2 => 'bg-red-100 text-red-800',
+            2 => 'bg-yellow-100 text-yellow-800',
             default => 'bg-gray-100 text-gray-400',
         };
     }

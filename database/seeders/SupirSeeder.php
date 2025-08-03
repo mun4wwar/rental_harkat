@@ -16,6 +16,7 @@ class SupirSeeder extends Seeder
         Supir::insert([
             [
                 'nama' => 'Budi Santoso',
+                'email' => 'budi@santoso.com',
                 'no_hp' => '081234567890',
                 'alamat' => 'Jl. Kaliurang Km 7, Yogyakarta',
                 'status' => 1,
@@ -24,6 +25,7 @@ class SupirSeeder extends Seeder
             ],
             [
                 'nama' => 'Slamet Riyadi',
+                'email' => 'slamet@riyadi.com',
                 'no_hp' => '085612345678',
                 'alamat' => 'Jl. Wates, Bantul',
                 'status' => 0,

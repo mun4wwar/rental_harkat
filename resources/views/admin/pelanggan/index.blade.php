@@ -10,7 +10,7 @@
             </div>
         @endif
 
-        <a href="{{ route('pelanggan.create') }}"
+        <a href="{{ route('admin.pelanggan.create') }}"
             class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mb-4">+ Tambah Pelanggan</a>
 
         <div class="overflow-x-auto bg-white shadow-md rounded-lg">
@@ -29,13 +29,13 @@
                         <tr class="border-t">
                             <td class="px-4 py-2">{{ $index + 1 }}</td>
                             <td class="px-4 py-2">{{ $pelanggan->nama }}</td>
-                            <td class="px-4 py-2">{{ $pelanggan->no_telp }}</td>
+                            <td class="px-4 py-2">{{ $pelanggan->no_hp }}</td>
                             <td class="px-4 py-2">{{ $pelanggan->alamat }}</td>
                             <td class="px-4 py-2 space-x-2">
-                                <a href="{{ route('pelanggan.edit', $pelanggan->id) }}"
+                                <a href="{{ route('admin.pelanggan.edit', $pelanggan->id) }}"
                                     class="text-blue-500 hover:underline">Edit</a>
                                 {{-- Hapus --}}
-                                <x-delete-button :id="$pelanggan->id" :route="route('pelanggan.destroy', $pelanggan->id)" :item="$pelanggan->nama" />
+                                <x-delete-button :id="$pelanggan->id" :route="route('admin.pelanggan.destroy', $pelanggan->id)" :item="$pelanggan->nama" />
                             </td>
                         </tr>
                     @endforeach

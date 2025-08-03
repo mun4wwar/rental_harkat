@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Supir;
+use Hash;
+use Illuminate\Validation\Rule;
 
 class SupirController extends Controller
 {
@@ -33,6 +35,8 @@ class SupirController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
+            'email' => 'required|string|lowercase|email|unique:supirs,email|max:255',
+            'password' => 'required|string|max:20',
             'no_hp' => 'required|string|max:20',
             'alamat' => 'required|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
@@ -40,13 +44,15 @@ class SupirController extends Controller
 
         $data = $request->except('gambar');
 
+        $data['password'] = Hash::make($request->password);
+
         if ($request->hasFile('gambar')) {
             $data['gambar'] = $request->file('gambar')->store('gambar_supir', 'public');
         }
 
         Supir::create($data);
 
-        return redirect()->route('supir.index')->with('success', 'Supir berhasil ditambahkan.');
+        return redirect()->route('admin.supir.index')->with('success', 'Supir berhasil ditambahkan.');
     }
 
     /**
@@ -72,6 +78,15 @@ class SupirController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                Rule::unique('supirs')->ignore($supir->id),
+            ],
+            'password' => 'nullable|string|max:20',
             'no_hp' => 'required|string|max:20',
             'alamat' => 'required|string',
             'status' => 'required|in:0,1,2',
@@ -88,9 +103,16 @@ class SupirController extends Controller
             $data['gambar'] = $request->file('gambar')->store('gambar_supir', 'public');
         }
 
+        // Kalo ada password baru, update, kalo gak ya jangan disentuh
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        } else {
+            unset($data['password']);
+        }
+
         $supir->update($data);
 
-        return redirect()->route('supir.index')->with('success', 'Data supir berhasil diupdate.');
+        return redirect()->route('admin.supir.index')->with('success', 'Data supir berhasil diupdate.');
     }
 
     /**
@@ -100,6 +122,6 @@ class SupirController extends Controller
     {
         $supir->delete();
 
-        return redirect()->route('supir.index')->with('success', 'Supir berhasil dihapus.');
+        return redirect()->route('admin.supir.index')->with('success', 'Supir berhasil dihapus.');
     }
 }

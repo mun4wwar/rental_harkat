@@ -12,7 +12,7 @@
     </div>
 @endif
 
-<form action="{{ $isEdit ? route('transaksi.update', $transaksi->id) : route('transaksi.store') }}" method="POST"
+<form action="{{ $isEdit ? route('admin.transaksi.update', $transaksi->id) : route('admin.transaksi.store') }}" method="POST"
     class="space-y-6">
     @csrf
     @if ($isEdit)

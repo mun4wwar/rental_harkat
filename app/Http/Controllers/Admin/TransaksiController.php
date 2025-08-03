@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\TransaksiRequest;
 use App\Models\Mobil;
 use App\Models\Pelanggan;
@@ -38,7 +39,7 @@ class TransaksiController extends Controller
             'status' => 2,
         ]);
 
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dibuat.');
+        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dibuat.');
     }
 
     public function show(Transaksi $transaksi)
@@ -94,13 +95,13 @@ class TransaksiController extends Controller
             }
         }
 
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil diperbarui.');
+        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil diperbarui.');
     }
 
     public function destroy(Transaksi $transaksi): RedirectResponse
     {
         $transaksi->delete();
-        return redirect()->route('transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
+        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
     }
 
     /**

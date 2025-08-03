@@ -18,7 +18,7 @@ class PelangganSeeder extends Seeder
             Pelanggan::create([
                 'nama' => "Pelanggan $i",
                 'email' => "pelanggan$i@example.com",
-                'no_telp' => '08123456789' . $i,
+                'no_hp' => '08123456789' . $i,
                 'alamat' => "Jl. Contoh Alamat No. $i",
             ]);
         }

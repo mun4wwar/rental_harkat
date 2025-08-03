@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('merk');
             $table->year('tahun');
             $table->decimal('harga_sewa', 10, 2);
-            $table->tinyInteger('status')->default(1); // 1 = tersedia, 0 = disewa
+            $table->tinyInteger('status')->default(1); // 1 = tersedia
             $table->timestamps();
         });
     }

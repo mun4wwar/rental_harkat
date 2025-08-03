@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $nama
  * @property string $email
- * @property string $no_telp
+ * @property string $no_hp
  * @property string|null $alamat
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -34,12 +34,17 @@ class Pelanggan extends Model
     protected $fillable = [
         'nama',
         'email',
-        'no_telp',
+        'no_hp',
         'alamat',
     ];
 
     public function transaksis()
-{
-    return $this->hasMany(Transaksi::class);
-}
+    {
+        return $this->hasMany(Transaksi::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

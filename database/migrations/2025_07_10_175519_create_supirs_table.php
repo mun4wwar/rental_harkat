@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('no_hp');
             $table->text('alamat');
-            $table->integer('status')->default(1); // 1 = tersedia, 0 = bertugas
+            $table->integer('status')->default(0); // ada di Supir.php info nya
             $table->timestamps();
         });
     }

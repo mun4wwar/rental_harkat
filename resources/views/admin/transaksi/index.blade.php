@@ -11,7 +11,7 @@
         @endif
 
         <div class="mb-4">
-            <a href="{{ route('transaksi.create') }}"
+            <a href="{{ route('admin.transaksi.create') }}"
                 class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow">
                 + Tambah Transaksi
             </a>
@@ -41,9 +41,9 @@
                         <td class="border px-4 py-2">{{ $transaksi->total_harga_rp  }}</td>
                         <td class="border px-4 py-2">{{ ucfirst($transaksi->status_label) }}</td>
                         <td class="border px-4 py-2 space-x-2">
-                            <a href="{{ route('transaksi.edit', $transaksi->id) }}"
+                            <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}"
                                 class="text-yellow-600 hover:underline">Edit</a>
-                            <form action="{{ route('transaksi.destroy', $transaksi->id) }}" method="POST"
+                            <form action="{{ route('admin.transaksi.destroy', $transaksi->id) }}" method="POST"
                                 class="inline-block" onsubmit="return confirm('Yakin hapus?')">
                                 @csrf
                                 @method('DELETE')

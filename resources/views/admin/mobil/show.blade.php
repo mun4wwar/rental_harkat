@@ -37,7 +37,7 @@
 
         <!-- Tombol Kembali -->
         <div class="mt-6 text-center">
-            <a href="{{ route('mobil.index') }}"
+            <a href="{{ route('admin.mobil.index') }}"
                 class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 transition">
                 ← Kembali ke Daftar Mobil
             </a>

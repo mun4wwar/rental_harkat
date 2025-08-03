@@ -1,3 +1,6 @@
+@php
+    $isEdit = isset($mobil);
+@endphp
 @if ($errors->any())
     <div class="mb-4 text-red-600 bg-red-100 border border-red-300 rounded p-4">
         <ul class="list-disc pl-4 mb-0">
@@ -57,6 +60,22 @@
         value="{{ old('harga_all_in', $mobil->harga_all_in ?? '') }}" required>
 </div>
 
+{{-- Status (hanya tampil kalau edit) --}}
+@if ($isEdit)
+    <div>
+        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+        <select name="status" id="status"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <option>--Pilih Status--</option>
+            <option value="0" {{ $mobil->status == 0 ? 'selected' : '' }}>Rusak</option>
+            <option value="1" {{ $mobil->status == 1 ? 'selected' : '' }}>Tersedia</option>
+            <option value="2" {{ $mobil->status == 2 ? 'selected' : '' }}>Telah dibooking</option>
+            <option value="3" {{ $mobil->status == 3 ? 'selected' : '' }}>Telah disewa</option>
+            <option value="4" {{ $mobil->status == 4 ? 'selected' : '' }}>Sedang diservis</option>
+        </select>
+    </div>
+@endif
+
 {{-- Gambar --}}
 <div>
     <label for="gambar" class="block text-sm font-medium text-gray-700">Foto Mobil</label>
@@ -67,7 +86,7 @@
 
 {{-- Tombol Submit --}}
 <div class="flex justify-end space-x-2">
-    <a href="{{ route('mobil.index') }}"
+    <a href="{{ route('admin.mobil.index') }}"
         class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Batal</a>
     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
         {{ isset($mobil) ? 'Update' : 'Simpan' }}

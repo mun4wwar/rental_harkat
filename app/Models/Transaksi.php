@@ -50,6 +50,7 @@ class Transaksi extends Model
     protected $fillable = [
         'pelanggan_id',
         'mobil_id',
+        'pakai_supir',
         'supir_id',
         'tanggal_sewa',
         'tanggal_kembali',
@@ -120,5 +121,10 @@ class Transaksi extends Model
     public function supir()
     {
         return $this->belongsTo(Supir::class);
+    }
+
+    public function pembayaran()
+    {
+        return $this->hasOne(Pembayaran::class, 'id_transaksi');
     }
 }

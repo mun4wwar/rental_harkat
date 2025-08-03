@@ -11,7 +11,7 @@
         @endif
 
         <div class="mb-4">
-            <a href="{{ route('mobil.create') }}"
+            <a href="{{ route('admin.mobil.create') }}"
                 class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow">
                 + Tambah Mobil
             </a>
@@ -60,19 +60,19 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <div class="flex items-center gap-2">
                                     {{-- Detail --}}
-                                    <a href="{{ route('mobil.show', $mobil->id) }}"
+                                    <a href="{{ route('admin.mobil.show', $mobil->id) }}"
                                         class="text-indigo-600 hover:text-indigo-900 font-medium" title="Lihat Detail">
                                         <i data-lucide="eye" class="w-5 h-5"></i>
                                     </a>
 
                                     {{-- Edit --}}
-                                    <a href="{{ route('mobil.edit', $mobil->id) }}"
+                                    <a href="{{ route('admin.mobil.edit', $mobil->id) }}"
                                         class="text-yellow-600 hover:text-indigo-900 font-medium" title="Edit">
                                         <i data-lucide="pencil" class="w-5 h-5"></i>
                                     </a>
 
                                     {{-- Hapus --}}
-                                    <x-delete-button :id="$mobil->id" :route="route('mobil.destroy', $mobil->id)" :item="$mobil->nama_mobil" />
+                                    <x-delete-button :id="$mobil->id" :route="route('admin.mobil.destroy', $mobil->id)" :item="$mobil->nama_mobil" />
                                 </div>
                             </td>
 

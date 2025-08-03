@@ -14,37 +14,58 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function showAdminLoginForm()
     {
-        return view('auth.login');
+        return view('auth.admin-login');
+    }
+
+    public function showCustomerLoginForm()
+    {
+        return view('auth.cust-login');
     }
 
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function login(Request $request)
     {
-        $request->authenticate();
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
 
-        $user = Auth::user();
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $from = $request->input('login_from');
 
-        switch ($user->role) {
-            case 1:
-            case 2:
-                return redirect('/admin');
-            case 3:
-                return redirect('/rental-harkat');
-            default:
-                return redirect('/dashboard');
+            if ($from === 'admin' && $user->role != 1) {
+                Auth::logout();
+                return redirect()->route('admin.login')->withErrors(['email' => 'Kredensial bukan admin.']);
+            }
+
+            if ($from === 'customer' && $user->role != 2) {
+                Auth::logout();
+                return redirect()->route('login')->withErrors(['email' => 'Kredensial bukan customer.']);
+            }
+
+            // Redirect sesuai role
+            return $user->role == 1
+                ? redirect()->route('admin.dashboard')
+                : redirect()->route('customer.dashboard');
         }
+
+
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ]);
     }
 
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function logout(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 

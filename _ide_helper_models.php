@@ -52,7 +52,7 @@ namespace App\Models{
  * @property int $id
  * @property string $nama
  * @property string $email
- * @property string $no_telp
+ * @property string $no_hp
  * @property string|null $alamat
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

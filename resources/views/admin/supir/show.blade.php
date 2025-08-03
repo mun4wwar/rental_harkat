@@ -34,7 +34,7 @@
 
         <!-- Tombol Kembali -->
         <div class="mt-6 text-center">
-            <a href="{{ route('supir.index') }}"
+            <a href="{{ route('admin.supir.index') }}"
                 class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 transition">
                 ← Kembali ke Daftar Supir
             </a>
