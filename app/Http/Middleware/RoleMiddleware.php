@@ -14,35 +14,24 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $role, $guard = 'web')
     {
-        // Route prefix checker
-        $uri = $request->path(); // e.g. admin/dashboard
-        $isAdminRoute = str_starts_with($uri, 'admin');
-        $isSupirRoute = str_starts_with($uri, 'supir');
-        $isCustomerRoute = str_starts_with($uri, 'customer');
+        if (Auth::guard($guard)->check() && Auth::guard($guard)->user()->role == $role) {
+            return $next($request);
+        }
 
-        // Admin check
-        if ($isAdminRoute) {
-            if (!Auth::guard('admin')->check()) {
+        // Redirect sesuai guard
+        switch ($guard) {
+            case 'admin':
                 return redirect()->route('admin.login');
-            }
-        }
-
-        // Supir check
-        if ($isSupirRoute) {
-            if (!Auth::guard('supir')->check()) {
+            case 'web':
+                return redirect()->route('login');
+            case 'supir':
                 return redirect()->route('supir.login');
-            }
+            default:
+                return redirect()->route("{$guard}.login")->withErrors([
+                    'email' => 'Akses ditolak. Role tidak sesuai.',
+                ]);
         }
-
-        // Customer check (assume pakai 'web' guard)
-        if ($isCustomerRoute) {
-            if (!Auth::guard('web')->check()) {
-                return redirect()->route('login'); // Breeze default
-            }
-        }
-
-        return $next($request);
     }
 }

@@ -48,7 +48,7 @@ class Transaksi extends Model
     const STATUS_DONE = 3;
 
     protected $fillable = [
-        'pelanggan_id',
+        'user_id',
         'mobil_id',
         'pakai_supir',
         'supir_id',
@@ -108,9 +108,9 @@ class Transaksi extends Model
     }
 
     // 🔗 Relasi
-    public function pelanggan()
+    public function user()
     {
-        return $this->belongsTo(Pelanggan::class);
+        return $this->belongsTo(User::class);
     }
 
     public function mobil()

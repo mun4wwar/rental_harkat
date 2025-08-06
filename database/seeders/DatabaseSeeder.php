@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             MobilSeeder::class,
             SupirSeeder::class,
-            PelangganSeeder::class,
         ]);
     }
 }

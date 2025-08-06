@@ -32,13 +32,14 @@
             <tbody>
                 @foreach ($transaksis as $transaksi)
                     <tr>
-                        <td class="border px-4 py-2">{{ $transaksi->pelanggan->nama ?? '-' }}</td>
+                        <td class="border px-4 py-2">{{ $transaksi->user->name ?? '-' }}</td>
                         <td class="border px-4 py-2">{{ $transaksi->mobil->nama_mobil ?? '-' }}</td>
-                        <td class="border px-4 py-2">{{ $transaksi->supir->nama ?? 'Tanpa Supir' }}</td>
+                        <td class="border px-4 py-2"><x-pakai-supir-label :pakaiSupir="$transaksi->pakai_supir" :supir="$transaksi->supir" />
+                        </td>
                         <td class="border px-4 py-2">
                             {{ $transaksi->tanggal_mulai_format }} s/d {{ $transaksi->tanggal_selesai_format }}
                         </td>
-                        <td class="border px-4 py-2">{{ $transaksi->total_harga_rp  }}</td>
+                        <td class="border px-4 py-2">{{ $transaksi->total_harga_rp }}</td>
                         <td class="border px-4 py-2">{{ ucfirst($transaksi->status_label) }}</td>
                         <td class="border px-4 py-2 space-x-2">
                             <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}"

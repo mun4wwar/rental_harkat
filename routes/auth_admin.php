@@ -1,30 +1,26 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthAdminController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MobilController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\SupirController;
 use App\Http\Controllers\Admin\TransaksiController;
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    // Auth
-    Route::middleware('guest:admin')->group(function () {
-        Route::get('/login', [AuthenticatedSessionController::class, 'showAdminLoginForm'])->name('login');
-        Route::post('/login', [AuthenticatedSessionController::class, 'login']);
-    });
+// ✅ Route Login & Post Login dipisah di luar middleware auth
+Route::prefix('admin')->name('admin.')->middleware('guest:admin')->group(function () {
+    Route::get('/login', [AuthAdminController::class, 'loginFormAdmin'])->name('login');
+    Route::post('/login', [AuthAdminController::class, 'loginAdmin']);
+});
 
-    Route::middleware('auth:admin')->group(function () {
-        Route::post('/logout', [AuthenticatedSessionController::class, 'logout'])->name('logout');
+// ✅ Route setelah login
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'role:1,admin'])->group(function () {
+    Route::post('/logout', [AuthAdminController::class, 'logoutAdmin'])->name('logout');
 
-        // Dashboard dan fitur admin
-        Route::middleware('role:1')->group(function () {
-            Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-            Route::resource('mobil', MobilController::class);
-            Route::resource('supir', SupirController::class);
-            Route::resource('pelanggan', PelangganController::class);
-            Route::resource('transaksi', TransaksiController::class);
-        });
-    });
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('mobil', MobilController::class);
+    Route::resource('supir', SupirController::class);
+    Route::resource('pelanggan', PelangganController::class);
+    Route::resource('transaksi', TransaksiController::class);
 });

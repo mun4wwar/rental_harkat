@@ -16,13 +16,13 @@ class SupirDashboardController extends Controller
 
         $transaksiAktif = Transaksi::where('supir_id', $supir->id)
             ->where('status', 2)
-            ->with('mobil', 'pelanggan')
+            ->with('mobil', 'user')
             ->first();
 
         $riwayat = Transaksi::where('supir_id', $supir->id)
             ->where('status', 3)
             ->latest()
-            ->with('mobil', 'pelanggan')
+            ->with('mobil', 'user')
             ->take(5)
             ->get();
 

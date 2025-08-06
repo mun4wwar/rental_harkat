@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pelanggan;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PelangganController extends Controller
@@ -13,7 +14,7 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $pelanggans = Pelanggan::latest()->get();
+        $pelanggans = User::latest()->get();
         return view('admin.pelanggan.index', compact('pelanggans'));
     }
 
@@ -32,11 +33,11 @@ class PelangganController extends Controller
     {
         $request->validate([
             'nama' => 'required',
-            'email' => 'required|email|unique:pelanggans,email',
+            'email' => 'required|email|unique:users,email',
             'no_hp' => 'required',
         ]);
 
-        Pelanggan::create($request->all());
+        User::create($request->all());
         return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil ditambahkan!');
     }
 
@@ -63,7 +64,7 @@ class PelangganController extends Controller
     {
         $request->validate([
             'nama' => 'required',
-            'email' => 'required|email|unique:pelanggans,email,' . $pelanggan->id,
+            'email' => 'required|email|unique:users,email,' . $pelanggan->id,
             'no_hp' => 'required',
         ]);
 

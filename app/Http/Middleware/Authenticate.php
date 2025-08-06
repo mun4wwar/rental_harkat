@@ -6,22 +6,19 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-
-    protected function redirectTo($request): ?string
+    protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
             if ($request->is('admin') || $request->is('admin/*')) {
                 return route('admin.login');
-            } else {
-                return route('login'); // atau 'login' tergantung naming lo
             }
-        }
 
-        return null;
+            if ($request->is('supir') || $request->is('supir/*')) {
+                return route('supir.login');
+            }
+
+            // fallback buat customer (web)
+            return route('login');
+        }
     }
 }

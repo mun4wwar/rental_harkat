@@ -21,8 +21,10 @@ class AuthSupirController extends Controller
 
         if (Auth::guard('supir')->attempt($credentials)) {
             $request->session()->regenerate();
+            session(['guard' => 'supir']); // ← HARUS DI SINI
             return redirect()->route('supir.dashboard');
         }
+
 
         return back()->withErrors([
             'email' => 'Email atau password salah.',

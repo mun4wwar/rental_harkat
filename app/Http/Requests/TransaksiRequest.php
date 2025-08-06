@@ -31,7 +31,7 @@ class TransaksiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pelanggan_id'     => 'required|exists:pelanggans,id',
+            'pelanggan_id'     => 'required|exists:users,id',
             'mobil_id'         => 'required|exists:mobils,id',
             'supir_id'         => 'nullable|exists:supirs,id', // Bisa null kalau sewa tanpa supir
             'tanggal_sewa'     => 'required|date',

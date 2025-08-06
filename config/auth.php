@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Supir;
-
 return [
 
     /*
@@ -40,15 +38,15 @@ return [
     'guards' => [
         'admin' => [
             'driver' => 'session',
-            'provider' => 'users', // sama kayak customer
-        ],
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'admin',
         ],
         'supir' => [
             'driver' => 'session',
             'provider' => 'supirs',
+        ],
+        'web' => [ // fallback default
+            'driver' => 'session',
+            'provider' => 'users',
         ],
     ],
 
@@ -70,14 +68,17 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'admin' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
-
         'supirs' => [
             'driver' => 'eloquent',
             'model' => App\Models\Supir::class,
+        ],
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
         ],
     ],
 

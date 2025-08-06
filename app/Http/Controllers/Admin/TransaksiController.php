@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TransaksiRequest;
 use App\Models\Mobil;
-use App\Models\Pelanggan;
 use App\Models\Supir;
 use App\Models\Transaksi;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 
@@ -15,13 +15,13 @@ class TransaksiController extends Controller
 {
     public function index()
     {
-        $transaksis = Transaksi::with(['pelanggan', 'mobil', 'supir'])->latest()->get();
+        $transaksis = Transaksi::with(['user', 'mobil', 'supir'])->latest()->get();
         return view('admin.transaksi.index', compact('transaksis'));
     }
 
     public function create()
     {
-        $pelanggans = Pelanggan::all();
+        $pelanggans = User::all();
         $mobils = Mobil::all();
         $supirs = Supir::all();
 
@@ -49,7 +49,7 @@ class TransaksiController extends Controller
 
     public function edit(Transaksi $transaksi)
     {
-        $pelanggans = Pelanggan::all();
+        $pelanggans = User::all();
         $mobils = Mobil::all();
         $supirs = Supir::all();
 

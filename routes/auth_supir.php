@@ -15,7 +15,6 @@ Route::prefix('supir')->name('supir.')->group(function () {
     });
 
     Route::middleware('auth:supir')->group(function () {
-        
         // Dashboard supir
         Route::get('/dashboard', [SupirDashboardController::class, 'index'])->name('dashboard');
         
