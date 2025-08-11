@@ -32,7 +32,7 @@
                 [
                     'route' => 'admin.transaksi.index',
                     'icon' => 'arrow-left-right',
-                    'label' => 'Manajemen Transaksi',
+                    'label' => 'Manajemen Penyewaan Mobil',
                     'match' => 'admin/transaksi',
                 ],
             ];
