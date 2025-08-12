@@ -78,10 +78,14 @@ class User extends Authenticatable
     {
         return $this->role === 1;
     }
+    public function isAdmin()
+    {
+        return $this->role === 2;
+    }
 
     public function isCustomer()
     {
-        return $this->role === 2;
+        return $this->role === 3;
     }
 
     public function transaksis()

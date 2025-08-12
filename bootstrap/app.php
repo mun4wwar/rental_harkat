@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'auth' => \App\Http\Middleware\Authenticate::class,
-            'auth.supir' => \App\Http\Middleware\AuthenticateSupir::class,
+            // 'auth.supir' => \App\Http\Middleware\AuthenticateSupir::class,
             'role' => RoleMiddleware::class,
         ]);
     })

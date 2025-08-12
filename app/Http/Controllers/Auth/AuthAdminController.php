@@ -18,7 +18,7 @@ class AuthAdminController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('admin')->attempt($credentials)) {
-            if (Auth::guard('admin')->user()->role == 1) {
+            if (Auth::guard('admin')->user()->role == 2) {
                 $request->session()->regenerate();
                 return redirect()->route('admin.dashboard'); // <- ini dia kuncinya
             }

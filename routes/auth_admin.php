@@ -15,7 +15,7 @@ Route::prefix('admin')->name('admin.')->middleware('guest:admin')->group(functio
 });
 
 // ✅ Route setelah login
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'role:1,admin'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'role:2,admin'])->group(function () {
     Route::post('/logout', [AuthAdminController::class, 'logoutAdmin'])->name('logout');
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
