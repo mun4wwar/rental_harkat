@@ -45,6 +45,7 @@ class Mobil extends Model
     protected $table = 'mobils'; // opsional sih, default-nya udah bener
     protected $fillable = [
         'nama_mobil',
+        'tipe_id',
         'plat_nomor',
         'merk',
         'tahun',
@@ -86,5 +87,10 @@ class Mobil extends Model
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class);
+    }
+
+    public function types()
+    {
+        return $this->belongsTo(TipeMobil::class, 'tipe_id');
     }
 }

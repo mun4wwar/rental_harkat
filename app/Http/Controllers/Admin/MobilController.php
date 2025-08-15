@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Mobil;
+use App\Models\TipeMobil;
 
 class MobilController extends Controller
 {
@@ -23,7 +24,8 @@ class MobilController extends Controller
      */
     public function create()
     {
-        return view('admin.mobil.create');
+        $tipeMobil = TipeMobil::all();
+        return view('admin.mobil.create', compact('tipeMobil'));
     }
 
     /**
@@ -33,6 +35,7 @@ class MobilController extends Controller
     {
         $request->validate([
             'nama_mobil' => 'required',
+            'tipe_id' => 'required|exists:tipe_mobils,id',
             'plat_nomor' => 'nullable|unique:mobils',
             'merk' => 'required',
             'tahun' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
@@ -65,7 +68,8 @@ class MobilController extends Controller
      */
     public function edit(Mobil $mobil)
     {
-        return view('admin.mobil.edit', compact('mobil'));
+        $tipeMobil = TipeMobil::all();
+        return view('admin.mobil.edit', compact('mobil', 'tipeMobil'));
     }
 
     /**
@@ -75,6 +79,7 @@ class MobilController extends Controller
     {
         $request->validate([
             'nama_mobil' => 'required',
+            'tipe_id' => 'required|exists:tipe_mobils,id',
             'plat_nomor' => 'nullable|unique:mobils,plat_nomor,' . $mobil->id,
             'merk' => 'required',
             'tahun' => 'required|digits:4|integer|min:1900|max:' . date('Y'),

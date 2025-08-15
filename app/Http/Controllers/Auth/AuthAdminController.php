@@ -38,6 +38,6 @@ class AuthAdminController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.login');
+        return redirect()->route('landing-page');
     }
 }

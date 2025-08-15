@@ -1,7 +1,7 @@
 @extends('layouts.landing')
 
 @section('content')
-    <div class="max-w-3xl mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto px-4 pt-20">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">📅 Form Booking Mobil</h1>
         @if ($errors->any())
             <div class="text-red-500 mb-4">
@@ -13,7 +13,7 @@
             </div>
         @endif
 
-        <form action="{{ route('booking') }}" method="POST" id="bookingForm">
+        <form action="{{ route('booking.store') }}" method="POST" id="bookingForm">
             @csrf
 
             {{-- Pilih Mobil --}}

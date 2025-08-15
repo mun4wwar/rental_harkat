@@ -10,10 +10,14 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Customer\BookingController;
-use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\MobilController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
+
+// guest route
+    Route::resource('mobil', MobilController::class);
 
 Route::middleware('guest:web')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -28,14 +32,11 @@ Route::middleware('guest:web')->group(function () {
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
     Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
     Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
-
-    // Halaman detail mobil
-    Route::get('/mobil/{id}', [MobilController::class, 'show'])->name('mobil.show');
 });
 
-Route::middleware(['auth:web', 'role:2', 'verified'])->group(function () {
+Route::middleware(['auth:web', 'role:3,web', 'verified'])->group(function () {
 
-    Route::get('/home', [CustomerController::class, 'homepage'])->name('home');
+    Route::get('/home', [LandingController::class, 'index'])->name('home');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -55,15 +56,9 @@ Route::middleware(['auth:web', 'role:2', 'verified'])->group(function () {
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
 
-    Route::get('/booking', [BookingController::class, 'create'])->name('form.booking');
-    Route::post('/booking', [BookingController::class, 'store'])->name('booking');
+    Route::resource('booking', BookingController::class)->only(['index', 'create', 'store']);
+    Route::get('riwayat', [BookingController::class, 'riwayat'])->name('riwayat.index');
 
     Route::post('logout', [AuthController::class, 'logout'])
         ->name('logout');
-});
-
-
-// === Route public ===
-Route::middleware('web')->group(function () {
-    Route::get('/mobil/{id}', [MobilController::class, 'show'])->name('mobil.show');
 });

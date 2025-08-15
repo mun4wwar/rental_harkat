@@ -16,8 +16,14 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role, $guard = 'web')
     {
-        if (Auth::guard($guard)->check() && Auth::guard($guard)->user()->role == $role) {
-            return $next($request);
+        if (Auth::guard($guard)->check()) {
+            if (Auth::guard($guard)->user()->role == $role) {
+                return $next($request);
+            }
+            // Kalau login tapi role nggak sesuai → logout dulu biar gak looping
+            Auth::guard($guard)->logout();
+            return redirect()->route($guard === 'web' ? 'login' : "{$guard}.login")
+                ->withErrors(['email' => 'Akses ditolak. Role tidak sesuai.']);
         }
 
         // Redirect sesuai guard

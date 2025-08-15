@@ -47,6 +47,6 @@ class RegisteredUserController extends Controller
 
         Auth::guard('web')->login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('home', absolute: false));
     }
 }

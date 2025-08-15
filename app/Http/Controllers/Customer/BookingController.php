@@ -4,12 +4,23 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mobil;
+use App\Models\TipeMobil;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
+    public function index()
+    {
+        $bookings = Transaksi::where('user_id', Auth::id())
+            ->where('status', '!=', 3) // filter status selain selesai
+            ->latest()
+            ->get();
+
+        return view('booking.index', compact('bookings'));
+    }
     public function create(Request $request)
     {
         $mobils = Mobil::all();
@@ -63,6 +74,16 @@ class BookingController extends Controller
         $mobil->status = 2;
         $mobil->save();
 
-        return redirect()->route('home')->with('success', 'Booking berhasil! Silakan tunggu konfirmasi dari admin.');
+        return redirect()->route('booking.index')->with('success', 'Booking berhasil! Silakan tunggu konfirmasi dari admin.');
+    }
+    // Riwayat booking (sudah selesai)
+    public function riwayat()
+    {
+        $riwayats = Transaksi::where('user_id', Auth::id())
+            ->where('status', 3)
+            ->latest()
+            ->get();
+
+        return view('booking.riwayat', compact('riwayats'));
     }
 }

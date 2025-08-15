@@ -8,7 +8,7 @@
         <p class="text-gray-700 mb-2">Harga Sewa: Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }} / hari</p>
         <p class="text-gray-600 mb-4">Deskripsi mobil bisa ditambahkan di sini (kalau ada).</p>
 
-        <a href="{{ route('form.booking', ['mobil_id' => $mobil->id]) }}"
+        <a href="{{ route('booking.create', ['mobil_id' => $mobil->id]) }}"
             class="inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
             Booking Sekarang
         </a>

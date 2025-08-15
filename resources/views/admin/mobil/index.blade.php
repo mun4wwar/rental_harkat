@@ -24,6 +24,8 @@
                         <th class="px-6 py-3 text-left tracking-wider">No</th>
                         <th class="px-6 py-3 text-left tracking-wider">Nama
                             Mobil</th>
+                        <th class="px-6 py-3 text-left tracking-wider">Tipe
+                            Mobil</th>
                         {{-- <th class="px-6 py-3 text-left tracking-wider">Plat
                             Nomor</th> --}}
                         <th class="px-6 py-3 text-left tracking-wider">Merk</th>
@@ -43,6 +45,7 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $index + 1 }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->nama_mobil }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->types->nama_tipe ?? '-' }}</td>
                             {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->plat_nomor }}</td> --}}
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->merk }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->tahun }}</td>

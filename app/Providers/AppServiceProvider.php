@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\TipeMobil;
+use Cache;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
+use View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +23,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer('*', function ($view) {
+            $types = Cache::rememberForever('types', function () {
+                return TipeMobil::all();
+            });
+            $view->with('types', $types);
+        });
         Carbon::setLocale('id');
     }
 }

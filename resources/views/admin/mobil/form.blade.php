@@ -20,6 +20,22 @@
         value="{{ old('nama_mobil', $mobil->nama_mobil ?? '') }}" required>
 </div>
 
+{{-- Tipe Mobil --}}
+<div>
+    <label for="tipe_id" class="block text-sm font-medium text-gray-700">Tipe Mobil</label>
+    <select name="tipe_id" id="tipe_id"
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        required>
+        <option value="">-- Pilih Tipe Mobil --</option>
+        @foreach ($tipeMobil as $type)
+            <option value="{{ $type->id }}"
+                {{ old('tipe_id', $mobil->tipe_id ?? '') == $type->id ? 'selected' : '' }}>
+                {{ $type->nama_tipe }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
 {{-- Plat Nomor --}}
 {{-- <div>
     <label for="plat_nomor" class="block text-sm font-medium text-gray-700">Plat Nomor</label>

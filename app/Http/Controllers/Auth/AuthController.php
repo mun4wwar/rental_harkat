@@ -18,7 +18,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('web')->attempt($credentials)) {
-            if (Auth::guard('web')->user()->role == 2) {
+            if (Auth::guard('web')->user()->role == 3) {
                 $request->session()->regenerate();
                 return redirect()->intended('home');
             }
