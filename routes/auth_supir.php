@@ -17,7 +17,9 @@ Route::prefix('supir')->name('supir.')->group(function () {
     Route::middleware('auth:supir')->group(function () {
         // Dashboard supir
         Route::get('/dashboard', [SupirDashboardController::class, 'index'])->name('dashboard');
-        
+        Route::post('/supir/status', [SupirDashboardController::class, 'updateStatus'])
+            ->name('updateStatus');
+
         Route::post('/logout', [AuthSupirController::class, 'logout'])->name('logout');
         // Tambah route supir lainnya di sini
     });

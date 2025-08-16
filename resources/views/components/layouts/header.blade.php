@@ -95,8 +95,10 @@
             document.getElementById('mobileMenu').classList.toggle('hidden');
         });
 
-        document.getElementById('loginDropdownBtn')?.addEventListener('click', function() {
-            document.getElementById('loginDropdown').classList.toggle('hidden');
+        window.addEventListener('click', function(e) {
+            if (!document.getElementById('loginDropdownBtn')?.contains(e.target)) {
+                document.getElementById('loginDropdown')?.classList.add('hidden');
+            }
         });
     </script>
 </header>

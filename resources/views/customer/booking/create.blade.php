@@ -18,94 +18,148 @@
 
             {{-- Pilih Mobil --}}
             <div class="mb-4">
-                <label for="mobil_id" class="block text-gray-700 font-semibold mb-1">🚗 Pilih Mobil</label>
-                <select name="mobil_id" id="mobil_id" required
-                    class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
-                    <option disabled selected>-- Pilih Mobil --</option>
+                <label class="block mb-1 font-semibold">Pilih Mobil</label>
+                <select name="mobil_id" class="w-full border rounded p-2" required>
+                    <option value="">-- Pilih Mobil --</option>
                     @foreach ($mobils as $mobil)
-                        <option value="{{ $mobil->id }}">{{ $mobil->merk }} - {{ $mobil->nama_mobil }}</option>
+                        <option value="{{ $mobil->id }}" data-harga="{{ $mobil->harga_sewa }}"
+                            data-harga-allin="{{ $mobil->harga_all_in }}">
+                            {{ $mobil->nama_mobil }} - Rp{{ number_format($mobil->harga_sewa, 0, ',', '.') }}/hari
+                        </option>
                     @endforeach
                 </select>
             </div>
 
-            {{-- Checkbox Pakai Supir --}}
-            <div class="mb-4 flex items-center">
-                <input type="hidden" name="pakai_supir" value="0">
-                <input type="checkbox" name="pakai_supir" id="pakai_supir" value="1" class="mr-2" onchange="toggleSupir()">
-                <label for="pakai_supir" class="text-gray-700 font-semibold">🧑‍✈️ Pakai Supir</label>
+            {{-- Pakai Supir (checkbox) --}}
+            <div class="mb-4 flex items-center gap-2">
+                <input type="hidden" name="pakai_supir" value="0" class="w-5 h-5">
+                <input type="checkbox" name="pakai_supir" id="pakaiSupir" value="1" class="w-5 h-5"
+                    onchange="toggleSupir()>
+                <label for="pakaiSupir" class="font-semibold">🧑‍✈️ Pakai
+                Supir</label>
+            </div>
+
+            {{-- Asal Kota --}}
+            <div class="mb-4">
+                <label class="block mb-1 font-semibold">Asal Kota</label>
+                <select name="asal_kota" id="asalKota" class="w-full border rounded p-2" required>
+                    <option value="">-- Pilih Asal Kota --</option>
+                    <option value="1">Warga Yogyakarta</option>
+                    <option value="2">Lainnya...</option>
+                </select>
+            </div>
+
+            {{-- Nama Kota (hidden default) --}}
+            <div class="mb-4 hidden" id="namaKotaWrapper">
+                <label class="block mb-1 font-semibold">Nama Kota</label>
+                <input type="text" name="nama_kota" id="namaKota" class="w-full border rounded p-2">
             </div>
 
             {{-- Tanggal Sewa --}}
             <div class="mb-4">
-                <label for="tanggal_sewa" class="block text-gray-700 font-semibold mb-1">📆 Tanggal Sewa</label>
-                <input type="date" name="tanggal_sewa" id="tanggal_sewa" required
-                    class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+                <label class="block mb-1 font-semibold">📆 Tanggal Sewa</label>
+                <input type="date" name="tanggal_sewa" id="tanggalSewa" class="w-full border rounded p-2" required>
             </div>
 
             {{-- Tanggal Kembali --}}
             <div class="mb-4">
-                <label for="tanggal_kembali" class="block text-gray-700 font-semibold mb-1">📆 Tanggal Kembali</label>
-                <input type="date" name="tanggal_kembali" id="tanggal_kembali" required
-                    class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+                <label class="block mb-1 font-semibold">📆 Tanggal Kembali</label>
+                <input type="date" name="tanggal_kembali" id="tanggalKembali" class="w-full border rounded p-2" required>
             </div>
 
-            {{-- Lama Sewa --}}
+            {{-- Lama Sewa (auto) --}}
             <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-1">⏳ Lama Sewa (hari)</label>
-                <input type="text" name="lama_sewa" id="lama_sewa"
-                    class="w-full bg-gray-100 px-4 py-2 rounded border border-gray-300" readonly>
+                <label class="block mb-1 font-semibold">⏳ Lama Sewa (hari)</label>
+                <input type="number" name="lama_sewa" id="lamaSewa" class="w-full border rounded p-2 bg-gray-100"
+                    readonly>
             </div>
 
-            {{-- Total Harga --}}
+            {{-- Jaminan --}}
             <div class="mb-4">
-                <label class="block text-gray-700 font-semibold mb-1">💰 Total Harga</label>
-                <input type="text" name="total_harga" id="total_harga"
-                    class="w-full bg-gray-100 px-4 py-2 rounded border border-gray-300" readonly>
+                <label class="block mb-1 font-semibold">Jaminan</label>
+                <select name="jaminan" id="jaminan" class="w-full border rounded p-2" required>
+                    <option value="">-- Pilih Jaminan --</option>
+                    <option value="1">KTP/ID CARD</option>
+                    <option value="2">KTP & Motor (untuk warga lokal)</option>
+                </select>
             </div>
 
-            <button type="submit"
-                class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-md shadow-md transition duration-200">
-                🚀 Booking Sekarang
+            {{-- Uang Muka (auto 50%) --}}
+            <div class="mb-4">
+                <label class="block mb-1 font-semibold">Uang Muka (50%)</label>
+                <input type="number" name="uang_muka" id="uangMuka" class="w-full border rounded p-2 bg-gray-100"
+                    readonly>
+            </div>
+
+            {{-- Total Harga (auto) --}}
+            <div class="mb-4">
+                <label class="block mb-1 font-semibold">💰 Total Harga</label>
+                <input type="text" name="total_harga" id="totalHarga" class="w-full border rounded p-2 bg-gray-100"
+                    readonly>
+            </div>
+
+            <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
+                Booking Sekarang
             </button>
         </form>
     </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const asalKota = document.querySelector("[name='asal_kota']");
+                const namaKotaWrapper = document.getElementById('namaKotaWrapper');
+                const tanggalSewa = document.querySelector("[name='tanggal_sewa']");
+                const tanggalKembali = document.querySelector("[name='tanggal_kembali']");
+                const pakaiSupir = document.querySelector("[name='pakai_supir']");
+                const mobilSelect = document.querySelector("[name='mobil_id']");
+                const lamaSewaInput = document.querySelector("[name='lama_sewa']");
+                const jaminan = document.querySelector("[name='jaminan']");
+                const uangMukaInput = document.querySelector("[name='uang_muka']");
+                const totalHargaInput = document.querySelector("[name='total_harga']");
+
+                function toggleSupir() {
+                    document.getElementById('supirField').classList.toggle('hidden', !pakaiSupir.checked);
+                }
+                // toggle nama kota
+                asalKota.addEventListener('change', () => {
+                    if (asalKota.value === '2') {
+                        namaKotaWrapper.classList.remove('hidden');
+                    } else {
+                        namaKotaWrapper.classList.add('hidden');
+                    }
+                });
+
+                function hitungHarga() {
+                    if (!tanggalSewa.value || !tanggalKembali.value || !mobilSelect.value) return;
+
+                    let tglSewa = new Date(tanggalSewa.value);
+                    let tglKembali = new Date(tanggalKembali.value);
+                    let lama = (tglKembali - tglSewa) / (1000 * 60 * 60 * 24); // hasil dalam hari
+
+                    if (lama <= 0) lama = 1; // minimal 1 hari
+                    lamaSewaInput.value = lama;
+
+                    // ambil harga mobil dari option dataset
+                    let hargaSewa = parseInt(mobilSelect.selectedOptions[0].dataset.harga);
+                    let hargaAllIn = parseInt(mobilSelect.selectedOptions[0].dataset.hargaAllin);
+
+                    let total = 0;
+                    if (pakaiSupir.checked) {
+                        total = lama * hargaAllIn;
+                    } else {
+                        total = lama * hargaSewa;
+                    }
+
+                    totalHargaInput.value = total.toLocaleString("id-ID");
+                    uangMukaInput.value = (total / 2).toLocaleString("id-ID");
+                }
+
+                tanggalSewa.addEventListener("change", hitungHarga);
+                tanggalKembali.addEventListener("change", hitungHarga);
+                pakaiSupir.addEventListener("change", hitungHarga);
+                mobilSelect.addEventListener("change", hitungHarga);
+            });
+        </script>
+    @endpush
 @endsection
-
-@push('scripts')
-    <script>
-        const tanggalSewa = document.getElementById('tanggal_sewa');
-        const tanggalKembali = document.getElementById('tanggal_kembali');
-        const lamaSewa = document.getElementById('lama_sewa');
-        const totalHarga = document.getElementById('total_harga');
-        const mobilSelect = document.getElementById('mobil_id');
-        const pakaiSupir = document.getElementById('pakai_supir');
-
-        function toggleSupir() {
-            document.getElementById('supirField').classList.toggle('hidden', !pakaiSupir.checked);
-        }
-
-        function hitungLamaDanHarga() {
-            const tglAwal = new Date(tanggalSewa.value);
-            const tglAkhir = new Date(tanggalKembali.value);
-
-            if (tanggalSewa.value && tanggalKembali.value && tglAkhir >= tglAwal) {
-                const hari = Math.ceil((tglAkhir - tglAwal) / (1000 * 60 * 60 * 24)) + 1;
-                lamaSewa.value = hari;
-
-                // Dummy harga - bisa diganti pakai JS fetch harga mobil
-                const hargaMobil = 300000; // misal 300rb per hari
-                const hargaSupir = 100000; // misal 100rb per hari
-                let total = hargaMobil * hari;
-                if (pakaiSupir.checked) total += hargaSupir * hari;
-                totalHarga.value = 'Rp ' + total.toLocaleString('id-ID');
-            } else {
-                lamaSewa.value = '';
-                totalHarga.value = '';
-            }
-        }
-
-        tanggalSewa.addEventListener('change', hitungLamaDanHarga);
-        tanggalKembali.addEventListener('change', hitungLamaDanHarga);
-        pakaiSupir.addEventListener('change', hitungLamaDanHarga);
-    </script>
-@endpush

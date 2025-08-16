@@ -14,7 +14,7 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $pelanggans = User::latest()->get();
+        $pelanggans = User::where('role', 3)->get();
         return view('admin.pelanggan.index', compact('pelanggans'));
     }
 

@@ -52,9 +52,13 @@ class Transaksi extends Model
         'mobil_id',
         'pakai_supir',
         'supir_id',
+        'asal_kota',
+        'nama_kota',
         'tanggal_sewa',
         'tanggal_kembali',
         'lama_sewa',
+        'jaminan',
+        'uang_muka',
         'total_harga',
         'status',
     ];
@@ -76,6 +80,14 @@ class Transaksi extends Model
             self::STATUS_DONE => 'Done',
             default => 'Unknown',
         };
+    }
+
+    public function getAsalKotaLabelAttribute()
+    {
+        if ($this->asal_kota == 1) {
+            return 'Yogyakarta';
+        }
+        return $this->nama_kota;
     }
 
     // ✅ Accessor tanggal format

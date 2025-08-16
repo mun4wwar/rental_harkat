@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 
+@section('title', 'Dashboard Admin')
 @section('content')
     <div class="bg-white p-6 rounded-lg shadow">
         <h2 class="text-2xl font-bold mb-4">Dashboard Admin</h2>
@@ -12,7 +13,7 @@
             </div>
             <div class="bg-green-100 p-4 rounded-lg">
                 <h3 class="font-semibold text-green-800">Mobil Tersedia</h3>
-                <p class="text-2xl font-bold text-green-600">{{ $mobilTersedia}}</p>
+                <p class="text-2xl font-bold text-green-600">{{ $mobilTersedia }}</p>
             </div>
             <div class="bg-yellow-100 p-4 rounded-lg">
                 <h3 class="font-semibold text-yellow-800">Mobil Disewa</h3>

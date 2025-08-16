@@ -23,6 +23,7 @@
                     <th class="border px-4 py-2">Pelanggan</th>
                     <th class="border px-4 py-2">Mobil</th>
                     <th class="border px-4 py-2">Supir</th>
+                    <th class="border px-4 py-2">Asal Kota</th>
                     <th class="border px-4 py-2">Tanggal</th>
                     <th class="border px-4 py-2">Total Harga</th>
                     <th class="border px-4 py-2">Status</th>
@@ -36,6 +37,7 @@
                         <td class="border px-4 py-2">{{ $transaksi->mobil->nama_mobil ?? '-' }}</td>
                         <td class="border px-4 py-2"><x-pakai-supir-label :pakaiSupir="$transaksi->pakai_supir" :supir="$transaksi->supir" />
                         </td>
+                        <td class="border px-4 py-2">{{ $transaksi->asal_kota_label }}</td>
                         <td class="border px-4 py-2">
                             {{ $transaksi->tanggal_mulai_format }} s/d {{ $transaksi->tanggal_selesai_format }}
                         </td>

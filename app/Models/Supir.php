@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @property int $id
@@ -32,7 +32,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class Supir extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'supirs'; // opsional sih, default-nya udah bener
     protected $fillable = [
@@ -46,6 +46,12 @@ class Supir extends Authenticatable
     ];
 
     protected $hidden = ['password'];
+
+    public function getIsAvailableAttribute()
+    {
+        return $this->status == 1;
+    }
+
 
     public function getStatusTextAttribute()
     {

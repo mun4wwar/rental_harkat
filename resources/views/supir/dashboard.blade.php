@@ -3,42 +3,31 @@
 @section('title', 'Dashboard Supir')
 
 @section('content')
-<div class="container py-4">
-    <h1 class="mb-4">Halo, {{ auth()->guard('supir')->user()->nama }}</h1>
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h2>
 
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Status</h5>
-                    <p class="card-text">
-                        <strong class="text-success">Siap Jalan</strong>
-                        {{-- nanti bisa diganti dinamis --}}
-                    </p>
-                    <a href="#" class="btn btn-outline-primary btn-sm">Ubah Status</a>
-                </div>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white shadow rounded-xl p-6 flex flex-col items-center">
+            <div class="text-blue-600 text-3xl font-bold">⚡</div>
+            <p class="mt-2 text-gray-600">Status</p>
+            <span class="mt-1 font-semibold text-gray-800">
+                @if (auth('supir')->user()->is_available)
+                    <p class="text-green-600 font-semibold">Ready to Drive 🚗</p>
+                @else
+                    <p class="text-gray-500">Not Available</p>
+                @endif
+            </span>
         </div>
 
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Job Aktif</h5>
-                    <p class="card-text">1 job sedang berlangsung</p>
-                    <a href="#" class="btn btn-outline-primary btn-sm">Lihat Detail</a>
-                </div>
-            </div>
+        <div class="bg-white shadow rounded-xl p-6 flex flex-col items-center">
+            <div class="text-green-600 text-3xl font-bold">📋</div>
+            <p class="mt-2 text-gray-600">Job Aktif</p>
+            <span class="mt-1 font-semibold text-gray-800">3</span>
         </div>
 
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Riwayat Nyupir</h5>
-                    <p class="card-text">Total 18 Transaksi</p>
-                    <a href="#" class="btn btn-outline-primary btn-sm">Lihat Riwayat</a>
-                </div>
-            </div>
+        <div class="bg-white shadow rounded-xl p-6 flex flex-col items-center">
+            <div class="text-purple-600 text-3xl font-bold">✅</div>
+            <p class="mt-2 text-gray-600">Selesai</p>
+            <span class="mt-1 font-semibold text-gray-800">12</span>
         </div>
     </div>
-</div>
 @endsection

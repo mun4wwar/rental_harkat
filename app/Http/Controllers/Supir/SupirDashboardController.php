@@ -31,13 +31,9 @@ class SupirDashboardController extends Controller
 
     public function updateStatus(Request $request)
     {
-        $request->validate([
-            'status' => 'required|in:available,unavailable,on_trip'
-        ]);
 
-        $supir = Auth::guard('supir')->user();
-        dd(get_class($supir));
-        $supir->status = $request->status;
+        $supir = Supir::findOrFail(auth('supir')->id());
+        $supir->status = $request->has('status') ? 1 : 0;
         $supir->save();
 
         return back()->with('success', 'Status berhasil diperbarui.');

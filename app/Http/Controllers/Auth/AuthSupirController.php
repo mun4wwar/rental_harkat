@@ -19,7 +19,7 @@ class AuthSupirController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::guard('supir')->attempt($credentials)) {
+        if (auth('supir')->attempt($credentials)) {
             $request->session()->regenerate();
             session(['guard' => 'supir']); // ← HARUS DI SINI
             return redirect()->route('supir.dashboard');
@@ -33,9 +33,12 @@ class AuthSupirController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::guard('supir')->logout();
+        auth('supir')->logout();
+
+        $request->session()->flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('supir.login');
+
+        return redirect()->route('landing-page');
     }
 }

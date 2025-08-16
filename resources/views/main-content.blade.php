@@ -15,7 +15,7 @@
         {{-- text content --}}
         <div class="relative z-10 flex items-center justify-center h-full text-center px-4">
             <div class="max-w-3xl">
-                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-4 drop-shadow-lg">Harkat Rental</h1>
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-4 drop-shadow-lg">Harkat Rent Car</h1>
                 <p class="text-lg md:text-xl text-gray-700 mb-8">
                     Nikmati perjalanan yang aman, nyaman, dan terjangkau bersama Harkat Yogyakarta.
                     Booking online kapan pun kamu butuh mobil!
