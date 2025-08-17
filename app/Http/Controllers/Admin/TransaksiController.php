@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\JobAssigned;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TransaksiRequest;
 use App\Models\Mobil;
@@ -98,10 +99,16 @@ class TransaksiController extends Controller
         return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil diperbarui.');
     }
 
-    public function destroy(Transaksi $transaksi): RedirectResponse
+    public function assignSupir($transaksiId)
     {
-        $transaksi->delete();
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
+        $transaksi = Transaksi::findOrFail($transaksiId);
+
+        $transaksi->pakai_supir = 2; // misalnya field nya `status_supir`
+        $transaksi->save();
+
+        broadcast(new JobAssigned($transaksi));
+
+        return back()->with('success', 'Job berhasil dikirim ke semua supir yang available!');
     }
 
     /**

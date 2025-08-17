@@ -1,4 +1,4 @@
-<header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+<header class="bg-white shadow px-6 py-4 flex justify-between items-center md:ml-64">
     <h1 class="text-lg font-bold text-blue-900">
         Halo, {{ auth('supir')->user()->nama }} 👋
     </h1>
@@ -7,17 +7,20 @@
         <span class="px-2 py-1 text-xs font-medium rounded {{ auth('supir')->user()->status_badge_class }}">
             {{ auth('supir')->user()->status_text }}
         </span>
-        <form action="{{ route('supir.updateStatus') }}" method="POST">
+        <form action="{{ route('supir.updateStatus') }}" method="POST" onsubmit="setTimeout(() => this.submit(), 200)">
             @csrf
             <label class="inline-flex items-center cursor-pointer">
-                <input type="checkbox" name="status" onchange="this.form.submit()" class="sr-only peer"
-                    {{ auth('supir')->user()->is_available ? 'checked' : '' }}>
+                <input type="checkbox" name="status" class="sr-only peer"
+                    {{ auth('supir')->user()->is_available ? 'checked' : '' }} onchange="this.form.requestSubmit()">
+
+                <!-- Background Switch -->
                 <div
-                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full 
-            peer peer-checked:bg-green-500 relative transition">
+                    class="w-11 h-6 bg-gray-200 rounded-full relative 
+                    transition-colors peer-checked:bg-green-500">
+                    <!-- Bulatan -->
                     <div
-                        class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all 
-                peer-checked:translate-x-5">
+                        class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full 
+                        transition-transform peer-checked:translate-x-5">
                     </div>
                 </div>
             </label>

@@ -8,7 +8,6 @@
         <a href="{{ route('supir.dashboard') }}" class="hover:bg-blue-700 px-3 py-2 rounded-md">🏠 Dashboard</a>
         <a href="" class="hover:bg-blue-700 px-3 py-2 rounded-md">📋 Job Aktif</a>
         <a href="" class="hover:bg-blue-700 px-3 py-2 rounded-md">📑 Riwayat</a>
-        <a href="" class="hover:bg-blue-700 px-3 py-2 rounded-md">⚡ Status</a>
     </nav>
 
     <form method="POST" action="{{ route('supir.logout') }}" class="mt-auto">

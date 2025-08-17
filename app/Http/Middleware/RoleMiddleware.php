@@ -28,6 +28,8 @@ class RoleMiddleware
 
         // Redirect sesuai guard
         switch ($guard) {
+            case 'superadmin':
+                return redirect()->route('superadmin.login');
             case 'admin':
                 return redirect()->route('admin.login');
             case 'web':

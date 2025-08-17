@@ -25,4 +25,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', 'role:2,admin'
     Route::resource('supir', SupirController::class);
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('transaksi', TransaksiController::class);
+
+    Route::post('/admin/transaksi/{id}/assign-supir', [TransaksiController::class, 'assignSupir'])
+        ->name('assign-supir');
 });

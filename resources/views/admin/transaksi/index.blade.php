@@ -35,7 +35,8 @@
                     <tr>
                         <td class="border px-4 py-2">{{ $transaksi->user->name ?? '-' }}</td>
                         <td class="border px-4 py-2">{{ $transaksi->mobil->nama_mobil ?? '-' }}</td>
-                        <td class="border px-4 py-2"><x-pakai-supir-label :pakaiSupir="$transaksi->pakai_supir" :supir="$transaksi->supir" />
+                        <td class="border px-4 py-2"><x-pakai-supir-label :pakaiSupir="$transaksi->pakai_supir" :supir="$transaksi->supir" :transaksi="$transaksi"/>
+
                         </td>
                         <td class="border px-4 py-2">{{ $transaksi->asal_kota_label }}</td>
                         <td class="border px-4 py-2">

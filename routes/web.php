@@ -43,5 +43,6 @@ Route::get('/debug-session', function () {
 });
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/auth_superadmin.php';
 require __DIR__ . '/auth_admin.php';
 require __DIR__ . '/auth_supir.php';

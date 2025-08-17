@@ -7,26 +7,25 @@ use App\Models\Transaksi;
 use App\Models\Supir;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SupirDashboardController extends Controller
 {
     public function index()
     {
-        $supir = Auth::guard('supir')->user();
+        $supir = auth('supir')->id();
 
-        $transaksiAktif = Transaksi::where('supir_id', $supir->id)
-            ->where('status', 2)
-            ->with('mobil', 'user')
-            ->first();
-
-        $riwayat = Transaksi::where('supir_id', $supir->id)
-            ->where('status', 3)
-            ->latest()
-            ->with('mobil', 'user')
-            ->take(5)
+        // Job aktif
+        $jobAktif = Transaksi::where('supir_id', $supir)
+            ->where('status', '!=', 3)
             ->get();
 
-        return view('supir.dashboard', compact('supir', 'transaksiAktif', 'riwayat'));
+        // Riwayat job
+        $riwayatJob = Transaksi::where('supir_id', $supir)
+            ->where('status', 3)
+            ->get();
+
+        return view('supir.dashboard', compact('supir', 'jobAktif', 'riwayatJob'));
     }
 
     public function updateStatus(Request $request)
@@ -37,5 +36,32 @@ class SupirDashboardController extends Controller
         $supir->save();
 
         return back()->with('success', 'Status berhasil diperbarui.');
+    }
+
+    public function acceptJob(Request $request, $transaksiId)
+    {
+        try {
+            $supir = Supir::findOrFail(auth('supir')->id()); // harus object Supir
+            $transaksi = Transaksi::findOrFail($transaksiId);
+
+            if ($transaksi->supir_id) {
+                return response()->json(['status' => 'failed', 'message' => 'Job sudah diambil supir lain']);
+            }
+
+            $transaksi->supir_id = $supir->id;
+            $transaksi->pakai_supir = 1;
+
+            $supir->status = 2;
+            $supir->save();
+
+            $transaksi->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Job berhasil diterima']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }
