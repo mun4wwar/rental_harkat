@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($pelanggans as $index => $pelanggan)
+                    @foreach ($pelanggans as $pelanggan)
                         <tr class="border-t">
                             <td class="px-4 py-2">{{ $loop->iteration }}</td>
                             <td class="px-4 py-2">{{ $pelanggan->name }}</td>

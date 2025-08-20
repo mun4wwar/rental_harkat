@@ -21,13 +21,13 @@
                     Booking online kapan pun kamu butuh mobil!
                 </p>
 
-                @if (Auth::check() && Auth::user()->role == 3)
+                @if (Auth::check() && Auth::user()->isRole('Customer'))
                     <a href="{{ route('booking.create') }}"
                         class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
                         Booking Sekarang
                     </a>
                 @else
-                    <a href="{{ route('login') }}"
+                    <a href="#" id="openCustomerLoginModalMobile"
                         class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
                         Booking Sekarang
                     </a>

@@ -31,13 +31,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($supirs as $index => $supir)
+                    @foreach ($supirs as $supir)
                         <tr class="border-t">
-                            <td class="px-4 py-2">{{ $index + 1 }}</td>
-                            <td class="px-4 py-2">{{ $supir->nama }}</td>
-                            <td class="px-4 py-2">{{ $supir->email }}</td>
-                            <td class="px-4 py-2">{{ $supir->no_hp }}</td>
-                            <td class="px-4 py-2">{{ $supir->alamat }}</td>
+                            <td class="px-4 py-2">{{ $loop->iteration }}</td>
+                            <td class="px-4 py-2">{{ $supir->user->name }}</td>
+                            <td class="px-4 py-2">{{ $supir->user->email }}</td>
+                            <td class="px-4 py-2">{{ $supir->user->no_hp }}</td>
+                            <td class="px-4 py-2">{{ $supir->user->alamat }}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-sm">
                                 <span
                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full

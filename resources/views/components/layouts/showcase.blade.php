@@ -13,14 +13,14 @@
 
                 {{-- Tombol booking --}}
                 <div class="mt-4">
-                    @if (Auth::check() && Auth::user()->role == 3)
+                    @if (Auth::check() && Auth::user()->isRole('Customer'))
                         <a href="{{ route('booking.create') }}"
-                            class="inline-block bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
+                            class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
                             Booking Sekarang
                         </a>
                     @else
-                        <a href="{{ route('login') }}"
-                            class="inline-block bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
+                        <a href="#" id="openCustomerLoginModalMobile"
+                            class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
                             Booking Sekarang
                         </a>
                     @endif

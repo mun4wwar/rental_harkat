@@ -31,7 +31,7 @@
                     'match' => 'admin/pelanggan',
                 ],
                 [
-                    'route' => 'admin.transaksi.index',
+                    'route' => 'admin.booking.index',
                     'icon' => 'arrow-left-right',
                     'label' => 'Manajemen Penyewaan Mobil',
                     'match' => 'admin/transaksi',

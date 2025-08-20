@@ -36,7 +36,7 @@ class TransaksiRequest extends FormRequest
             'supir_id'         => 'nullable|exists:supirs,id', // Bisa null kalau sewa tanpa supir
             'tanggal_sewa'     => 'required|date',
             'tanggal_kembali'  => 'required|date|after_or_equal:tanggal_sewa',
-            'status'           => 'required|in:1,2,3', // 1 = Booking, 2 = Berlangsung, 3 = Selesai
+            'status'           => 'required|in:1,2', // 1 = Booking, 2 = Berlangsung
         ];
     }
     public function messages(): array
@@ -46,7 +46,7 @@ class TransaksiRequest extends FormRequest
             'mobil_id.required'     => 'Mobil wajib dipilih.',
             'tanggal_sewa.required' => 'Tanggal sewa wajib diisi.',
             'tanggal_kembali.after_or_equal' => 'Tanggal kembali tidak boleh sebelum tanggal sewa.',
-            'status.in'             => 'Status hanya boleh 1 (Booking), 2 (Berlangsung), atau 3 (Selesai).',
+            'status.in'             => 'Status hanya boleh 1 (Booking) atau 2 (Berlangsung)',
         ];
     }
 }

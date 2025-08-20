@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Supir;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Supir;
 
 class SupirSeeder extends Seeder
 {
@@ -13,25 +14,16 @@ class SupirSeeder extends Seeder
      */
     public function run(): void
     {
-        Supir::insert([
-            [
-                'nama' => 'Budi Santoso',
-                'email' => 'budi@santoso.com',
-                'no_hp' => '081234567890',
-                'alamat' => 'Jl. Kaliurang Km 7, Yogyakarta',
-                'status' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'nama' => 'Slamet Riyadi',
-                'email' => 'slamet@riyadi.com',
-                'no_hp' => '085612345678',
-                'alamat' => 'Jl. Wates, Bantul',
-                'status' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        // Ambil user supir dari tabel users
+        $supirUser = User::where('role', 3)->get();
+
+        foreach ($supirUser as $user) {
+            Supir::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'status' => 1, // default aktif
+                ]
+            );
+        }
     }
 }

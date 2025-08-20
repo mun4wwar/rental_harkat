@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\TipeMobil;
 use Cache;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use View;
 

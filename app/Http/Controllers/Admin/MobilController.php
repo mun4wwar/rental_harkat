@@ -15,7 +15,7 @@ class MobilController extends Controller
      */
     public function index()
     {
-        $mobils = Mobil::all();
+        $mobils = Mobil::with('images')->get();
         return view('admin.mobil.index', compact('mobils'));
     }
 
@@ -42,15 +42,24 @@ class MobilController extends Controller
             'harga_sewa' => 'required|numeric',
             'harga_all_in' => 'required|numeric',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
-        $data = $request->except('gambar');
+        $data = $request->except('gambar', 'images');
 
         if ($request->hasFile('gambar')) {
             $data['gambar'] = $request->file('gambar')->store('gambar_mobil', 'public');
         }
 
-        Mobil::create($data);
+        $mobil = Mobil::create($data);
+
+        // Additional images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $img) {
+                $path = $img->store('mobil_images', 'public');
+                $mobil->images()->create(['image_path' => $path]);
+            }
+        }
 
         return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil di tambahkan");
     }
@@ -60,6 +69,7 @@ class MobilController extends Controller
      */
     public function show(Mobil $mobil)
     {
+        $mobil->load('images'); // eager load
         return view('admin.mobil.show', compact('mobil'));
     }
 
@@ -69,6 +79,7 @@ class MobilController extends Controller
     public function edit(Mobil $mobil)
     {
         $tipeMobil = TipeMobil::all();
+        $mobil->load('images');
         return view('admin.mobil.edit', compact('mobil', 'tipeMobil'));
     }
 
@@ -87,9 +98,10 @@ class MobilController extends Controller
             'harga_all_in' => 'required|numeric',
             'status' => 'required|in:0,1,2,3,4',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
         ]);
 
-        $data = $request->except('gambar');
+        $data = $request->except('gambar', 'images');
 
         if ($request->hasFile('gambar')) {
             // Optional: Hapus gambar lama kalau ada
@@ -101,6 +113,14 @@ class MobilController extends Controller
 
         $mobil->update($data);
 
+        // Additional images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $img) {
+                $path = $img->store('mobil_images', 'public');
+                $mobil->images()->create(['image_path' => $path]);
+            }
+        }
+
         return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil diupdate");
     }
 
@@ -109,6 +129,15 @@ class MobilController extends Controller
      */
     public function destroy(Mobil $mobil)
     {
+        // Hapus cover image
+        if ($mobil->gambar) {
+            Storage::disk('public')->delete($mobil->gambar);
+        }
+
+        // Hapus additional images
+        foreach ($mobil->images as $img) {
+            Storage::disk('public')->delete($img->image_path);
+        }
         $mobil->delete();
         return redirect()->route('admin.mobil.index')->with('success', 'Mobil berhasil dihapus!');
     }

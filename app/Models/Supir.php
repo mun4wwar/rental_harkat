@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -30,22 +31,25 @@ use Illuminate\Notifications\Notifiable;
  * @property-read int|null $transaksis_count
  * @mixin \Eloquent
  */
-class Supir extends Authenticatable
+class Supir extends Model
 {
     use HasFactory, Notifiable;
 
     protected $table = 'supirs'; // opsional sih, default-nya udah bener
     protected $fillable = [
-        'nama',
-        'email',
-        'password',
-        'no_hp',
-        'alamat',
         'status',
         'gambar'
     ];
 
     protected $hidden = ['password'];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function jobOffers()
+    {
+        return $this->hasMany(JobOffer::class);
+    }
 
     public function getIsAvailableAttribute()
     {

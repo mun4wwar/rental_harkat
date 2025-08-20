@@ -5,19 +5,24 @@ namespace App\Http\Controllers\Admin;
 use App\Events\JobAssigned;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TransaksiRequest;
+use App\Models\Booking;
+use App\Models\BookingDetail;
+use App\Models\JobOffer;
 use App\Models\Mobil;
 use App\Models\Supir;
-use App\Models\Transaksi;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
-class TransaksiController extends Controller
+class BookingController extends Controller
 {
     public function index()
     {
-        $transaksis = Transaksi::with(['user', 'mobil', 'supir'])->latest()->get();
-        return view('admin.transaksi.index', compact('transaksis'));
+        $bookings = Booking::with(['details'])->latest()->get();
+        return view('admin.transaksi.index', compact('bookings'));
     }
 
     public function create()
@@ -33,7 +38,7 @@ class TransaksiController extends Controller
     {
         $data = $this->prepareTransaksiData($request->validated());
 
-        Transaksi::create($data);
+        Booking::create($data);
 
         // Update status mobil
         Mobil::where('id', $data['mobil_id'])->update([
@@ -43,12 +48,12 @@ class TransaksiController extends Controller
         return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dibuat.');
     }
 
-    public function show(Transaksi $transaksi)
+    public function show(Booking $booking)
     {
         return view('admin.transaksi.show', compact('transaksi'));
     }
 
-    public function edit(Transaksi $transaksi)
+    public function edit(Booking $booking)
     {
         $pelanggans = User::all();
         $mobils = Mobil::all();
@@ -57,23 +62,22 @@ class TransaksiController extends Controller
         return view('admin.transaksi.edit', compact('transaksi', 'pelanggans', 'mobils', 'supirs'));
     }
 
-
-    public function update(TransaksiRequest $request, Transaksi $transaksi): RedirectResponse
+    public function update(TransaksiRequest $request, Booking $booking): RedirectResponse
     {
         $data = $this->prepareTransaksiData($request->validated());
 
         // Step 1: Cek apakah mobil atau supir sebelumnya dipakai
-        $oldMobilId = $transaksi->mobil_id;
-        $oldSupirId = $transaksi->supir_id;
+        $oldMobilId = $booking->mobil_id;
+        $oldSupirId = $booking->supir_id;
 
-        $transaksi->update($data);
+        $booking->update($data);
 
         // Step 3: Kalau status transaksi jadi
         if ($data['status'] === 2) {
             // Mobil dan supir jadi tersedia lagi
-            Mobil::where('id', $transaksi->mobil_id)->update(['status' => 3]);
-            if ($transaksi->supir_id) {
-                Supir::where('id', $transaksi->supir_id)->update(['status' => 0]);
+            Mobil::where('id', $booking->mobil_id)->update(['status' => 3]);
+            if ($booking->supir_id) {
+                Supir::where('id', $booking->supir_id)->update(['status' => 0]);
             }
         } else {
             // Kalau mobil diganti, balikin mobil lama jadi tersedia
@@ -99,17 +103,39 @@ class TransaksiController extends Controller
         return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil diperbarui.');
     }
 
-    public function assignSupir($transaksiId)
+    public function assignJobSupir(Request $request, BookingDetail $bookingDtl)
     {
-        $transaksi = Transaksi::findOrFail($transaksiId);
+        try {
+            // Ambil semua supir available
+            $availableSupirs = Supir::where('status', 1)->get();
+            if ($availableSupirs->isEmpty()) {
+                return back()->with('error', 'Tidak ada supir yang available.');
+            }
 
-        $transaksi->pakai_supir = 2; // misalnya field nya `status_supir`
-        $transaksi->save();
-
-        broadcast(new JobAssigned($transaksi));
-
-        return back()->with('success', 'Job berhasil dikirim ke semua supir yang available!');
+            // Mulai transaksi DB
+            DB::transaction(function () use ($availableSupirs, $bookingDtl) {
+                foreach ($availableSupirs as $supir) {
+                    $offer = JobOffer::firstOrCreate([
+                        'booking_detail_id' => $bookingDtl->id,
+                        'supir_id' => $supir->id,
+                    ]);
+                    Log::info("Job offer created/exists:", $offer->toArray());
+                    // Cek kalau supir punya user_id
+                    if ($supir->user_id) {
+                        event(new JobAssigned($offer));
+                    }
+                }
+            });
+            $bookingDtl->update(['pakai_supir' => 2]);
+            return back()->with('success', 'Job dikirim ke semua supir available.');
+        } catch (\Exception $e) {
+            Log::error('AssignJob error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->with('error', 'Gagal assign job: ' . $e->getMessage());
+        }
     }
+
 
     /**
      * Prepare data for create or update transaksi

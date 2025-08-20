@@ -83,10 +83,17 @@ class Mobil extends Model
     {
         return $pakaiSupir ? ($this->harga_all_in ?? 0) : ($this->harga_sewa ?? 0);
     }
-
+    public function images()
+    {
+        return $this->hasMany(MobilImage::class);
+    }
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class);
+    }
+    public function bookingDetails()
+    {
+        return $this->hasMany(BookingDetail::class);
     }
 
     public function types()

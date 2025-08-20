@@ -44,6 +44,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    protected $guard_name = 'web';
     protected $fillable = [
         'name',
         'email',
@@ -61,6 +62,24 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    // mapping role int ke nama
+    const ROLES = [
+        1 => 'SuperAdmin',
+        2 => 'Admin',
+        3 => 'Supir',
+        4 => 'Customer',
+    ];
+    public function getRoleNameAttribute()
+    {
+        return self::ROLES[$this->role] ?? 'unknown';
+    }
+
+    // helper cek role
+    public function isRole($roleName)
+    {
+        return $this->roleName === $roleName;
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -73,19 +92,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-    public function isSuperAdmin()
+    public function supir()
     {
-        return $this->role === 1;
-    }
-    public function isAdmin()
-    {
-        return $this->role === 2;
-    }
-
-    public function isCustomer()
-    {
-        return $this->role === 3;
+        return $this->hasOne(Supir::class);
     }
 
     public function transaksis()

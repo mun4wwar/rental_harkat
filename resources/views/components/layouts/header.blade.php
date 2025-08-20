@@ -29,8 +29,10 @@
                     </button>
                 </form>
             @else
-                <a href="{{ route('login') }}" class="text-gray-700 font-medium hover:text-green-700">Pesanan</a>
-                <a href="{{ route('login') }}" class="text-gray-700 font-medium hover:text-green-700">Riwayat</a>
+                <a href="{{ route('login.form', ['role' => 'customer']) }}"
+                    class="text-gray-700 font-medium hover:text-green-700">Pesanan</a>
+                <a href="{{ route('login.form', ['role' => 'customer']) }}"
+                    class="text-gray-700 font-medium hover:text-green-700">Riwayat</a>
 
                 {{-- Dropdown Login --}}
                 <div class="relative inline-block text-left">
@@ -40,10 +42,11 @@
                     </button>
                     <div id="loginDropdown"
                         class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg overflow-hidden z-50 text-sm">
-                        <a href="{{ route('login') }}" class="block px-4 py-3 text-gray-700 hover:bg-green-50 transition">🔑
-                            Login Customer</a>
-                        <a href="{{ route('supir.login') }}"
-                            class="block px-4 py-3 text-gray-700 hover:bg-green-50 transition">🚗 Login Supir</a>
+                        <a href="#" id="openCustomerLoginModalDesktop"
+                            class="block px-4 py-3 text-gray-700 hover:bg-green-50 transition">🔑 Login</a>
+                        <a href="{{ route('login.form', ['role' => 'supir']) }}"
+                            class="block px-4 py-3 text-gray-700 hover:bg-green-50 transition">🚗
+                            Login Supir</a>
                     </div>
                 </div>
             @endauth
@@ -80,11 +83,14 @@
                 </button>
             </form>
         @else
-            <a href="{{ route('login') }}" class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Pesanan</a>
-            <a href="{{ route('login') }}" class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Riwayat</a>
-            <a href="{{ route('login') }}" class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">🔑 Login
-                Customer</a>
-            <a href="{{ route('supir.login') }}" class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">🚗
+            <a href="{{ route('login.form', ['role' => 'customer']) }}"
+                class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Pesanan</a>
+            <a href="{{ route('login.form', ['role' => 'customer']) }}"
+                class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Riwayat</a>
+            <a href="#" id="openCustomerLoginModalMobile"
+                class="block px-4 py-3 text-gray-700 hover:bg-green-50 transition">🔑 Login</a>
+            <a href="{{ route('login.form', ['role' => 'supir']) }}"
+                class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">🚗
                 Login Supir</a>
         @endauth
     </div>
@@ -101,4 +107,5 @@
             }
         });
     </script>
+    
 </header>

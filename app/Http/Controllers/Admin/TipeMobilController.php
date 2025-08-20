@@ -13,7 +13,8 @@ class TipeMobilController extends Controller
      */
     public function index()
     {
-        return view('admin.tipe-mobil.index');
+        $types = TipeMobil::get();
+        return view('admin.tipe-mobil.index', compact('types'));
     }
 
     /**

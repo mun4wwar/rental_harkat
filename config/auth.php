@@ -36,18 +36,6 @@ return [
     */
 
     'guards' => [
-        'superadmin' => [
-            'driver' => 'session',
-            'provider' => 'superadmin',
-        ],
-        'admin' => [
-            'driver' => 'session',
-            'provider' => 'admin',
-        ],
-        'supir' => [
-            'driver' => 'session',
-            'provider' => 'supirs',
-        ],
         'web' => [ // fallback default
             'driver' => 'session',
             'provider' => 'users',
@@ -72,18 +60,6 @@ return [
     */
 
     'providers' => [
-        'superadmin' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-        'admin' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-        'supirs' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Supir::class,
-        ],
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,

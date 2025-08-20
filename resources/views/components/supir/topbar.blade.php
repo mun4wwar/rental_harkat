@@ -1,17 +1,17 @@
 <header class="bg-white shadow px-6 py-4 flex justify-between items-center md:ml-64">
     <h1 class="text-lg font-bold text-blue-900">
-        Halo, {{ auth('supir')->user()->nama }} 👋
+        Halo, {{ auth()->user()->name }} 👋
     </h1>
 
     <div class="flex items-center gap-3">
-        <span class="px-2 py-1 text-xs font-medium rounded {{ auth('supir')->user()->status_badge_class }}">
-            {{ auth('supir')->user()->status_text }}
+        <span class="px-2 py-1 text-xs font-medium rounded {{ auth()->user()->supir->status_badge_class }}">
+            {{ auth()->user()->supir->status_text }}
         </span>
         <form action="{{ route('supir.updateStatus') }}" method="POST" onsubmit="setTimeout(() => this.submit(), 200)">
             @csrf
             <label class="inline-flex items-center cursor-pointer">
                 <input type="checkbox" name="status" class="sr-only peer"
-                    {{ auth('supir')->user()->is_available ? 'checked' : '' }} onchange="this.form.requestSubmit()">
+                    {{ auth()->user()->supir->status ? 'checked' : '' }} onchange="this.form.requestSubmit()">
 
                 <!-- Background Switch -->
                 <div

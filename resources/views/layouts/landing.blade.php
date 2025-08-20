@@ -5,6 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
+
     <title>Harkat Rental Yogyakarta</title>
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -21,16 +25,56 @@
     <!-- Header -->
     <x-layouts.header />
 
+    {{-- Customer Login Modal --}}
+    <div id="customerLoginModal" class="fixed inset-0 hidden items-center justify-center z-50">
+        <!-- Overlay -->
+        <div id="modalOverlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="relative w-full max-w-md">
+            <button id="closeLoginModal"
+                class="absolute top-2 right-2 text-white text-3xl font-bold hover:text-gray-300">&times;</button>
+
+            {{-- Include form login customer --}}
+            <x-auth.login-form :roleName="'Customer'" :color="'green'" :loginFrom="'customer'" />
+        </div>
+    </div>
+
     <!-- Hero (full width) -->
     @yield('hero')
 
     <!-- Main Content -->
     <main class="flex-1 pt-15 pb-20 px-4 max-w-6xl mx-auto w-full">
         @yield('content')
+
     </main>
 
     <!-- Footer -->
     <x-layouts.footer :types="$types" />
+    <script>
+        const modal = document.getElementById('customerLoginModal');
+        const overlay = document.getElementById('modalOverlay');
+        const closeBtn = document.getElementById('closeLoginModal');
+
+        // Semua tombol login yang bisa buka modal
+        const loginDesktop = document.getElementById('openCustomerLoginModalDesktop');
+        const loginMobile = document.getElementById('openCustomerLoginModalMobile');
+        const loginBtn = document.getElementById('openCustomerLoginModal'); // fallback
+
+        [loginDesktop, loginMobile, loginBtn].forEach(btn => {
+            btn?.addEventListener('click', e => {
+                e.preventDefault();
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+        });
+
+        // Tutup modal
+        [overlay, closeBtn].forEach(el => {
+            el?.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+        });
+    </script>
 
     <!-- JS Dropdown -->
     <script>

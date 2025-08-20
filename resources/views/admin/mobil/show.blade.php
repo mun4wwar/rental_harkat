@@ -1,46 +1,80 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="bg-white p-6 rounded-lg shadow max-w-2xl mx-auto">
-        <h2 class="text-2xl font-bold mb-6 text-center">Detail Mobil</h2>
+    <div class="max-w-4xl mx-auto mt-8">
+        <h2 class="text-3xl font-bold mb-6 text-center">Detail Mobil</h2>
 
-        <div class="flex flex-col md:flex-row gap-6">
-            <!-- Gambar Mobil -->
-            <div class="flex-shrink-0">
-                @if ($mobil->gambar)
-                    <img src="{{ Storage::url($mobil->gambar) }}" alt="Gambar Mobil"
-                        class="w-64 h-40 object-cover rounded shadow">
-                @else
-                    <div class="w-64 h-40 bg-gray-200 flex items-center justify-center rounded">
-                        <span class="text-gray-500">Gambar tidak tersedia</span>
-                    </div>
-                @endif
-            </div>
-
-            <!-- Detail Data -->
-            <div class="flex-1 space-y-2">
-                <p><strong>Nama Mobil:</strong> {{ $mobil->nama_mobil }}</p>
-                {{-- <p><strong>Plat Nomor:</strong> {{ $mobil->plat_nomor }}</p> --}}
-                <p><strong>Merk:</strong> {{ $mobil->merk }}</p>
-                <p><strong>Tahun:</strong> {{ $mobil->tahun }}</p>
-                <p><strong>Harga Sewa:</strong> Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }}</p>
-                <p><strong>Harga Sewa ALL IN:</strong> Rp {{ number_format($mobil->harga_all_in, 0, ',', '.') }}</p>
-                <p><strong>Status:</strong>
-                    @if ($mobil->status == 1)
-                        <span class="text-green-600 font-semibold">Tersedia</span>
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            {{-- Gambar --}}
+            <div class="md:flex">
+                <div class="md:w-1/2 p-4">
+                    {{-- Cover Image --}}
+                    @if ($mobil->gambar)
+                        <img src="{{ Storage::url($mobil->gambar) }}" alt="Cover Image"
+                            class="w-full h-64 object-cover rounded mb-4 shadow">
                     @else
-                        <span class="text-red-600 font-semibold">Disewa</span>
+                        <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded mb-4">
+                            <span class="text-gray-500">Cover image tidak tersedia</span>
+                        </div>
                     @endif
-                </p>
-            </div>
-        </div>
 
-        <!-- Tombol Kembali -->
-        <div class="mt-6 text-center">
-            <a href="{{ route('admin.mobil.index') }}"
-                class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 transition">
-                ← Kembali ke Daftar Mobil
-            </a>
+                    {{-- Galeri Additional Images --}}
+                    @if ($mobil->images->count())
+                        <h3 class="text-lg font-semibold mb-2">Galeri Tambahan</h3>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach ($mobil->images as $img)
+                                <img src="{{ Storage::url($img->image_path) }}" alt="Additional Image"
+                                    class="w-24 h-16 object-cover rounded shadow-sm">
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Detail Info --}}
+                <div class="md:w-1/2 p-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <p><span class="font-semibold">Nama Mobil:</span> {{ $mobil->nama_mobil }}</p>
+                        {{-- <p><span class="font-semibold">Plat Nomor:</span> {{ $mobil->plat_nomor }}</p> --}}
+                        <p><span class="font-semibold">Merk:</span> {{ $mobil->merk }}</p>
+                        <p><span class="font-semibold">Tahun:</span> {{ $mobil->tahun }}</p>
+                        <p><span class="font-semibold">Harga Sewa:</span> Rp
+                            {{ number_format($mobil->harga_sewa, 0, ',', '.') }}</p>
+                        <p><span class="font-semibold">Harga Sewa ALL IN:</span> Rp
+                            {{ number_format($mobil->harga_all_in, 0, ',', '.') }}</p>
+                        <p>
+                            <span class="font-semibold">Status:</span>
+                            @if ($mobil->status == 1)
+                                <span
+                                    class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">Tersedia</span>
+                            @elseif ($mobil->status == 0)
+                                <span
+                                    class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-sm font-semibold">Rusak</span>
+                            @elseif ($mobil->status == 2)
+                                <span
+                                    class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">Telah
+                                    Dibooking</span>
+                            @elseif ($mobil->status == 3)
+                                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">Telah
+                                    Disewa</span>
+                            @elseif ($mobil->status == 4)
+                                <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-semibold">Sedang
+                                    Diservis</span>
+                            @else
+                                <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-semibold">Tidak
+                                    diketahui</span>
+                            @endif
+                        </p>
+                    </div>
+
+                    {{-- Tombol Kembali --}}
+                    <div class="mt-6 text-center md:text-left">
+                        <a href="{{ route('admin.mobil.index') }}"
+                            class="inline-block bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 transition">
+                            ← Kembali ke Daftar Mobil
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

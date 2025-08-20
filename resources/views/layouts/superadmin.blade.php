@@ -39,7 +39,7 @@
                 <x-super-admin.sidebar-item href="" >
                     Laporan
                 </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="" >
+                <x-super-admin.sidebar-item href="{{ route('superadmin.admins.index') }}" :active="request()->routeIs('superadmin.admins.*')">
                     Kelola Admin
                 </x-super-admin.sidebar-item>
             </nav>

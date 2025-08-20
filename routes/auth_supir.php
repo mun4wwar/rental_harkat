@@ -1,28 +1,21 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthSupirController;
 use App\Http\Controllers\Supir\SupirDashboardController;
 
 Route::prefix('supir')->name('supir.')->group(function () {
     Route::get('/', function () {
-        return redirect()->route('supir.login');
-    })->middleware('guest:supir');
+        return redirect()->route('login');
+    })->middleware('guest:web');
     // Auth
-    Route::middleware('guest:supir')->group(function () {
-        Route::get('/login', [AuthSupirController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [AuthSupirController::class, 'login']);
-    });
-
-    Route::middleware('auth:supir')->group(function () {
+    Route::middleware(['auth', 'role:Supir'])->group(function () {
         // Dashboard supir
         Route::get('/dashboard', [SupirDashboardController::class, 'index'])->name('dashboard');
         Route::post('/supir/status', [SupirDashboardController::class, 'updateStatus'])
             ->name('updateStatus');
-        Route::post('/supir/accept-job/{transaksiId}', [SupirDashboardController::class, 'acceptJob'])
+        Route::post('/supir/job-accept', [SupirDashboardController::class, 'acceptJob'])
             ->name('acceptJob');
-
-        Route::post('/logout', [AuthSupirController::class, 'logout'])->name('logout');
         // Tambah route supir lainnya di sini
     });
 });

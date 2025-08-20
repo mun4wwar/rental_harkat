@@ -43,7 +43,7 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach ($mobils as $index => $mobil)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $index + 1 }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->nama_mobil }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->types->nama_tipe ?? '-' }}</td>
                             {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->plat_nomor }}</td> --}}

@@ -13,33 +13,23 @@ class RoleMiddleware
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  string  $roles  Comma separated roles, misal: "Admin,SuperAdmin"
      */
-    public function handle(Request $request, Closure $next, $role, $guard = 'web')
+    public function handle(Request $request, Closure $next, $roles): Response
     {
-        if (Auth::guard($guard)->check()) {
-            if (Auth::guard($guard)->user()->role == $role) {
-                return $next($request);
-            }
-            // Kalau login tapi role nggak sesuai → logout dulu biar gak looping
-            Auth::guard($guard)->logout();
-            return redirect()->route($guard === 'web' ? 'login' : "{$guard}.login")
-                ->withErrors(['email' => 'Akses ditolak. Role tidak sesuai.']);
+        if (!Auth::check()) {
+            // redirect login form sesuai prefix
+            $prefix = explode('/', $request->path())[0] ?? '';
+            return redirect("/$prefix/login");
         }
 
-        // Redirect sesuai guard
-        switch ($guard) {
-            case 'superadmin':
-                return redirect()->route('superadmin.login');
-            case 'admin':
-                return redirect()->route('admin.login');
-            case 'web':
-                return redirect()->route('login');
-            case 'supir':
-                return redirect()->route('supir.login');
-            default:
-                return redirect()->route("{$guard}.login")->withErrors([
-                    'email' => 'Akses ditolak. Role tidak sesuai.',
-                ]);
+        $userRole = Auth::user()->roleName;
+        $rolesArray = array_map('trim', explode(',', $roles));
+
+        if (!in_array($userRole, $rolesArray)) {
+            abort(403, 'Unauthorized.');
         }
+
+        return $next($request);
     }
 }

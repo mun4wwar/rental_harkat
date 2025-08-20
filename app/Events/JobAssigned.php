@@ -2,44 +2,37 @@
 
 namespace App\Events;
 
-use App\Models\Transaksi;
+use App\Models\JobOffer;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class JobAssigned implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $transaksi;
-    /**
-     * Create a new event instance.
-     */
-    public function __construct($transaksi)
+
+    public $jobOffer;
+
+    public function __construct(JobOffer $jobOffer)
     {
-        $this->transaksi = $transaksi;
+        $this->jobOffer = $jobOffer->load('booking_detail'); // biar ada info booking
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
     public function broadcastOn()
     {
-        return [new Channel('supir-available')];
+        // channel khusus supir yg dituju
+        return new Channel('supir.' . $this->jobOffer->supir_id);
     }
 
     public function broadcastWith()
     {
         return [
-            'transaksi_id' => $this->transaksi->id,
-            'mobil' => $this->transaksi->mobil->nama_mobil,
-            'tanggal_sewa' => $this->transaksi->tanggal_sewa,
-            'tanggal_kembali' => $this->transaksi->tanggal_kembali,
+            'id' => $this->jobOffer->id,
+            'mobil' => $this->jobOffer->booking_detail->mobil->nama_mobil ?? 'Unknown',
+            'tanggal_sewa' => $this->jobOffer->booking_detail->tanggal_sewa,
+            'tanggal_kembali' => $this->jobOffer->booking_detail->tanggal_kembali,
         ];
     }
 }

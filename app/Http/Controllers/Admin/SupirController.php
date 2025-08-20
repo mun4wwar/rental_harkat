@@ -16,7 +16,7 @@ class SupirController extends Controller
      */
     public function index()
     {
-        $supirs = Supir::all();
+        $supirs = Supir::with('user')->get();
         return view('admin.supir.index', compact('supirs'));
     }
 

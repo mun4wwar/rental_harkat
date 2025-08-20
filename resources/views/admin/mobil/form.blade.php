@@ -92,13 +92,22 @@
     </div>
 @endif
 
-{{-- Gambar --}}
+{{-- Cover Image --}}
 <div>
-    <label for="gambar" class="block text-sm font-medium text-gray-700">Foto Mobil</label>
+    <label for="gambar" class="block text-sm font-medium text-gray-700">Cover Image</label>
     <input type="file" name="gambar" id="gambar"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         @if (!isset($mobil)) required @endif>
 </div>
+
+{{-- Additional Images --}}
+<div>
+    <label for="images" class="block text-sm font-medium text-gray-700">Foto Tambahan (Bisa pilih lebih dari
+        1)</label>
+    <input type="file" name="images[]" id="images" multiple
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+</div>
+
 
 {{-- Tombol Submit --}}
 <div class="flex justify-end space-x-2">
@@ -107,4 +116,32 @@
     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
         {{ isset($mobil) ? 'Update' : 'Simpan' }}
     </button>
+</div>
+<script>
+    const gambarInput = document.getElementById('gambar');
+    const imagesInput = document.getElementById('images');
+
+    gambarInput.addEventListener('change', function() {
+        const preview = document.getElementById('cover-preview');
+        if (this.files && this.files[0]) {
+            preview.src = URL.createObjectURL(this.files[0]);
+        }
+    });
+
+    imagesInput.addEventListener('change', function() {
+        const previewContainer = document.getElementById('additional-preview');
+        previewContainer.innerHTML = '';
+        Array.from(this.files).forEach(file => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.className = 'w-32 h-20 object-cover mr-2 mb-2';
+            previewContainer.appendChild(img);
+        });
+    });
+</script>
+
+{{-- Tempat preview --}}
+<div class="mt-2">
+    <img id="cover-preview" class="w-40 h-24 object-cover mb-2">
+    <div id="additional-preview" class="flex flex-wrap"></div>
 </div>

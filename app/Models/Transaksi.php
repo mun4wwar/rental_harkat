@@ -134,6 +134,10 @@ class Transaksi extends Model
     {
         return $this->belongsTo(Supir::class);
     }
+    public function jobOffers()
+    {
+        return $this->hasMany(JobOffer::class);
+    }
 
     public function pembayaran()
     {

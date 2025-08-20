@@ -10,7 +10,7 @@
         <a href="" class="hover:bg-blue-700 px-3 py-2 rounded-md">📑 Riwayat</a>
     </nav>
 
-    <form method="POST" action="{{ route('supir.logout') }}" class="mt-auto">
+    <form method="POST" action="{{ route('logout') }}" class="mt-auto">
         @csrf
         <button type="submit" class="w-full bg-red-500 hover:bg-red-600 py-2 rounded-md">
             Logout

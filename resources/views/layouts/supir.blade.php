@@ -5,14 +5,27 @@
     <meta charset="UTF-8">
     <title>Supir Panel - Rental Mobil Harkat Yogyakarta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="user-id" content="{{ auth()->user()->id }}">
+    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-gray-50 h-full">
+    @if (session('success'))
+        <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <x-supir.sidebar />
@@ -22,24 +35,31 @@
             <x-supir.topbar />
 
             <!-- Main Section with Alpine State -->
-            <main class="flex-1 p-4 md:ml-64" x-data="jobModal()" @open-modal.window="openModal($event.detail)">
-
+            <main class="flex-1 p-4 md:ml-64">
                 @yield('content')
+                <div x-data="{ open: false, job: {} }" x-show="open" x-transition.opacity.scale.duration.300ms id="jobOfferModal"
+                    class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+                    style="display: none;">
+                    <div class="bg-white p-6 rounded-2xl shadow-2xl w-96">
+                        <h2 class="text-xl font-bold mb-4">📢 Job Baru!</h2>
+                        <p><b>ID:</b> <span x-text="job.id"></span></p>
+                        <p><b>Mobil:</b> <span x-text="job.mobil"></span></p>
+                        <p><b>Tanggal Sewa:</b> <span x-text="job.tanggal_sewa"></span></p>
+                        <p><b>Tanggal Kembali:</b> <span x-text="job.tanggal_kembali"></span></p>
 
-                <!-- Modal Popup -->
-                <div x-show="showModal"
-                    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" x-transition>
-                    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-                        <h2 class="text-lg font-bold mb-4">🚗 Job Baru Masuk!</h2>
-                        <p><strong>Mobil:</strong> <span x-text="job?.mobil"></span></p>
-                        <p><strong>Tanggal Sewa:</strong> <span x-text="job?.tanggal_sewa"></span></p>
-                        <p><strong>Tanggal Kembali:</strong> <span x-text="job?.tanggal_kembali"></span></p>
-
-                        <div class="mt-6 flex justify-end gap-3">
-                            <button @click="declineJob()"
-                                class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Decline</button>
-                            <button @click="acceptJob()"
-                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">Accept</button>
+                        <div class="flex justify-end gap-2 mt-4">
+                            <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                                @click="open = false">
+                                Abaikan
+                            </button>
+                            <form method="POST" action={{ route('supir.acceptJob') }}>
+                                @csrf
+                                <input type="hidden" name="job_offer_id" x-model="job.id">
+                                <button
+                                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                                    Terima
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -47,79 +67,33 @@
         </div>
     </div>
     <x-supir.bottomnav />
+    <!-- Pusher & Echo -->
+    <script src="https://js.pusher.com/8.2/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@^1.15/dist/echo.iife.js"></script>
 
-    <!-- Script Echo + AlpineJS -->
     <script>
-        // Pusher / Echo example
-        document.addEventListener("DOMContentLoaded", () => {
-            if (window.Echo) {
-                console.log("Echo connected ✅");
-
-                Echo.channel('supir-available')
-                    .listen('JobAssigned', (e) => {
-                        console.log("Job baru masuk:", e);
-
-                        // trigger Alpine modal event
-                        window.dispatchEvent(new CustomEvent('open-modal', {
-                            detail: {
-                                transaksi_id: e.transaksi_id,
-                                mobil: e.mobil,
-                                tanggal_sewa: e.tanggal_sewa,
-                                tanggal_kembali: e.tanggal_kembali
-                            }
-                        }));
-                    });
-            } else {
-                console.error("Echo not loaded ❌");
-            }
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: '{{ env('PUSHER_APP_KEY') }}',
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+            forceTLS: true
         });
 
-        function jobModal() {
-            return {
-                showModal: false,
-                job: null,
+        const supirId = {{ Auth::user()->supir->id }};
 
-                // Dipanggil saat Echo event diterima
-                openModal(detail) {
-                    console.log('Job baru masuk:', detail);
-                    this.job = detail;
-                    this.showModal = true;
-                },
+        window.Echo.channel(`supir.${supirId}`)
+            .listen('JobAssigned', (data) => {
+                console.log("Job Offer diterima:", data);
 
-                // Accept job
-                acceptJob() {
-                    if (!this.job?.transaksi_id) return;
-                    console.log('Accept clicked, id:', this.job.transaksi_id);
+                // Inject ke Alpine component
+                let modal = document.getElementById('jobOfferModal');
+                let scope = Alpine.$data(modal);
 
-                    fetch("{{ route('supir.acceptJob', ['transaksiId' => 'TRANSAKSI_ID']) }}"
-                            .replace('TRANSAKSI_ID', this.job.transaksi_id), {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    // ambil langsung id supir dari auth
-                                    supir_id: {{ auth('supir')->id() }}
-                                })
-                            })
-                        .then(res => res.json())
-                        .then(data => {
-                            console.log("Job accepted ✅", data);
-                            this.showModal = false;
-                            this.job = null;
-                        })
-                        .catch(err => console.error('Error accept job:', err));
-                },
-
-                // Decline job
-                declineJob() {
-                    this.showModal = false;
-                    this.job = null;
-                }
-            }
-        }
+                scope.job = data; // masukin data job
+                scope.open = true; // buka modal
+            });
     </script>
+
 
 </body>
 

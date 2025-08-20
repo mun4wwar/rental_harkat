@@ -3,6 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
     <title>Admin Panel - Rental Mobil Harkat Yogyakarta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -32,9 +35,9 @@
     </div>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-<script>
-    lucide.createIcons();
-</script>
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 

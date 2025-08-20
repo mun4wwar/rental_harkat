@@ -27,24 +27,23 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach ($types as $index => $type)
+                    @foreach ($types as $type)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $index + 1 }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $type->nama_tipe }}</td>
-                            
+
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <div class="flex items-center gap-2">
-                                    {{-- Edit --}}
                                     <a href="{{ route('admin.tipe-mobil.edit', $type->id) }}"
                                         class="text-yellow-600 hover:text-indigo-900 font-medium" title="Edit">
                                         <i data-lucide="pencil" class="w-5 h-5"></i>
                                     </a>
                                 </div>
                             </td>
-
                         </tr>
                     @endforeach
                 </tbody>
+
             </table>
         </div>
     </div>

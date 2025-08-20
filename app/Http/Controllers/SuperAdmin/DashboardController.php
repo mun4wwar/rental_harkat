@@ -5,7 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class SuperAdminController extends Controller
+class DashboardController extends Controller
 {
     public function index()
     {

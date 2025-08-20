@@ -1,46 +1,37 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\LandingController;
+use Illuminate\Broadcasting\BroadcastController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Customer\MobilController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing-page');
+// Login universal untuk semua role
+Route::middleware('guest:web')->group(function () {
+    Route::get('login/{role}', [LoginController::class, 'showLoginForm'])->name('login.form');
+    Route::post('login', [LoginController::class, 'login'])->name('login');
 
-Route::get('/cek-login', function () {
-    return [
-        'active_guard_from_session' => session('guard'),
-        'active_guard' => Auth::getDefaultDriver(),
-        'admin' => Auth::guard('admin')->check(),
-        'web' => Auth::guard('web')->check(),
-        'supir' => Auth::guard('supir')->check(),
-    ];
-});
+    // REGISTER untuk customer aja
+    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('register', [RegisteredUserController::class, 'store']);
 
-Route::get('/cek-auth', function () {
-    return [
-        'admin' => Auth::guard('admin')->check(),
-        'web' => Auth::guard('web')->check(),
-        'supir' => Auth::guard('supir')->check(),
-    ];
-});
+    // guest route
+    Route::resource('mobil', MobilController::class);
 
-Route::get('/debug-auth', function () {
-    return [
-        'web' => Auth::guard('web')->check(),
-        'admin' => Auth::guard('admin')->check(),
-        'supir' => Auth::guard('supir')->check(),
-        'user' => Auth::user(),
-    ];
+    // forgot password dll tetap
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+    Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 });
+Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 
-Route::get('/debug-session', function () {
-    return [
-        'admin_logged_in' => Auth::guard('admin')->check(),
-        'web_logged_in' => Auth::guard('web')->check(),
-        'supir_logged_in' => Auth::guard('supir')->check(),
-        'current_user' => Auth::user(),
-        'guard_admin_user' => Auth::guard('admin')->user(),
-    ];
-});
+Route::post('/broadcasting/auth', [BroadcastController::class, 'authenticate'])
+    ->middleware('auth');
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/auth_superadmin.php';

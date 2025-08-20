@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('supirs', function (Blueprint $table) {
-            Schema::table('supirs', function (Blueprint $table) {
-                // Drop unique index dulu kalo ada
-                $table->dropColumn('email');
-            });
+        Schema::table('booking_details', function (Blueprint $table) {
+            $table->string('nama_kota')->nullable()->change();
         });
     }
 
@@ -24,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('supirs', function (Blueprint $table) {
-            $table->string('email')->nullable()->after('nama');
+        Schema::table('booking_details', function (Blueprint $table) {
+            $table->string('plat_nomor')->nullable(false)->change();
         });
     }
 };

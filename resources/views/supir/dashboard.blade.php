@@ -10,7 +10,7 @@
             <div class="text-blue-600 text-3xl font-bold">⚡</div>
             <p class="mt-2 text-gray-600">Status</p>
             <span class="mt-1 font-semibold text-gray-800">
-                @if (auth('supir')->user()->is_available)
+                @if (auth()->user()->supir->is_available)
                     <p class="text-green-600 font-semibold">Ready to Drive 🚗</p>
                 @else
                     <p class="text-gray-500">Not Available</p>
