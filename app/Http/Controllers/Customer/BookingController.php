@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\Mobil;
-use App\Models\TipeMobil;
-use App\Models\Transaksi;
+use App\Models\Pembayaran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +15,15 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Transaksi::where('user_id', Auth::id())
-            ->where('status', '!=', 3) // filter status selain selesai
+        $userId = Auth::id();
+
+        $bookings = Booking::where('user_id', $userId)
+            ->whereIn('status', [1, 2]) // booked & ongoing
+            ->with(['details'])
             ->latest()
             ->get();
 
-        return view('booking.index', compact('bookings'));
+        return view('customer.booking.index', compact('bookings'));
     }
     public function create(Request $request)
     {
@@ -42,12 +44,14 @@ class BookingController extends Controller
             'mobils.*.tanggal_kembali' => 'required|date|after_or_equal:mobils.*.tanggal_sewa',
             'mobils.*.pakai_supir' => 'required|in:0,1',
             'asal_kota' => 'required|in:1,2',
+            'nama_kota' => 'required_if:asal_kota,2|nullable|string',
             'jaminan' => 'required|in:1,2',
         ], [
             'mobils.*.mobil_id.required' => 'Mobil harus dipilih.',
             'mobils.*.tanggal_sewa.required' => 'Tanggal sewa harus diisi.',
             'mobils.*.tanggal_kembali.after_or_equal' => 'Tanggal kembali tidak boleh sebelum tanggal sewa.',
             'asal_kota.required' => 'Asal Kota harus diisi.',
+            'nama_kota.required_if' => 'Nama kota harus diisi jika asal kota = luar kota.',
             'jaminan.required' => 'Jaminan harus diisi.',
         ]);
 
@@ -98,6 +102,15 @@ class BookingController extends Controller
             'total_harga' => $totalBooking,
             'uang_muka' => $totalBooking / 2,
         ]);
+        $dp = $uangMuka;
+        // langsung generate pembayaran DP (belum bayar)
+        Pembayaran::create([
+            'booking_id' => $booking->id,
+            'jenis' => 1,
+            'jumlah' => $dp,
+            'status' => 0,
+            'jatuh_tempo' => Carbon::parse($request->mobils[0]['tanggal_sewa'])->subDays(3), // H-3 sebelum sewa
+        ]);
 
         return redirect()->route('home')->with('success', 'Booking berhasil! Silakan tunggu konfirmasi dari admin.');
     }
@@ -105,11 +118,14 @@ class BookingController extends Controller
     // Riwayat booking (sudah selesai)
     public function riwayat()
     {
-        $riwayats = Transaksi::where('user_id', Auth::id())
-            ->where('status', 3)
+        $userId = Auth::id();
+
+        $riwayat = Booking::where('user_id', $userId)
+            ->whereIn('status', [0, 3]) // canceled & done
+            ->with(['mobil', 'supir'])
             ->latest()
             ->get();
 
-        return view('booking.riwayat', compact('riwayats'));
+        return view('customer.booking.riwayat', compact('riwayat'));
     }
 }

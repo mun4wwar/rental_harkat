@@ -16,9 +16,9 @@ class BookingDetail extends Model
         'mobil_id',
         'pakai_supir',
         'supir_id',
-        'nama_kota',
         'tanggal_sewa',
         'tanggal_kembali',
+        'status',
         'lama_sewa',
     ];
 
@@ -38,7 +38,7 @@ class BookingDetail extends Model
     }
     public function getStatusLabelAttribute()
     {
-        return match ($this->booking?->status) {
+        return match ($this->status) {
             0 => 'Canceled',
             1 => 'Booked',
             2 => 'On Going',
@@ -71,7 +71,7 @@ class BookingDetail extends Model
     {
         return $this->belongsTo(Booking::class);
     }
-    
+
     public function jobOffers()
     {
         return $this->hasMany(JobOffer::class, 'booking_detail_id');
@@ -87,5 +87,9 @@ class BookingDetail extends Model
     public function supir()
     {
         return $this->belongsTo(Supir::class);
+    }
+    public function pengembalian()
+    {
+        return $this->hasOne(Pengembalian::class);
     }
 }

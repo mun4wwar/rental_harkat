@@ -9,7 +9,7 @@
         {{-- Desktop Nav --}}
         <nav class="hidden md:flex items-center space-x-6">
             {{-- Selalu tampil --}}
-            <a href="{{ route('mobil.index') }}" class="text-gray-700 font-medium hover:text-green-700">Katalog</a>
+            <a href="{{ route('mobil.index') }}" class="text-gray-700 font-medium hover:text-green-700">Armada Kami</a>
 
             @auth('web')
                 <a href="{{ route('booking.index') }}" class="text-gray-700 font-medium hover:text-green-700">Pesanan</a>
@@ -62,7 +62,7 @@
     <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-200 mt-4">
         {{-- Selalu tampil --}}
         <a href="{{ route('mobil.index') }}"
-            class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Katalog</a>
+            class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Armada Kami</a>
 
         @auth('web')
             <a href="{{ route('booking.index') }}"

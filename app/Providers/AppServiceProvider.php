@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\BookingDetail;
 use App\Models\TipeMobil;
+use App\Observers\BookingDetailObserver;
 use Cache;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Blade;
@@ -31,5 +33,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('types', $types);
         });
         Carbon::setLocale('id');
+
+        BookingDetail::observe(BookingDetailObserver::class);
     }
 }

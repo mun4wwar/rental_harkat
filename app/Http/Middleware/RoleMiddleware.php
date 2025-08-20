@@ -20,14 +20,17 @@ class RoleMiddleware
         if (!Auth::check()) {
             // redirect login form sesuai prefix
             $prefix = explode('/', $request->path())[0] ?? '';
-            return redirect("/$prefix/login");
+            return redirect("login/$prefix");
         }
 
         $userRole = Auth::user()->roleName;
         $rolesArray = array_map('trim', explode(',', $roles));
 
         if (!in_array($userRole, $rolesArray)) {
-            abort(403, 'Unauthorized.');
+            Auth::logout(); // tambahan biar user langsung dipaksa logout
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->route('landing-page');
         }
 
         return $next($request);

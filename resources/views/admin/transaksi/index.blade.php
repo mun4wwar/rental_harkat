@@ -58,6 +58,7 @@
                                         <th class="border px-2 py-1">Mobil</th>
                                         <th class="border px-2 py-1">Supir</th>
                                         <th class="border px-2 py-1">Tanggal</th>
+                                        <th class="border px-2 py-1">Status Mobil</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -71,6 +72,9 @@
                                             <td class="border px-2 py-1">
                                                 {{ $detail->tanggal_mulai_format }} s/d
                                                 {{ $detail->tanggal_selesai_format }}
+                                            </td>
+                                            <td class="border px-2 py-1">
+                                                {{ $detail->status_label }}
                                             </td>
                                         </tr>
                                     @endforeach

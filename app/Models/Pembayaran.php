@@ -9,12 +9,14 @@ class Pembayaran extends Model
     protected $table = 'pembayarans';
 
     protected $fillable = [
-        'transaksi_id',
+        'booking_id',
         'tanggal_pembayaran',
         'jumlah',
         'metode_pembayaran',
+        'jenis',
         'foto_bukti',
         'status_pembayaran',
+        'jatuh_tempo',
         'keterangan',
     ];
 
@@ -41,6 +43,10 @@ class Pembayaran extends Model
             2 => 'Pending',
             default => 'Tidak Diketahui',
         };
+    }
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
     }
 
     public function transaksi()

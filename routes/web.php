@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\LandingController;
 use Illuminate\Broadcasting\BroadcastController;
@@ -12,6 +13,8 @@ use App\Http\Controllers\Customer\MobilController;
 Route::get('/', [LandingController::class, 'index'])->name('landing-page');
 // Login universal untuk semua role
 Route::middleware('guest:web')->group(function () {
+    Route::get('login/google', [GoogleController::class, 'redirect'])->name('google.login');
+    Route::get('auth/google/callback', [GoogleController::class, 'callback']);
     Route::get('login/{role}', [LoginController::class, 'showLoginForm'])->name('login.form');
     Route::post('login', [LoginController::class, 'login'])->name('login');
 

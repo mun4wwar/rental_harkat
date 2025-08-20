@@ -30,6 +30,7 @@ class Booking extends Model
         'user_id',
         'pakai_supir',
         'asal_kota',
+        'nama_kota',
         'tanggal_booking',
         'status',       // 0=canceled, 1=booked, 2=ongoing, 3=done
         'jaminan',
@@ -66,6 +67,10 @@ class Booking extends Model
     public function details()
     {
         return $this->hasMany(BookingDetail::class);
+    }
+    public function pembayarans()
+    {
+        return $this->hasMany(Pembayaran::class);
     }
 
     /** 
@@ -166,5 +171,28 @@ class Booking extends Model
             self::STATUS_DONE     => '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">Done</span>',
             default               => '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-700">Unknown</span>',
         });
+    }
+    // Accessor: status dihitung dari details
+    protected function computedStatus(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $details = $this->details;
+
+                if ($details->every(fn($d) => $d->status_detail === 0)) {
+                    return 'Canceled';
+                }
+
+                if ($details->every(fn($d) => $d->status_detail === 3)) {
+                    return 'Done';
+                }
+
+                if ($details->contains(fn($d) => $d->status_detail === 2)) {
+                    return 'Ongoing';
+                }
+
+                return 'Booked'; // default kalau baru dibuat
+            }
+        );
     }
 }

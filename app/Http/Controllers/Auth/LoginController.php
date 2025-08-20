@@ -74,9 +74,9 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        Auth::forgetGuards();
 
         // Bersihin semua session
-        $request->session()->flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

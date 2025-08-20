@@ -15,28 +15,49 @@ class MobilSeeder extends Seeder
     {
         Mobil::insert([
             [
-                'nama_mobil' => 'Toyota Avanza',
-                'plat_nomor' => 'AB1234CD',
+                'nama_mobil' => 'New Avanza',
+                'plat_nomor' => 'AB 1234 CD',
                 'merk' => 'Toyota',
-                'tahun' => 2020,
+                'tahun' => 2022,
                 'harga_sewa' => 350000,
+                'harga_all_in' => 650000,
                 'status' => 1
             ],
             [
-                'nama_mobil' => 'Daihatsu Xenia',
-                'plat_nomor' => 'AB5678EF',
-                'merk' => 'Daihatsu',
-                'tahun' => 2019,
-                'harga_sewa' => 320000,
+                'nama_mobil' => 'New Agya',
+                'plat_nomor' => 'AB 5678 EF',
+                'merk' => 'Toyota',
+                'tahun' => 2022,
+                'harga_sewa' => 325000,
+                'harga_all_in' => 625000,
                 'status' => 1
             ],
             [
-                'nama_mobil' => 'Honda Brio',
-                'plat_nomor' => 'AB9101GH',
+                'nama_mobil' => 'New BR-V',
+                'plat_nomor' => 'AB 9101 GH',
                 'merk' => 'Honda',
                 'tahun' => 2021,
                 'harga_sewa' => 400000,
-                'status' => 0
+                'harga_all_in' => 700000,
+                'status' => 1
+            ],
+            [
+                'nama_mobil' => 'New Fortuner',
+                'plat_nomor' => 'B 2367 UYT',
+                'merk' => 'Toyota',
+                'tahun' => 2022,
+                'harga_sewa' => 750000,
+                'harga_all_in' => 1100000,
+                'status' => 1
+            ],
+            [
+                'nama_mobil' => 'New Brio',
+                'plat_nomor' => 'F 9886 UK',
+                'merk' => 'Honda',
+                'tahun' => 2023,
+                'harga_sewa' => 300000,
+                'harga_all_in' => 500000,
+                'status' => 1
             ],
         ]);
     }

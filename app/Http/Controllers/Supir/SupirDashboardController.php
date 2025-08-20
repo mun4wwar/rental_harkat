@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\BookingDetail;
 use App\Models\JobOffer;
 use App\Models\Supir;
-use App\Models\Transaksi;
 use App\Models\User; // karena role supir ada di users
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,12 +18,12 @@ class SupirDashboardController extends Controller
         $supirId = Auth::user()->supir->id; // ambil id user yang login
 
         // Job aktif
-        $jobAktif = Transaksi::where('supir_id', $supirId)
+        $jobAktif = BookingDetail::where('supir_id', $supirId)
             ->where('status', '!=', 3)
             ->get();
 
         // Riwayat job
-        $riwayatJob = Transaksi::where('supir_id', $supirId)
+        $riwayatJob = BookingDetail::where('supir_id', $supirId)
             ->where('status', 3)
             ->get();
 

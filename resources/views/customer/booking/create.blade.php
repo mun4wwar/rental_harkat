@@ -97,7 +97,7 @@
                 <label class="block mb-1 font-semibold">Jaminan</label>
                 <select name="jaminan" id="jaminan" class="w-full border rounded p-2" required>
                     <option value="">-- Pilih Jaminan --</option>
-                    <option value="1">KTP/ID CARD</option>
+                    <option value="1">KTP/Passport</option>
                     <option value="2">KTP & Motor (untuk warga lokal)</option>
                 </select>
             </div>
