@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Mobil;
 use App\Models\TipeMobil;
+use Illuminate\Support\Facades\Auth;
 
 class MobilController extends Controller
 {
@@ -33,6 +34,7 @@ class MobilController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $request->validate([
             'nama_mobil' => 'required',
             'tipe_id' => 'required|exists:tipe_mobils,id',
@@ -41,8 +43,8 @@ class MobilController extends Controller
             'tahun' => 'required|digits:4|integer|min:1900|max:' . date('Y'),
             'harga_sewa' => 'required|numeric',
             'harga_all_in' => 'required|numeric',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:8192',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:8192',
         ]);
 
         $data = $request->except('gambar', 'images');
@@ -50,6 +52,7 @@ class MobilController extends Controller
         if ($request->hasFile('gambar')) {
             $data['gambar'] = $request->file('gambar')->store('gambar_mobil', 'public');
         }
+        $data['status_approval'] = 2;
 
         $mobil = Mobil::create($data);
 
@@ -61,7 +64,15 @@ class MobilController extends Controller
             }
         }
 
-        return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil di tambahkan");
+        // ✅ Buat request approval
+        $mobil->approvals()->create([
+            'requested_by' => $user->id,
+            'status' => 2, // pending
+            'old_data' => null,
+            'new_data' => $mobil,
+        ]);
+
+        return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil ditambahkan, menunggu approval super admin.");
     }
 
     /**
@@ -88,6 +99,7 @@ class MobilController extends Controller
      */
     public function update(Request $request, Mobil $mobil)
     {
+        $user = Auth::user();
         $request->validate([
             'nama_mobil' => 'required',
             'tipe_id' => 'required|exists:tipe_mobils,id',
@@ -97,19 +109,31 @@ class MobilController extends Controller
             'harga_sewa' => 'required|numeric',
             'harga_all_in' => 'required|numeric',
             'status' => 'required|in:0,1,2,3,4',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg|max:8192',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:8192',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:8192',
+        ]);
+
+        // 1) snapshot data lama
+        $old = $mobil->only([
+            'nama_mobil',
+            'tipe_id',
+            'plat_nomor',
+            'merk',
+            'tahun',
+            'harga_sewa',
+            'harga_all_in',
+            'status',
+            'gambar'
         ]);
 
         $data = $request->except('gambar', 'images');
-
         if ($request->hasFile('gambar')) {
-            // Optional: Hapus gambar lama kalau ada
             if ($mobil->gambar) {
                 Storage::disk('public')->delete($mobil->gambar);
             }
             $data['gambar'] = $request->file('gambar')->store('gambar_mobil', 'public');
         }
+        $data['status_approval'] = 2;
 
         $mobil->update($data);
 
@@ -121,24 +145,24 @@ class MobilController extends Controller
             }
         }
 
-        return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil diupdate");
-    }
+        // 4) simpan approval snapshot
+        $mobil->approvals()->create([
+            'requested_by' => $user->id,
+            'status' => 2,
+            'old_data' => $old,
+            'new_data' => $mobil->only([
+                'nama_mobil',
+                'tipe_id',
+                'plat_nomor',
+                'merk',
+                'tahun',
+                'harga_sewa',
+                'harga_all_in',
+                'status',
+                'gambar'
+            ]),
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Mobil $mobil)
-    {
-        // Hapus cover image
-        if ($mobil->gambar) {
-            Storage::disk('public')->delete($mobil->gambar);
-        }
-
-        // Hapus additional images
-        foreach ($mobil->images as $img) {
-            Storage::disk('public')->delete($img->image_path);
-        }
-        $mobil->delete();
-        return redirect()->route('admin.mobil.index')->with('success', 'Mobil berhasil dihapus!');
+        return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil diupdate, menunggu approval super admin.");
     }
 }

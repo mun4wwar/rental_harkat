@@ -1,11 +1,12 @@
 import './bootstrap';
 import './echo';
+import './booking';
 import Alpine from 'alpinejs';
-import { createIcons, icons  } from 'lucide';
+import lucide from 'lucide/dist/umd/lucide.js';
 
 window.Alpine = Alpine;
 Alpine.start();
 
-window.addEventListener('DOMContentLoaded', () => {
-    createIcons({ icons });
+document.addEventListener("DOMContentLoaded", () => {
+    lucide.createIcons();
 });

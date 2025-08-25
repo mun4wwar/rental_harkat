@@ -37,7 +37,9 @@ class Supir extends Model
 
     protected $table = 'supirs'; // opsional sih, default-nya udah bener
     protected $fillable = [
+        'user_id',
         'status',
+        'status_approval',
         'gambar'
     ];
 
@@ -49,6 +51,10 @@ class Supir extends Model
     public function jobOffers()
     {
         return $this->hasMany(JobOffer::class);
+    }
+    public function approvals()
+    {
+        return $this->morphMany(Approval::class, 'approvable');
     }
 
     public function getIsAvailableAttribute()
@@ -76,9 +82,13 @@ class Supir extends Model
             default => 'bg-gray-100 text-gray-400',
         };
     }
-
-    public function transaksis()
+    public function getStatusApprovalTextAttribute()
     {
-        return $this->hasMany(Transaksi::class);
+        return match ($this->status_approval) {
+            0 => 'Rejected by SuperAdmin',
+            1 => 'Approved',
+            2 => 'Pending Approval',
+            default => 'Unknown',
+        };
     }
 }

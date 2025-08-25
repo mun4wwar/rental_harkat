@@ -16,10 +16,10 @@
 
 {{-- Nama Supir --}}
 <div>
-    <label for="nama" class="block text-sm font-medium text-gray-700">Nama Supir</label>
-    <input type="text" name="nama" id="nama"
+    <label for="name" class="block text-sm font-medium text-gray-700">Nama Supir</label>
+    <input type="text" name="name" id="name"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        value="{{ old('nama', $isEdit ? $supir->nama : '') }}" required>
+        value="{{ old('name', $isEdit ? $supir->user->name : '') }}" required>
 </div>
 
 {{-- Email --}}
@@ -27,7 +27,7 @@
     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
     <input type="email" name="email" id="email"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        value="{{ old('email', $isEdit ? $supir->email : '') }}" required>
+        value="{{ old('email', $isEdit ? $supir->user->email : '') }}" required>
 </div>
 
 {{-- password --}}
@@ -55,7 +55,7 @@
     <label for="no_hp" class="block text-sm font-medium text-gray-700">No Telepon</label>
     <input type="number" name="no_hp" id="no_hp"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        value="{{ old('no_hp', $isEdit ? $supir->no_hp : '') }}" required>
+        value="{{ old('no_hp', $isEdit ? $supir->user->no_hp : '') }}" required>
 </div>
 
 {{-- Alamat --}}
@@ -63,7 +63,7 @@
     <label for="alamat" class="block text-sm font-medium text-gray-700">Alamat</label>
     <textarea name="alamat" id="alamat"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        required>{{ old('alamat', $isEdit ? $supir->alamat : '') }}</textarea>
+        required>{{ old('alamat', $isEdit ? $supir->user->alamat : '') }}</textarea>
 </div>
 
 {{-- Status (hanya tampil kalau edit) --}}

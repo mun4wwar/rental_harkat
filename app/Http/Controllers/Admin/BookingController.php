@@ -11,6 +11,7 @@ use App\Models\JobOffer;
 use App\Models\Mobil;
 use App\Models\Supir;
 use App\Models\User;
+use App\Notifications\JobAssignedEmail;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -124,6 +125,10 @@ class BookingController extends Controller
                     if ($supir->user_id) {
                         event(new JobAssigned($offer));
                     }
+                    // Kirim email
+                    if ($supir->user && $supir->user->email) {
+                        $supir->user->notify(new JobAssignedEmail($bookingDtl));
+                    }
                 }
             });
             $bookingDtl->update(['pakai_supir' => 2]);
@@ -135,7 +140,6 @@ class BookingController extends Controller
             return back()->with('error', 'Gagal assign job: ' . $e->getMessage());
         }
     }
-
 
     /**
      * Prepare data for create or update transaksi

@@ -34,8 +34,6 @@
                             <td class="px-4 py-2 space-x-2">
                                 <a href="{{ route('admin.pelanggan.edit', $pelanggan->id) }}"
                                     class="text-blue-500 hover:underline">Edit</a>
-                                {{-- Hapus --}}
-                                <x-delete-button :id="$pelanggan->id" :route="route('admin.pelanggan.destroy', $pelanggan->id)" :item="$pelanggan->nama" />
                             </td>
                         </tr>
                     @endforeach

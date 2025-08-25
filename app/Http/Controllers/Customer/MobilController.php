@@ -15,7 +15,7 @@ class MobilController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Mobil::with('types');
+        $query = Mobil::with('type')->where('status', 1);
 
         // Search
         if ($request->filled('search')) {
@@ -24,7 +24,7 @@ class MobilController extends Controller
 
         // Filter tipe
         if ($request->filled('type')) {
-            $query->whereHas('types', function ($q) use ($request) {
+            $query->whereHas('type', function ($q) use ($request) {
                 $q->where('nama_tipe', $request->type);
             });
         }

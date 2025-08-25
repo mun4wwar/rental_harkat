@@ -11,6 +11,10 @@
 
     <title>Harkat Rental Yogyakarta</title>
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -29,26 +33,49 @@
     <div id="customerLoginModal" class="fixed inset-0 hidden items-center justify-center z-50">
         <!-- Overlay -->
         <div id="modalOverlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
-        <div class="relative w-full max-w-md">
-            <button id="closeLoginModal"
-                class="absolute top-2 right-2 text-white text-3xl font-bold hover:text-gray-300">&times;</button>
 
-            {{-- Include form login customer --}}
+        <div class="relative w-full max-w-md bg-white rounded-lg shadow-lg overflow-auto">
+            <button id="closeLoginModal"
+                class="absolute top-2 right-2 text-gray-700 text-3xl font-bold hover:text-gray-500">&times;</button>
+
+            {{-- Form login customer --}}
             <x-auth.login-form :roleName="'Customer'" :color="'green'" :loginFrom="'customer'" />
         </div>
     </div>
 
+    {{-- Lengkapi Profile Modal --}}
+    <div id="profileModal" class="fixed inset-0 hidden items-center justify-center z-50">
+        <!-- Overlay -->
+        <div id="profileOverlay" class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="relative w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+            <button id="closeProfileModal"
+                class="absolute top-2 right-2 text-gray-600 text-2xl font-bold hover:text-gray-800">&times;</button>
+
+            <h2 class="text-lg font-bold mb-3">Lengkapi Profil Dulu 🚨</h2>
+            <p class="mb-4 text-gray-600">Sebelum booking mobil, kamu perlu melengkapi data profil.</p>
+
+            <div class="flex justify-end gap-2">
+                <button id="cancelProfileModal" class="px-4 py-2 bg-gray-300 rounded">Nanti</button>
+                <a href="{{ route('profile.edit') }}" class="px-4 py-2 bg-green-600 text-white rounded">Isi Profile</a>
+            </div>
+        </div>
+    </div>
     <!-- Hero (full width) -->
     @yield('hero')
-
     <!-- Main Content -->
-    <main class="flex-1 pt-15 pb-20 px-4 max-w-6xl mx-auto w-full">
+    <main class="flex-1 pt-18 pb-20 px-4 max-w-6xl mx-auto w-full">
         @yield('content')
-
     </main>
 
     <!-- Footer -->
-    <x-layouts.footer :types="$types" />
+    <x-layouts.footer />
+    {{-- lucide icons --}}
+    <script type="module">
+        import "lucide/dist/umd/lucide.js";
+        lucide.createIcons();
+    </script>
+    <script type="module" src="{{ asset('resources/js/showcase.js') }}"></script>
+
     <script>
         const modal = document.getElementById('customerLoginModal');
         const overlay = document.getElementById('modalOverlay');
@@ -59,11 +86,15 @@
         const loginMobile = document.getElementById('openCustomerLoginModalMobile');
         const loginBtn = document.getElementById('openCustomerLoginModal'); // fallback
 
-        [loginDesktop, loginMobile, loginBtn].forEach(btn => {
+        // Semua tombol yang bisa buka modal
+        const loginTriggers = document.querySelectorAll(
+            '#openCustomerLoginModal, #openCustomerLoginModalDesktop, #openCustomerLoginModalMobile');
+
+        loginTriggers.forEach(btn => {
             btn?.addEventListener('click', e => {
                 e.preventDefault();
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
+                modal?.classList.remove('hidden');
+                modal?.classList.add('flex');
             });
         });
 
@@ -72,6 +103,26 @@
             el?.addEventListener('click', () => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
+            });
+        });
+    </script>
+    <script>
+        const profileModal = document.getElementById('profileModal');
+        const profileOverlay = document.getElementById('profileOverlay');
+        const closeProfileModal = document.getElementById('closeProfileModal');
+        const cancelProfileModal = document.getElementById('cancelProfileModal');
+
+        // Function buat munculin modal
+        function openProfileModal() {
+            profileModal.classList.remove('hidden');
+            profileModal.classList.add('flex');
+        }
+
+        // Tutup modal
+        [profileOverlay, closeProfileModal, cancelProfileModal].forEach(el => {
+            el?.addEventListener('click', () => {
+                profileModal.classList.add('hidden');
+                profileModal.classList.remove('flex');
             });
         });
     </script>

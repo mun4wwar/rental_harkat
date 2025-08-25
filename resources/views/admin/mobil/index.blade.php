@@ -42,46 +42,55 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach ($mobils as $index => $mobil)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $loop->iteration }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->nama_mobil }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->types->nama_tipe ?? '-' }}</td>
-                            {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->plat_nomor }}</td> --}}
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->merk }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->tahun }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                Rp. {{ number_format($mobil->harga_sewa, 0, ',', '.') }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                Rp. {{ number_format($mobil->harga_all_in, 0, ',', '.') }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <span
-                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                {{ $mobil->status_badge_class }}">
-                                    {{ $mobil->status_text }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <div class="flex items-center gap-2">
-                                    {{-- Detail --}}
-                                    <a href="{{ route('admin.mobil.show', $mobil->id) }}"
-                                        class="text-indigo-600 hover:text-indigo-900 font-medium" title="Lihat Detail">
-                                        <i data-lucide="eye" class="w-5 h-5"></i>
-                                    </a>
-
-                                    {{-- Edit --}}
-                                    <a href="{{ route('admin.mobil.edit', $mobil->id) }}"
-                                        class="text-yellow-600 hover:text-indigo-900 font-medium" title="Edit">
-                                        <i data-lucide="pencil" class="w-5 h-5"></i>
-                                    </a>
-
-                                    {{-- Hapus --}}
-                                    <x-delete-button :id="$mobil->id" :route="route('admin.mobil.destroy', $mobil->id)" :item="$mobil->nama_mobil" />
-                                </div>
-                            </td>
-
-                        </tr>
+                        @if ($mobil->status_approval == 2)
+                            <tr class="bg-gray-200 opacity-70">
+                                <td colspan="9" class="text-center text-gray-600 italic">
+                                    Waiting for approval SuperAdmin
+                                </td>
+                            </tr>
+                        @elseif ($mobil->status_approval == 0)
+                            <tr class="bg-red-100 opacity-90">
+                                <td colspan="9" class="text-center text-red-600 font-bold">
+                                    Data Rejected by SuperAdmin
+                                </td>
+                            </tr>
+                        @else
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->nama_mobil }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    {{ $mobil->type->nama_tipe ?? '-' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->merk }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $mobil->tahun }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    Rp. {{ number_format($mobil->harga_sewa, 0, ',', '.') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    Rp. {{ number_format($mobil->harga_all_in, 0, ',', '.') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $mobil->status_badge_class }}">
+                                        {{ $mobil->status_text }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ route('admin.mobil.show', $mobil->id) }}"
+                                            class="text-indigo-600 hover:text-indigo-900 font-medium" title="Lihat Detail">
+                                            <i data-lucide="eye" class="w-5 h-5"></i>
+                                        </a>
+                                        <a href="{{ route('admin.mobil.edit', $mobil->id) }}"
+                                            class="text-yellow-600 hover:text-indigo-900 font-medium" title="Edit">
+                                            <i data-lucide="pencil" class="w-5 h-5"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
                     @endforeach
                 </tbody>
+
             </table>
         </div>
     </div>

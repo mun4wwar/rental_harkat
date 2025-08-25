@@ -1,31 +1,113 @@
 @props(['mobils'])
+<section class="py-16">
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            @foreach ($mobils as $mobil)
+                <div class="swiper-slide">
+                    <div
+                        class="backdrop-blur-xl bg-white/30 border border-white/20 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transform transition duration-500">
 
-<section class="mt-10" data-aos="fade-up">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        @foreach ($mobils as $mobil)
-            <div class="bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg transition">
-                <a href="{{ route('mobil.show', $mobil->id) }}">
-                    <img src="{{ Storage::url($mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
-                        class="w-full h-40 object-contain mb-4">
-                    <h4 class="font-semibold text-lg">{{ $mobil->nama_mobil }}</h4>
-                    <p class="text-gray-500 text-sm">Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }} / hari</p>
-                </a>
+                        <!-- Gambar mobil -->
+                        <div class="p-4">
+                            <img src="{{ asset('storage/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
+                                class="w-full h-40 object-contain">
+                        </div>
 
-                {{-- Tombol booking --}}
-                <div class="mt-4">
-                    @if (Auth::check() && Auth::user()->isRole('Customer'))
-                        <a href="{{ route('booking.create') }}"
-                            class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
-                            Booking Sekarang
-                        </a>
-                    @else
-                        <a href="#" id="openCustomerLoginModalMobile"
-                            class="inline-block bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
-                            Booking Sekarang
-                        </a>
-                    @endif
+                        <!-- Detail mobil -->
+                        <div class="p-4 text-center">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $mobil->nama_mobil }}</h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }}/hari
+                            </p>
+                            <p class="text-gray-500 text-sm">
+                                Include Supir:
+                                <span class="font-medium text-green-600">
+                                    Rp {{ number_format($mobil->harga_all_in, 0, ',', '.') }}/hari
+                                </span>
+                            </p>
+
+                            <!-- Tombol booking opsional -->
+                            @if (Auth::check() && Auth::user()->isRole('Customer'))
+                                <a href="{{ route('booking.create') }}"
+                                    class="mt-4 inline-block bg-emerald-500 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-emerald-600 transition">
+                                    Booking Sekarang
+                                </a>
+                            @else
+                                <a href="#" id="openCustomerLoginModalMobile"
+                                    class="mt-4 inline-block bg-emerald-500 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-emerald-600 transition">
+                                    Booking Sekarang
+                                </a>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
+        <div class="swiper-pagination mt-8"></div>
     </div>
 </section>
+
+<script>
+    const swiper = new Swiper(".mySwiper", {
+        loop: true,
+        centeredSlides: true,
+        slidesPerView: "auto",
+        spaceBetween: 20,
+        initialSlide: 0,
+        autoplay: {
+            delay: 2000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        on: {
+            slideChangeTransitionStart: function() {
+                // reset semua slide
+                this.slides.forEach(slide => {
+                    slide.style.transform = "scale(0.8)";
+                    slide.style.opacity = "0.4";
+                });
+
+                // ambil slide aktif
+                let active = this.slides[this.activeIndex];
+                if (active) {
+                    active.style.transform = "scale(1)";
+                    active.style.opacity = "1";
+                }
+            },
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 2
+            },
+            1024: {
+                slidesPerView: 3
+            },
+        },
+    });
+
+    // trigger pertama kali biar langsung animasi aktif
+    swiper.emit("slideChangeTransitionStart");
+</script>
+
+<style>
+    .swiper-slide {
+        transition: transform 0.6s ease, opacity 0.6s ease;
+        transform: scale(0.8);
+        opacity: 0.4;
+    }
+
+    .swiper-slide-active {
+        transform: scale(1) !important;
+        opacity: 1 !important;
+    }
+
+    .swiper-pagination {
+        margin-top: 24px !important;
+        /* kasih jarak atas */
+        position: relative !important;
+        /* biar tetep di bawah swiper */
+    }
+</style>

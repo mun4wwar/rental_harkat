@@ -11,19 +11,18 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Customer\MobilController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing-page');
+Route::resource('mobil', MobilController::class);
 // Login universal untuk semua role
 Route::middleware('guest:web')->group(function () {
     Route::get('login/google', [GoogleController::class, 'redirect'])->name('google.login');
     Route::get('auth/google/callback', [GoogleController::class, 'callback']);
+
     Route::get('login/{role}', [LoginController::class, 'showLoginForm'])->name('login.form');
     Route::post('login', [LoginController::class, 'login'])->name('login');
 
     // REGISTER untuk customer aja
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('register', [RegisteredUserController::class, 'store']);
-
-    // guest route
-    Route::resource('mobil', MobilController::class);
 
     // forgot password dll tetap
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');

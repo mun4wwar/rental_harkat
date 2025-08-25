@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\City;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,17 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
+    }
+    public function autocompleteCities(Request $request)
+    {
+        $search = $request->get('q', '');
+        $cities = City::where('name', 'like', "%{$search}%")
+            ->limit(10)
+            ->get(['name', 'country']);
+        return response()->json($cities);
     }
 
     /**
@@ -26,15 +35,19 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = Auth::user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+        $data = $request->validate([
+            'name'   => 'required|string|max:100',
+            'email'  => 'required|email|unique:users,email,' . $user->id,
+            'no_hp'  => 'required|string|max:15',
+            'alamat' => 'required|string|max:255',
+            'asal_kota' => 'required|string|max:255',
+        ]);
 
-        $request->user()->save();
+        $user->update($data);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('home')->with('success', 'Profil berhasil diperbarui!');
     }
 
     /**

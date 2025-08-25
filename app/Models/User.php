@@ -50,6 +50,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'no_hp',
+        'alamat',
+        'asal_kota',
     ];
 
     /**
@@ -97,8 +100,8 @@ class User extends Authenticatable
         return $this->hasOne(Supir::class);
     }
 
-    public function transaksis()
+    public function bookings()
     {
-        return $this->hasMany(Transaksi::class);
+        return $this->hasMany(Booking::class);
     }
 }

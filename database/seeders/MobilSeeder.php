@@ -33,6 +33,15 @@ class MobilSeeder extends Seeder
                 'status' => 1
             ],
             [
+                'nama_mobil' => 'Raize',
+                'plat_nomor' => 'AB 8789 EF',
+                'merk' => 'Toyota',
+                'tahun' => 2022,
+                'harga_sewa' => 350000,
+                'harga_all_in' => 650000,
+                'status' => 1
+            ],
+            [
                 'nama_mobil' => 'New BR-V',
                 'plat_nomor' => 'AB 9101 GH',
                 'merk' => 'Honda',
@@ -42,11 +51,20 @@ class MobilSeeder extends Seeder
                 'status' => 1
             ],
             [
-                'nama_mobil' => 'New Fortuner',
+                'nama_mobil' => 'New Innova Reborn',
+                'plat_nomor' => 'B 8879 OKL',
+                'merk' => 'Toyota',
+                'tahun' => 2022,
+                'harga_sewa' => 450000,
+                'harga_all_in' => 850000,
+                'status' => 1
+            ],
+            [
+                'nama_mobil' => 'New Fortuner GR',
                 'plat_nomor' => 'B 2367 UYT',
                 'merk' => 'Toyota',
                 'tahun' => 2022,
-                'harga_sewa' => 750000,
+                'harga_sewa' => 1100000,
                 'harga_all_in' => 1100000,
                 'status' => 1
             ],

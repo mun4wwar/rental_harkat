@@ -24,23 +24,17 @@
                 <x-super-admin.sidebar-item href="">
                     Dashboard
                 </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="" >
+                <x-super-admin.sidebar-item href="{{ route('superadmin.approvals.index') }}" :active="request()->routeIs('superadmin.admins.*')">
                     Approvals
                 </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="" >
+                <x-super-admin.sidebar-item href="">
                     Data Mobil
                 </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="" >
-                    Data Supir
-                </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="" >
-                    Transaksi
-                </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="" >
+                <x-super-admin.sidebar-item href="{{ route('superadmin.listLaporan') }}" :active="request()->routeIs('superadmin.admins.*')">
                     Laporan
                 </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="{{ route('superadmin.admins.index') }}" :active="request()->routeIs('superadmin.admins.*')">
-                    Kelola Admin
+                <x-super-admin.sidebar-item href="{{ route('superadmin.users.index') }}" :active="request()->routeIs('superadmin.admins.*')">
+                    Kelola Users
                 </x-super-admin.sidebar-item>
             </nav>
         </aside>
@@ -65,6 +59,7 @@
             </main>
         </div>
     </div>
+    <script src="//unpkg.com/alpinejs" defer></script>
 
 </body>
 

@@ -71,13 +71,4 @@ class PelangganController extends Controller
         $pelanggan->update($request->all());
         return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil diupdate!');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Pelanggan $pelanggan)
-    {
-        $pelanggan->delete();
-        return redirect()->route('admin.pelanggan.index')->with('success', 'Pelanggan berhasil dihapus!');
-    }
 }

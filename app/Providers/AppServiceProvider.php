@@ -27,10 +27,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-            $types = Cache::rememberForever('types', function () {
+            $types = Cache::rememberForever('type', function () {
                 return TipeMobil::all();
             });
-            $view->with('types', $types);
+            $view->with('type', $types);
         });
         Carbon::setLocale('id');
 

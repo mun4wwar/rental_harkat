@@ -16,9 +16,9 @@ return new class extends Migration
             $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade'); // relasi ke bookings
             $table->date('tanggal_pembayaran');
             $table->decimal('jumlah', 12, 2);
-            $table->tinyInteger('metode_pembayaran')->nullable(); // 1 = cash, 2 = transfer
+            $table->tinyInteger('metode_pembayaran')->nullable(); // 1 = cash, 2 = transfer, 3=qris
             $table->tinyInteger('jenis')->default(1); // 1=uang_muka, 2= pelunasan
-            $table->tinyInteger('status_pembayaran')->default(0); // 0 = belum bayar, 1 = sudah bayar
+            $table->tinyInteger('status_pembayaran')->default(0); // 0 = belum bayar, 1 = sudah bayar, 2=pending
             $table->string('foto_bukti')->nullable(); // opsional: path bukti
             $table->timestamps();
         });

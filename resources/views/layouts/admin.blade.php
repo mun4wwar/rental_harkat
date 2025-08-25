@@ -34,8 +34,9 @@
         </div>
     </div>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
+    {{-- lucide icons --}}
+    <script type="module">
+        import "lucide/dist/umd/lucide.js";
         lucide.createIcons();
     </script>
 

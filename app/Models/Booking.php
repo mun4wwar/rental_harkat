@@ -63,15 +63,19 @@ class Booking extends Model
     {
         return $this->belongsTo(User::class);
     }
-
     public function details()
     {
         return $this->hasMany(BookingDetail::class);
     }
-    public function pembayarans()
+    public function pembayaranDp()
     {
-        return $this->hasMany(Pembayaran::class);
+        return $this->hasOne(Pembayaran::class)->where('jenis', 1);
     }
+    public function pelunasan()
+    {
+        return $this->hasOne(Pembayaran::class)->where('jenis', 2);
+    }
+
 
     /** 
      * ==============================
@@ -103,6 +107,12 @@ class Booking extends Model
             $this->asal_kota == 1 ? 'Yogyakarta' : $this->nama_kota
         );
     }
+    protected function tanggalBookingFormat(): Attribute
+    {
+        return Attribute::get(fn() => $this->tanggal_booking
+            ? Carbon::parse($this->tanggal_booking)->translatedFormat('l, d F Y H:i')
+            : null);
+    }
 
     // Label Jaminan
     protected function jaminanLabel(): Attribute
@@ -112,27 +122,6 @@ class Booking extends Model
             2 => 'KTP & Motor',
             default => '-',
         });
-    }
-
-    // Format Tanggal
-    protected function tanggalMulaiFormat(): Attribute
-    {
-        return Attribute::get(
-            fn() =>
-            $this->tanggal_sewa
-                ? Carbon::parse($this->tanggal_sewa)->translatedFormat('l, d F Y')
-                : null
-        );
-    }
-
-    protected function tanggalSelesaiFormat(): Attribute
-    {
-        return Attribute::get(
-            fn() =>
-            $this->tanggal_kembali
-                ? Carbon::parse($this->tanggal_kembali)->translatedFormat('l, d F Y')
-                : null
-        );
     }
 
     // Format Harga

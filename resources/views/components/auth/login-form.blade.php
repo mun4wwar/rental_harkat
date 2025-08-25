@@ -33,7 +33,7 @@
         {{-- FORM LOGIN --}}
         <form method="POST" action="{{ route('login', ['role' => $roleSlug]) }}" class="relative z-10 space-y-4">
             @csrf
-            <input type="hidden" name="role" value="{{ $roleName }}">
+            <input type="hidden" name="role" value="{{ $roleSlug }}">
 
             {{-- EMAIL --}}
             <div>

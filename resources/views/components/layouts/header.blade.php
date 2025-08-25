@@ -1,21 +1,23 @@
 <header class="px-6 py-4 bg-white shadow-md fixed top-0 left-0 right-0 z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
         {{-- Logo --}}
-        <a href="{{ auth('web')->check() ? url('/home') : url('/') }}"
-            class="text-2xl font-bold text-green-700 tracking-wide">
-            Harkat <span class="text-gray-800">Rent Car</span>
+        <a href="{{ auth('web')->check() ? url('/home') : url('/') }}" class="flex items-center">
+            {{-- Desktop Logo (text) --}}
+            <span class="hidden md:block text-2xl font-bold text-green-700 tracking-wide">
+                Harkat <span class="text-gray-800">Rent Car</span>
+            </span>
+            {{-- Mobile Logo (image) --}}
+            <img src="{{ asset('images/logo-text.png') }}" alt="Harkat Rent Car" class="h-10 w-auto block md:hidden">
         </a>
 
         {{-- Desktop Nav --}}
         <nav class="hidden md:flex items-center space-x-6">
-            {{-- Selalu tampil --}}
             <a href="{{ route('mobil.index') }}" class="text-gray-700 font-medium hover:text-green-700">Armada Kami</a>
 
             @auth('web')
                 <a href="{{ route('booking.index') }}" class="text-gray-700 font-medium hover:text-green-700">Pesanan</a>
                 <a href="{{ route('riwayat.index') }}" class="text-gray-700 font-medium hover:text-green-700">Riwayat</a>
 
-                {{-- Greeting --}}
                 <span class="text-gray-700 font-semibold">
                     👋 Hai, {{ auth('web')->user()->name }}
                 </span>
@@ -29,12 +31,11 @@
                     </button>
                 </form>
             @else
-                <a href="{{ route('login.form', ['role' => 'customer']) }}"
+                <a href="#" id="openCustomerLoginModal"
                     class="text-gray-700 font-medium hover:text-green-700">Pesanan</a>
-                <a href="{{ route('login.form', ['role' => 'customer']) }}"
+                <a href="#" id="openCustomerLoginModal"
                     class="text-gray-700 font-medium hover:text-green-700">Riwayat</a>
 
-                {{-- Dropdown Login --}}
                 <div class="relative inline-block text-left">
                     <button id="loginDropdownBtn"
                         class="text-green-700 font-semibold hover:text-green-900 transition duration-150 text-sm">
@@ -45,34 +46,34 @@
                         <a href="#" id="openCustomerLoginModalDesktop"
                             class="block px-4 py-3 text-gray-700 hover:bg-green-50 transition">🔑 Login</a>
                         <a href="{{ route('login.form', ['role' => 'supir']) }}"
-                            class="block px-4 py-3 text-gray-700 hover:bg-green-50 transition">🚗
-                            Login Supir</a>
+                            class="block px-4 py-3 text-gray-700 hover:bg-green-50 transition">🚗 Login Supir</a>
                     </div>
                 </div>
             @endauth
         </nav>
 
-        {{-- Mobile Menu Button --}}
-        <button id="mobileMenuBtn" class="md:hidden text-green-700 focus:outline-none text-2xl">
-            ☰
-        </button>
+        {{-- Mobile Greeting + Menu Button --}}
+        <div class="flex items-center gap-3 md:hidden">
+            @auth('web')
+                <span class="text-gray-700 font-semibold text-sm">
+                    👋 Hai, {{ auth('web')->user()->name }}
+                </span>
+            @endauth
+            <button id="mobileMenuBtn" class="text-green-700 focus:outline-none text-2xl">☰</button>
+        </div>
     </div>
 
     {{-- Mobile Nav --}}
     <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-200 mt-4">
-        {{-- Selalu tampil --}}
-        <a href="{{ route('mobil.index') }}"
-            class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Armada Kami</a>
+        <a href="{{ route('mobil.index') }}" class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">
+            Armada Kami
+        </a>
 
         @auth('web')
             <a href="{{ route('booking.index') }}"
                 class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Pesanan</a>
             <a href="{{ route('riwayat.index') }}"
                 class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Riwayat</a>
-
-            <div class="px-6 py-3 text-gray-700 font-semibold">
-                👋 Hai, {{ auth('web')->user()->name }}
-            </div>
 
             {{-- Logout Mobile --}}
             <form method="POST" action="{{ route('logout') }}" class="px-6 pb-4">
@@ -83,15 +84,14 @@
                 </button>
             </form>
         @else
-            <a href="{{ route('login.form', ['role' => 'customer']) }}"
+            <a href="#" id="openCustomerLoginModalMobile"
                 class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Pesanan</a>
-            <a href="{{ route('login.form', ['role' => 'customer']) }}"
+            <a href="#" id="openCustomerLoginModalMobile"
                 class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">Riwayat</a>
             <a href="#" id="openCustomerLoginModalMobile"
                 class="block px-4 py-3 text-gray-700 hover:bg-green-50 transition">🔑 Login</a>
             <a href="{{ route('login.form', ['role' => 'supir']) }}"
-                class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">🚗
-                Login Supir</a>
+                class="block px-6 py-3 text-gray-700 hover:bg-green-50 transition">🚗 Login Supir</a>
         @endauth
     </div>
 
@@ -107,5 +107,4 @@
             }
         });
     </script>
-    
 </header>

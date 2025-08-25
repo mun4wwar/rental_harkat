@@ -52,6 +52,7 @@ class Mobil extends Model
         'harga_sewa',
         'harga_all_in',
         'status',
+        'status_approval',
         'gambar',
     ];
 
@@ -78,6 +79,15 @@ class Mobil extends Model
             default => 'bg-gray-100 text-gray-400',
         };
     }
+    public function getStatusApprovalTextAttribute()
+    {
+        return match ($this->status_approval) {
+            0 => 'Rejected by SuperAdmin',
+            1 => 'Approved',
+            2 => 'Pending Approval',
+            default => 'Unknown',
+        };
+    }
 
     public function getHargaPerHari(bool $pakaiSupir = false): int
     {
@@ -96,8 +106,12 @@ class Mobil extends Model
         return $this->hasMany(BookingDetail::class);
     }
 
-    public function types()
+    public function type()
     {
         return $this->belongsTo(TipeMobil::class, 'tipe_id');
+    }
+    public function approvals()
+    {
+        return $this->morphMany(Approval::class, 'approvable');
     }
 }

@@ -36,6 +36,18 @@
                     'label' => 'Manajemen Penyewaan Mobil',
                     'match' => 'admin/transaksi',
                 ],
+                [
+                    'route' => 'admin.pembayaran.index',
+                    'icon' => 'arrow-left-right',
+                    'label' => 'Manajemen Pembayaran Mobil',
+                    'match' => 'admin/pembayaran',
+                ],
+                [
+                    'route' => 'admin.laporan',
+                    'icon' => 'paper',
+                    'label' => 'Laporan',
+                    'match' => 'admin/laporan/generate',
+                ],
             ];
 
         @endphp

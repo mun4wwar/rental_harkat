@@ -51,7 +51,7 @@ class BookingDetail extends Model
     protected function tanggalMulaiFormat(): Attribute
     {
         return Attribute::get(fn() => $this->tanggal_sewa
-            ? Carbon::parse($this->tanggal_sewa)->translatedFormat('l, d F Y')
+            ? Carbon::parse($this->tanggal_sewa)->translatedFormat('l, d F Y H:i')
             : null);
     }
 
@@ -61,28 +61,21 @@ class BookingDetail extends Model
             ? Carbon::parse($this->tanggal_kembali)->translatedFormat('l, d F Y')
             : null);
     }
-    public function getTotalHargaRpAttribute()
-    {
-        return 'Rp ' . number_format($this->total_harga, 0, ',', '.');
-    }
-
+    
     // Relasi ke Booking
     public function booking()
     {
         return $this->belongsTo(Booking::class);
     }
-
-    public function jobOffers()
-    {
-        return $this->hasMany(JobOffer::class, 'booking_detail_id');
-    }
-
     // Relasi ke Mobil
     public function mobil()
     {
         return $this->belongsTo(Mobil::class);
     }
-
+    public function jobOffers()
+    {
+        return $this->hasMany(JobOffer::class, 'booking_detail_id');
+    }
     // Relasi ke Supir
     public function supir()
     {

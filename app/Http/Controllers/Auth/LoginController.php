@@ -35,7 +35,15 @@ class LoginController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
-        $role = ucfirst(strtolower($request->input('role'))); // Customer / Supir / Admin
+        $roleMap = [
+            'superadmin' => 'SuperAdmin',
+            'admin'      => 'Admin',
+            'supir'      => 'Supir',
+            'customer'   => 'Customer',
+        ];
+
+        $roleSlug = strtolower($request->input('role'));
+        $role = $roleMap[$roleSlug] ?? null;
 
         if (!Auth::attempt($credentials, $request->filled('remember'))) {
             return back()->withErrors(['email' => 'Email atau password salah'])->onlyInput('email');
@@ -43,16 +51,7 @@ class LoginController extends Controller
 
         $user = Auth::user();
 
-        // cek role sesuai form login
-        $valid = match ($role) {
-            'Customer' => $user->isRole('Customer'),
-            'Supir'    => $user->isRole('Supir'),
-            'Admin'    => $user->isRole('Admin'),
-            'SuperAdmin'    => $user->isRole('SuperAdmin'),
-            default    => false,
-        };
-
-        if (!$valid) {
+        if (!$user->isRole($role)) {
             Auth::logout();
             return back()->withErrors(['email' => "Bukan akun $role"]);
         }

@@ -11,7 +11,7 @@ class LandingController extends Controller
 {
     public function index()
     {
-        $mobils = Mobil::latest()->take(3)->get();
+        $mobils = Mobil::where('status', 1)->get();
         $user = Auth::user();
         return view('main-content', compact('mobils', 'user'));
     }

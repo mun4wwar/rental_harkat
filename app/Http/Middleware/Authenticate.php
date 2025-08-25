@@ -13,7 +13,7 @@ class Authenticate extends Middleware
             if ($request->is('admin*')) return '/login/admin';
             if ($request->is('supir*')) return '/supir/login';
             // if ($request->is('home') || $request->is('customer*')) return '/login/customer';
-            return '/login'; // fallback
+            return '/landing-page'; // fallback
         }
     }
 }

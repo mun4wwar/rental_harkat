@@ -5,9 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Supir\SupirDashboardController;
 
 Route::prefix('supir')->name('supir.')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('login');
-    })->middleware('guest:web');
     // Auth
     Route::middleware(['auth', 'role:Supir'])->group(function () {
         // Dashboard supir
