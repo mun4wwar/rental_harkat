@@ -31,22 +31,44 @@ class TransaksiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pelanggan_id'     => 'required|exists:users,id',
-            'mobil_id'         => 'required|exists:mobils,id',
-            'supir_id'         => 'nullable|exists:supirs,id', // Bisa null kalau sewa tanpa supir
-            'tanggal_sewa'     => 'required|date',
-            'tanggal_kembali'  => 'required|date|after_or_equal:tanggal_sewa',
-            'status'           => 'required|in:1,2', // 1 = Booking, 2 = Berlangsung
+            'pelanggan_id'          => 'required|exists:users,id',
+            'asal_kota'             => 'required|in:1,2',
+            'nama_kota'             => 'required_if:asal_kota,2|nullable|string',
+            'jaminan'               => 'required|in:1,2',
+
+            // Multi-mobil
+            'mobils'                => 'required|array|min:1',
+            'mobils.*.mobil_id'     => 'required|exists:mobils,id',
+            'mobils.*.tanggal_sewa' => 'required|date',
+            'mobils.*.tanggal_kembali' => 'required|date|after_or_equal:mobils.*.tanggal_sewa',
+            'mobils.*.pakai_supir'  => 'required|in:0,1',
+            'mobils.*.supir_id'     => 'nullable|exists:supirs,id',
         ];
     }
+
     public function messages(): array
     {
         return [
-            'pelanggan_id.required' => 'Pelanggan wajib dipilih.',
-            'mobil_id.required'     => 'Mobil wajib dipilih.',
-            'tanggal_sewa.required' => 'Tanggal sewa wajib diisi.',
-            'tanggal_kembali.after_or_equal' => 'Tanggal kembali tidak boleh sebelum tanggal sewa.',
-            'status.in'             => 'Status hanya boleh 1 (Booking) atau 2 (Berlangsung)',
+            'pelanggan_id.required'          => 'Pelanggan wajib dipilih.',
+            'pelanggan_id.exists'            => 'Pelanggan tidak valid.',
+
+            'asal_kota.required'             => 'Asal kota wajib dipilih.',
+            'asal_kota.in'                   => 'Asal kota tidak valid.',
+            'nama_kota.required_if'          => 'Nama kota harus diisi jika asal kota = luar kota.',
+
+            'jaminan.required'               => 'Jaminan wajib dipilih.',
+            'jaminan.in'                     => 'Jaminan tidak valid.',
+
+            'mobils.required'                => 'Minimal 1 mobil harus dipilih.',
+            'mobils.array'                   => 'Format data mobil tidak valid.',
+            'mobils.*.mobil_id.required'     => 'Mobil harus dipilih.',
+            'mobils.*.mobil_id.exists'       => 'Mobil tidak valid.',
+            'mobils.*.tanggal_sewa.required' => 'Tanggal sewa harus diisi.',
+            'mobils.*.tanggal_kembali.required' => 'Tanggal kembali harus diisi.',
+            'mobils.*.tanggal_kembali.after_or_equal' => 'Tanggal kembali tidak boleh sebelum tanggal sewa.',
+            'mobils.*.pakai_supir.required'  => 'Harus pilih apakah pakai supir atau tidak.',
+            'mobils.*.pakai_supir.in'        => 'Pilihan pakai supir tidak valid.',
+            'mobils.*.supir_id.exists'       => 'Supir tidak valid.',
         ];
     }
 }

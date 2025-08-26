@@ -1,11 +1,15 @@
 <header class="px-6 py-4 bg-white shadow-md fixed top-0 left-0 right-0 z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
         {{-- Logo --}}
-        <a href="{{ auth('web')->check() ? url('/home') : url('/') }}" class="flex items-center">
+        <a href="{{ auth('web')->check() ? url('/home') : url('/') }}" class="flex items-center gap-2">
+            {{-- Desktop & Mobile logo --}}
+            <img src="{{ asset('images/logo.png') }}" alt="Harkat Rent Car" class="h-8 w-auto hidden md:block">
+
             {{-- Desktop Logo (text) --}}
             <span class="hidden md:block text-2xl font-bold text-green-700 tracking-wide">
                 Harkat <span class="text-gray-800">Rent Car</span>
             </span>
+
             {{-- Mobile Logo (image) --}}
             <img src="{{ asset('images/logo-text.png') }}" alt="Harkat Rent Car" class="h-10 w-auto block md:hidden">
         </a>

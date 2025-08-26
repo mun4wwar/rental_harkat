@@ -38,19 +38,18 @@ class CancelUnpaidBookings extends Command
             })
             ->with(['pembayaranDp', 'details.mobil', 'user'])
             ->get();
-
+        $this->info("Found {$bookings->count()} bookings to cancel.");
         foreach ($bookings as $booking) {
-            $booking->update(['status' => 0]); // 0 = canceled
-
             foreach ($booking->details as $detail) {
                 // cancel booking_detail
                 $detail->update(['status' => 0]);
-                
+
                 if ($detail->mobil) {
                     $detail->mobil->update(['status' => 1]); // 1 = tersedia
                 }
             }
-
+            // Update status booking
+            $booking->update(['status' => Booking::STATUS_CANCELED]);
             // kirim notif email
             $booking->user->notify(new BookingCanceledNotification($booking));
 

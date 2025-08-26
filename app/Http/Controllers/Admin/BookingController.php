@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\JobOffer;
 use App\Models\Mobil;
+use App\Models\Pembayaran;
 use App\Models\Supir;
 use App\Models\User;
 use App\Notifications\JobAssignedEmail;
@@ -28,8 +29,11 @@ class BookingController extends Controller
 
     public function create()
     {
-        $pelanggans = User::all();
-        $mobils = Mobil::all();
+        $pelanggans = User::where('role', 4)->get();
+        $mobils = Mobil::where('status', 1)->where('status_approval', 1)->get();
+        if ($mobils->isEmpty()) {
+            return redirect()->back()->with('error', 'Belum ada mobil tersedia.');
+        }
         $supirs = Supir::all();
 
         return view('admin.transaksi.create', compact('pelanggans', 'mobils', 'supirs'));
@@ -37,16 +41,105 @@ class BookingController extends Controller
 
     public function store(TransaksiRequest $request): RedirectResponse
     {
-        $data = $this->prepareTransaksiData($request->validated());
-
-        Booking::create($data);
-
-        // Update status mobil
-        Mobil::where('id', $data['mobil_id'])->update([
-            'status' => 2,
+        // ✅ Validasi input
+        $validated = $request->validate([
+            'pelanggan_id' => 'required|exists:users,id',
+            'mobils.*.mobil_id'        => 'required|exists:mobils,id',
+            'mobils.*.tanggal_sewa'    => 'required|date',
+            'mobils.*.tanggal_kembali' => 'required|date|after_or_equal:mobils.*.tanggal_sewa',
+            'mobils.*.pakai_supir'     => 'required|in:0,1',
+            'asal_kota'                => 'required|in:1,2',
+            'nama_kota'                => 'required_if:asal_kota,2|nullable|string',
+            'jaminan'                  => 'required|in:1,2',
+        ], [
+            'mobils.*.mobil_id.required'        => 'Mobil harus dipilih.',
+            'mobils.*.tanggal_sewa.required'    => 'Tanggal sewa harus diisi.',
+            'mobils.*.tanggal_kembali.after_or_equal' => 'Tanggal kembali tidak boleh sebelum tanggal sewa.',
+            'asal_kota.required'                => 'Asal Kota harus diisi.',
+            'nama_kota.required_if'             => 'Nama kota harus diisi jika asal kota = luar kota.',
+            'jaminan.required'                  => 'Jaminan harus diisi.',
         ]);
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dibuat.');
+        // ✅ Buat booking baru
+        $booking = Booking::create([
+            'user_id'        => $request->pelanggan_id,
+            'tanggal_booking' => now(),
+            'total_harga'    => 0,
+            'uang_muka'    => 0,
+            'status'         => 1, // booked
+            'asal_kota'      => $request->asal_kota,
+            'nama_kota'      => $request->nama_kota,
+            'jaminan'        => $request->jaminan,
+        ]);
+
+        $totalBooking = 0;
+        $tanggalSewaTerdekat = null;
+
+        // ✅ Simpan detail booking
+        foreach ($validated['mobils'] as $item) {
+            $mobil          = Mobil::findOrFail($item['mobil_id']);
+            $tanggalSewa    = Carbon::parse($item['tanggal_sewa']);
+            $tanggalKembali = Carbon::parse($item['tanggal_kembali']);
+
+            // hitung selisih jam -> dibagi 24 -> ceil (dibulatkan ke atas)
+            $jam = $tanggalSewa->diffInHours($tanggalKembali);
+            $lama = max(1, ceil($jam / 24));
+
+
+            $harga = $item['pakai_supir']
+                ? $mobil->harga_all_in * $lama
+                : $mobil->harga_sewa * $lama;
+
+
+            BookingDetail::create([
+                'booking_id'      => $booking->id,
+                'mobil_id'        => $mobil->id,
+                'pakai_supir'     => $item['pakai_supir'],
+                'supir_id'        => null,
+                'tanggal_sewa'    => $tanggalSewa,
+                'tanggal_kembali' => $tanggalKembali,
+                'lama_sewa'       => $lama,
+                'harga'           => $harga,
+            ]);
+
+            // update mobil jadi booked
+            foreach ($validated['mobils'] as $item) {
+                $mobil = Mobil::findOrFail($item['mobil_id']);
+                $mobil->update(['status' => 2]);
+                \Log::info("Mobil {$mobil->id} status updated to {$mobil->status}");
+            }
+            $totalBooking += $harga;
+
+            // simpan tanggal sewa paling awal
+            $tanggalSewaTerdekat = is_null($tanggalSewaTerdekat) || $tanggalSewa->lt($tanggalSewaTerdekat)
+                ? $tanggalSewa
+                : $tanggalSewaTerdekat;
+        }
+
+        // ✅ Update total booking & uang muka
+        $booking->update([
+            'total_harga' => $totalBooking,
+            'uang_muka'   => $totalBooking / 2, // override biar fix 50%
+        ]);
+
+        // ✅ Hitung jatuh tempo DP
+        $tanggalBooking = Carbon::parse($booking->tanggal_booking);
+
+        // default jatuh tempo = 3 hari setelah booking
+        $jatuhTempoDefault = $tanggalBooking->copy()->addDays(4);
+
+        // jatuh tempo final = minimal dari (jatuh tempo default, tanggal sewa - 2 jam)
+        $jatuhTempo = $jatuhTempoDefault->min($tanggalSewaTerdekat->copy()->subHours(2));
+
+        // ✅ Generate pembayaran DP
+        $pembayaranDp = Pembayaran::create([
+            'booking_id'  => $booking->id,
+            'jenis'       => 1, // DP
+            'jumlah'      => $booking->uang_muka,
+            'status'      => 0, // belum dibayar
+            'jatuh_tempo' => $jatuhTempo,
+        ]);
+        return redirect()->route('admin.booking.index')->with('success', 'Transaksi berhasil dibuat.');
     }
 
     public function show(Booking $booking)
@@ -56,11 +149,14 @@ class BookingController extends Controller
 
     public function edit(Booking $booking)
     {
-        $pelanggans = User::all();
-        $mobils = Mobil::all();
+        $pelanggans = User::where('role', 4);
+        $mobils = Mobil::where('status', 1)->where('status_approval', 1)->get();
+        if ($mobils->isEmpty()) {
+            return redirect()->back()->with('error', 'Belum ada mobil tersedia.');
+        }
         $supirs = Supir::all();
 
-        return view('admin.transaksi.edit', compact('transaksi', 'pelanggans', 'mobils', 'supirs'));
+        return view('admin.transaksi.edit', compact('booking', 'pelanggans', 'mobils', 'supirs'));
     }
 
     public function update(TransaksiRequest $request, Booking $booking): RedirectResponse
@@ -101,7 +197,7 @@ class BookingController extends Controller
             }
         }
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil diperbarui.');
+        return redirect()->route('admin.booking.index')->with('success', 'Transaksi berhasil diperbarui.');
     }
 
     public function assignJobSupir(Request $request, BookingDetail $bookingDtl)

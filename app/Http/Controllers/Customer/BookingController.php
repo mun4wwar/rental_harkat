@@ -196,9 +196,6 @@ class BookingController extends Controller
             'status'      => 0, // belum dibayar
             'jatuh_tempo' => $jatuhTempo,
         ]);
-
-
-
         // ✅ Kirim notifikasi email DP
         $booking->user->notify(new DpReminderNotification($booking, $pembayaranDp));
 

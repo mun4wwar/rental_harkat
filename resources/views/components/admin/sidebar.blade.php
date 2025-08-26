@@ -16,8 +16,18 @@
                     'label' => 'Dashboard',
                     'match' => 'admin',
                 ],
-                ['route' => 'admin.mobil.index', 'icon' => 'car', 'label' => 'Manajemen Mobil', 'match' => 'admin/mobil'],
-                ['route' => 'admin.tipe-mobil.index', 'icon' => 'car', 'label' => 'Manajemen Tipe mobil', 'match' => 'admin/tipe-mobil'],
+                [
+                    'route' => 'admin.mobil.index',
+                    'icon' => 'car',
+                    'label' => 'Manajemen Mobil',
+                    'match' => 'admin/mobil',
+                ],
+                [
+                    'route' => 'admin.tipe-mobil.index',
+                    'icon' => 'car',
+                    'label' => 'Manajemen Tipe mobil',
+                    'match' => 'admin/tipe-mobil',
+                ],
                 [
                     'route' => 'admin.supir.index',
                     'icon' => 'shield-user',
@@ -41,12 +51,6 @@
                     'icon' => 'arrow-left-right',
                     'label' => 'Manajemen Pembayaran Mobil',
                     'match' => 'admin/pembayaran',
-                ],
-                [
-                    'route' => 'admin.laporan',
-                    'icon' => 'paper',
-                    'label' => 'Laporan',
-                    'match' => 'admin/laporan/generate',
                 ],
             ];
 

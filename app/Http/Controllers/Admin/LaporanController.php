@@ -44,7 +44,7 @@ class LaporanController extends Controller
         }
 
         // nama file unik per generate
-        $filename = 'laporan_admin_' . now()->format('Ymd_His') . '.pdf';
+        $filename = 'laporan_penyewaan_mobil_HarkatRentCar' . now()->format('Ymd_His') . '.pdf';
         $path = $folderPath . '/' . $filename;
 
         // simpan ke storage

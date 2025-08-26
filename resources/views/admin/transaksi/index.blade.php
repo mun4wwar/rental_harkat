@@ -10,10 +10,16 @@
             </div>
         @endif
 
-        <div class="mb-4">
+        <div class="mb-4 flex gap-2">
             <a href="{{ route('admin.booking.create') }}"
                 class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow">
                 + Tambah Booking
+            </a>
+
+            <a href="{{ route('admin.laporan') }}"
+                class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md shadow transition transform hover:scale-105">
+                <i data-lucide="scroll-text" class="w-5 h-5"></i>
+                Generate Laporan
             </a>
         </div>
 
@@ -85,6 +91,5 @@
                 @endforeach
             </tbody>
         </table>
-
     </div>
 @endsection

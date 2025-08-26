@@ -8,7 +8,7 @@
     <title>Super Admin - @yield('title')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!-- Scripts -->
+    <!-- Scripts dari Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -21,19 +21,23 @@
                 <h1 class="text-xl font-bold text-blue-600">Super Admin</h1>
             </div>
             <nav class="flex-1 px-4 py-6 space-y-2">
-                <x-super-admin.sidebar-item href="">
+                <x-super-admin.sidebar-item href="{{ route('superadmin.dashboard') }}" :active="request()->routeIs('superadmin.dashboard')">
                     Dashboard
                 </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="{{ route('superadmin.approvals.index') }}" :active="request()->routeIs('superadmin.admins.*')">
+
+                <x-super-admin.sidebar-item href="{{ route('superadmin.approvals.index') }}" :active="request()->routeIs('superadmin.approvals.*')">
                     Approvals
                 </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="">
+
+                {{-- <x-super-admin.sidebar-item href="{{ route('superadmin.mobil.index') }}" :active="request()->routeIs('superadmin.mobil.*')">
                     Data Mobil
-                </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="{{ route('superadmin.listLaporan') }}" :active="request()->routeIs('superadmin.admins.*')">
+                </x-super-admin.sidebar-item> --}}
+
+                <x-super-admin.sidebar-item href="{{ route('superadmin.listLaporan') }}" :active="request()->routeIs('superadmin.listLaporan')">
                     Laporan
                 </x-super-admin.sidebar-item>
-                <x-super-admin.sidebar-item href="{{ route('superadmin.users.index') }}" :active="request()->routeIs('superadmin.admins.*')">
+
+                <x-super-admin.sidebar-item href="{{ route('superadmin.users.index') }}" :active="request()->routeIs('superadmin.users.*')">
                     Kelola Users
                 </x-super-admin.sidebar-item>
             </nav>
@@ -59,8 +63,11 @@
             </main>
         </div>
     </div>
-    <script src="//unpkg.com/alpinejs" defer></script>
 
+    {{-- Script global --}}
+    <script src="//unpkg.com/alpinejs" defer></script>
+    {{-- ✅ ini fix: harus sama dengan @push('scripts') --}}
+    @stack('scripts')
 </body>
 
 </html>

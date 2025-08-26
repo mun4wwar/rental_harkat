@@ -35,11 +35,10 @@
     </div>
 
     {{-- lucide icons --}}
-    <script type="module">
-        import "lucide/dist/umd/lucide.js";
-        lucide.createIcons();
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/lucide.min.js"></script>
+    <script>
+        lucide.replace()
     </script>
-
 </body>
 
 </html>

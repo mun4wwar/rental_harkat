@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\BookingDetail;
 use App\Models\Mobil;
 use App\Models\Pembayaran;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -24,13 +25,21 @@ class BookingExpiredSeeder extends Seeder
             $this->command->warn("⚠️ Tidak ada mobil di database, seed mobil dulu brok!");
             return;
         }
-
+        // cek atau buat user dummy
+        $user = User::find(5);
+        if (!$user) {
+            $user = User::create([
+                'id' => 5,
+                'name' => 'Dummy User',
+                'email' => 'dummy5@example.com',
+                'password' => bcrypt('password'),
+            ]);
+        }
         // tandain mobil dipakai (0 = tidak tersedia)
         $mobil->update(['status' => 0]);
-
         // bikin booking dummy
         $booking = Booking::create([
-            'user_id' => 5, // asumsi user id 1 ada
+            'user_id' => $user->id, // asumsi user id 1 ada
             'asal_kota' => 1,
             'status' => 1, // status booking awal
             'tanggal_booking' => Carbon::now()->subDays(2), // booking 2 hari lalu
