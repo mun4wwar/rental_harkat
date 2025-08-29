@@ -56,7 +56,7 @@
 
             <div class="flex justify-end gap-2">
                 <button id="cancelProfileModal" class="px-4 py-2 bg-gray-300 rounded">Nanti</button>
-                <a href="{{ route('profile.edit') }}" class="px-4 py-2 bg-green-600 text-white rounded">Isi Profile</a>
+                <a href="{{ route('profile.index') }}" class="px-4 py-2 bg-green-600 text-white rounded">Isi Profile</a>
             </div>
         </div>
     </div>
@@ -177,6 +177,16 @@
             })
         </script>
     @endif
+    <!-- Script auto-open modal kalau ada error -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            @if ($errors->has('email') || $errors->has('password'))
+                const modal = document.getElementById("customerLoginModal");
+                modal?.classList.remove("hidden");
+                modal?.classList.add("flex");
+            @endif
+        });
+    </script>
     @stack('scripts') {{-- ini yang penting buat munculin script dari @push --}}
 </body>
 

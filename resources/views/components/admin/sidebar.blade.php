@@ -52,6 +52,12 @@
                     'label' => 'Manajemen Pembayaran Mobil',
                     'match' => 'admin/pembayaran',
                 ],
+                [
+                    'route' => 'admin.pengembalian.index',
+                    'icon' => 'arrow-left-right',
+                    'label' => 'Manajemen Pengembalian Mobil',
+                    'match' => 'admin/pengembalian',
+                ],
             ];
 
         @endphp

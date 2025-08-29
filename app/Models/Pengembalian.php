@@ -15,7 +15,8 @@ class Pengembalian extends Model
         'booking_detail_id',
         'tanggal_kembali_aktual',
         'kondisi',
-        'denda',
+        'denda_flag',
+        'nominal_denda',
         'catatan',
         'gambar',
     ];

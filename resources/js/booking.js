@@ -56,6 +56,47 @@ document.addEventListener("DOMContentLoaded", () => {
         const pakaiSupir = item.querySelector(".pakai-supir-checkbox");
         const hiddenSupir = item.querySelector(".hidden-pakai-supir");
 
+        // === Atur tanggal kembali otomatis ===
+        tanggalSewa.addEventListener("change", () => {
+            if (tanggalSewa.value) {
+                let sewa = new Date(tanggalSewa.value);
+
+                // bikin kembali = sewa + 1 hari
+                let kembali = new Date(sewa);
+                kembali.setDate(sewa.getDate() + 1);
+
+                // format yyyy-MM-ddTHH:mm
+                let yyyy = kembali.getFullYear();
+                let mm = String(kembali.getMonth() + 1).padStart(2, '0');
+                let dd = String(kembali.getDate()).padStart(2, '0');
+                let hh = String(sewa.getHours()).padStart(2, '0');
+                let min = String(sewa.getMinutes()).padStart(2, '0');
+                let formatted = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+
+                tanggalKembali.value = formatted;
+            }
+            hitungHarga(item);
+        });
+        // === Kalau user ubah tanggal kembali, jam tetep ikut jam sewa ===
+        tanggalKembali.addEventListener("change", () => {
+            if (tanggalKembali.value && tanggalSewa.value) {
+                let sewa = new Date(tanggalSewa.value);
+                let kembali = new Date(tanggalKembali.value);
+
+                // jam kembali = jam sewa
+                kembali.setHours(sewa.getHours(), sewa.getMinutes(), 0, 0);
+
+                let yyyy = kembali.getFullYear();
+                let mm = String(kembali.getMonth() + 1).padStart(2, '0');
+                let dd = String(kembali.getDate()).padStart(2, '0');
+                let hh = String(sewa.getHours()).padStart(2, '0');
+                let min = String(sewa.getMinutes()).padStart(2, '0');
+                let formatted = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+
+                tanggalKembali.value = formatted;
+            }
+            hitungHarga(item);
+        });
         [tanggalSewa, tanggalKembali, mobilSelect].forEach(el =>
             el.addEventListener("change", () => hitungHarga(item))
         );

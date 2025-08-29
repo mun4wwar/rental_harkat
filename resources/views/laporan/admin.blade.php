@@ -46,6 +46,9 @@
             @endforeach
         </tbody>
     </table>
+    <p><strong></strong></strong> {{ $jumlahBooking }}</p>
+    <p><strong>..., 28 Agustus 2025</strong> {{ $jumlahBooking }}</p>
+    <p><strong></strong> {{ $jumlahMobil }}</p>
 </body>
 
 </html>

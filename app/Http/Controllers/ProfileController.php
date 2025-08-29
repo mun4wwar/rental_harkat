@@ -4,29 +4,42 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\City;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ProfileController extends Controller
 {
+    public function show(Request $request): View
+    {
+        return view('profile.index', [
+            'user' => $request->user(),
+        ]);
+    }
     /**
-     * Display the user's profile form.
+     * Show the profile edit form.
      */
     public function edit(Request $request): View
     {
-
-        $user = Auth::user();
-        return view('profile.edit', compact('user'));
+        return view('profile.edit', [
+            'user' => $request->user(),
+        ]);
     }
+
+    /**
+     * Autocomplete city search (for dropdowns, etc).
+     */
     public function autocompleteCities(Request $request)
     {
         $search = $request->get('q', '');
-        $cities = City::where('name', 'like', "%{$search}%")
+
+        $cities = City::query()
+            ->where('name', 'like', "%{$search}%")
             ->limit(10)
             ->get(['name', 'country']);
+
         return response()->json($cities);
     }
 
@@ -35,19 +48,11 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $user = Auth::user();
+        $request->user()->update($request->validated());
 
-        $data = $request->validate([
-            'name'   => 'required|string|max:100',
-            'email'  => 'required|email|unique:users,email,' . $user->id,
-            'no_hp'  => 'required|string|max:15',
-            'alamat' => 'required|string|max:255',
-            'asal_kota' => 'required|string|max:255',
-        ]);
-
-        $user->update($data);
-
-        return redirect()->route('home')->with('success', 'Profil berhasil diperbarui!');
+        return redirect()
+            ->route('profile.index')
+            ->with('success', 'Profil berhasil diperbarui!');
     }
 
     /**
@@ -62,12 +67,12 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
-
         $user->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return Redirect::to('/')
+            ->with('success', 'Akun berhasil dihapus.');
     }
 }

@@ -40,7 +40,7 @@ class BookingController extends Controller
             $nama_kota_booking = $user->asal_kota;
             $jaminan_default = 1;
         }
-        $mobils = Mobil::where('status', 1)->get();
+        $mobils = Mobil::where('status', 1)->where('status_approval', 1)->get();
         if ($mobils->isEmpty()) {
             return redirect()->back()->with('error', 'Belum ada mobil tersedia.');
         }

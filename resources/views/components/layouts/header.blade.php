@@ -22,9 +22,10 @@
                 <a href="{{ route('booking.index') }}" class="text-gray-700 font-medium hover:text-green-700">Pesanan</a>
                 <a href="{{ route('riwayat.index') }}" class="text-gray-700 font-medium hover:text-green-700">Riwayat</a>
 
-                <span class="text-gray-700 font-semibold">
+                <a href="{{ route('profile.index') }}"
+                    class="text-gray-700 font-semibold hover:text-green-700 hover:underline transition">
                     👋 Hai, {{ auth('web')->user()->name }}
-                </span>
+                </a>
 
                 {{-- Logout --}}
                 <form method="POST" action="{{ route('logout') }}">
@@ -59,9 +60,10 @@
         {{-- Mobile Greeting + Menu Button --}}
         <div class="flex items-center gap-3 md:hidden">
             @auth('web')
-                <span class="text-gray-700 font-semibold text-sm">
+                <a href="{{ route('profile.index') }}"
+                    class="text-gray-700 font-semibold text-sm hover:text-green-700 transition">
                     👋 Hai, {{ auth('web')->user()->name }}
-                </span>
+                </a>
             @endauth
             <button id="mobileMenuBtn" class="text-green-700 focus:outline-none text-2xl">☰</button>
         </div>

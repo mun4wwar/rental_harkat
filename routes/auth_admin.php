@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\PembayaranController;
+use App\Http\Controllers\Admin\PengembalianController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
@@ -23,6 +24,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:Admin'])->grou
     Route::get('pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
     Route::put('pembayaran/{pembayaran}/verifikasi', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');
     Route::put('pembayaran/{pembayaran}/tolak', [PembayaranController::class, 'tolak'])->name('pembayaran.tolak');
+    Route::resource('pengembalian', PengembalianController::class)
+        ->only(['index', 'show', 'store', 'update']);
 
     Route::post('/booking/{bookingDtl}/send', [BookingController::class, 'assignJobSupir'])
         ->name('assignJob');

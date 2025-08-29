@@ -30,6 +30,21 @@ class PembayaranController extends Controller
         $booking = $pembayaran->booking;
         $customer = $booking->user; // ini customer (role=4)
 
+        // ✅ Kalau pembayaran ini jenis DP (1), buat otomatis record pelunasan (2)
+        if ($pembayaran->jenis == 1) {
+            Pembayaran::create([
+                'booking_id'        => $booking->id,
+                'tanggal_pembayaran' => null, // kosong dulu, nunggu bayar
+                'jumlah'            => $booking->total_harga - $pembayaran->jumlah, // sisa yg harus dilunasi
+                'metode_pembayaran' => null, // nunggu input dari customer
+                'jenis'             => 2, // pelunasan
+                'status_pembayaran' => 0, // pending
+                'catatan_admin'     => null,
+                'foto_bukti'        => null,
+                'jatuh_tempo'       => $booking->details->max('tanggal_kembali'), // misalnya jatuh tempo pas pengembalian
+            ]);
+        }
+
         // ✅ Generate PDF Invoice
         $pdf = Pdf::loadView('invoices.pdf', compact('booking', 'pembayaran'))->output();
 

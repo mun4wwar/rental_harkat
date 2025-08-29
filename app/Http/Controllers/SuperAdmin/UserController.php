@@ -48,7 +48,7 @@ class UserController extends Controller
             'name'     => 'required|string',
             'email'    => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'role'     => 'required|integer|in:2,3', // Admin, Supir, Customer
+            'role'     => 'required|integer|in:2,3,4', // Admin, Supir, Customer
         ]);
 
         User::create([
@@ -73,7 +73,7 @@ class UserController extends Controller
             'name'     => 'required|string',
             'email'    => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:6',
-            'role'     => 'required|integer|in:2,3',
+            'role'     => 'required|integer|in:2,3,4',
         ]);
 
         $data = $request->only(['name', 'email', 'role']);

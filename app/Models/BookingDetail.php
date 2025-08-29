@@ -58,10 +58,16 @@ class BookingDetail extends Model
     protected function tanggalSelesaiFormat(): Attribute
     {
         return Attribute::get(fn() => $this->tanggal_kembali
-            ? Carbon::parse($this->tanggal_kembali)->translatedFormat('l, d F Y')
+            ? Carbon::parse($this->tanggal_kembali)->translatedFormat('l, d F Y H:i')
             : null);
     }
-    
+    protected function tanggalSelesaiIso(): Attribute
+    {
+        return Attribute::get(fn() => $this->tanggal_kembali
+            ? Carbon::parse($this->tanggal_kembali)->format('Y-m-d\TH:i')
+            : null);
+    }
+
     // Relasi ke Booking
     public function booking()
     {

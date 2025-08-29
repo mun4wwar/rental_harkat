@@ -45,7 +45,7 @@
             <select name="role" class="w-full border rounded p-2" required>
                 <option value="2" {{ $user->role == 2 ? 'selected' : '' }}>Admin</option>
                 <option value="3" {{ $user->role == 3 ? 'selected' : '' }}>Supir</option>
-                <option value="4" {{ $user->role == 4 ? 'selected' : '' }}>Customer</option>
+                <option value="4" {{ $user->role == 4 ? 'selected' : '' }}>Customer</option>    
             </select>
             @error('role')
                 <p class="text-red-500 text-sm">{{ $message }}</p>

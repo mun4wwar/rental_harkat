@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         $totalMobil = Mobil::count();
         $totalSupir = Supir::count();
-        $mobilTersedia = Mobil::where('status', 1)->count();
+        $mobilTersedia = Mobil::where('status', 1)->where('status_approval', 1) ->count();
         $supirBertugas = Supir::where('status', 2)->count();
         $mobilDisewa = Mobil::where('status', 2)->count();
         $supirSiap = Supir::where('status', 1)->count();

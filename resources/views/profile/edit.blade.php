@@ -2,81 +2,87 @@
 
 @section('content')
     <div class="max-w-3xl mx-auto px-4 pt-20">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Lengkapi Profil Kamu 👤</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">✏️ Edit Profil Kamu</h1>
 
         @if (session('success'))
-            <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
-                {{ session('success') }}
+            <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg shadow">
+                ✅ {{ session('success') }}
             </div>
         @endif
 
-        <form method="POST" action="{{ route('profile.update') }}" class="space-y-5">
-            @csrf
-            @method('PATCH')
+        <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+            <form method="POST" action="{{ route('profile.update') }}" class="space-y-6">
+                @csrf
+                @method('PATCH')
 
-            {{-- Nama --}}
-            <div>
-                <label class="block font-medium text-gray-700">Nama Lengkap</label>
-                <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                    class="w-full border rounded-lg px-4 py-2 mt-1 @error('name') border-red-500 @enderror">
-                @error('name')
-                    <p class="text-red-500 text-sm">{{ $message }}</p>
-                @enderror
-            </div>
-
-            {{-- Email --}}
-            <div>
-                <label class="block font-medium text-gray-700">Email</label>
-                <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                    class="w-full border rounded-lg px-4 py-2 mt-1 @error('email') border-red-500 @enderror">
-                @error('email')
-                    <p class="text-red-500 text-sm">{{ $message }}</p>
-                @enderror
-            </div>
-
-            {{-- No HP --}}
-            <div>
-                <label class="block font-medium text-gray-700">No HP</label>
-                <input type="text" name="no_hp" value="{{ old('no_hp', $user->no_hp) }}"
-                    class="w-full border rounded-lg px-4 py-2 mt-1 @error('no_hp') border-red-500 @enderror">
-                @error('no_hp')
-                    <p class="text-red-500 text-sm">{{ $message }}</p>
-                @enderror
-            </div>
-
-            {{-- Asal Kota --}}
-            <div class="relative">
-                <label class="block font-medium text-gray-700">Asal Kota</label>
-                <input type="text" id="asal_kota_input" placeholder="Cari kota..."
-                    value="{{ old('asal_kota', $user->asal_kota) }}"
-                    class="w-full border rounded-lg px-4 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-green-500 @error('asal_kota') border-red-500 @enderror">
-
-                <div id="asal_kota_list"
-                    class="absolute z-50 w-full mt-1 max-h-48 overflow-auto rounded-md shadow-lg bg-white hidden border border-gray-300">
+                {{-- Nama --}}
+                <div>
+                    <label class="block text-gray-600 font-medium mb-1">Nama Lengkap</label>
+                    <input type="text" name="name" value="{{ old('name', $user->name) }}"
+                        class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 px-4 py-2 @error('name') border-red-500 @enderror">
+                    @error('name')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
-                <input type="hidden" name="asal_kota" id="asal_kota_hidden"
-                    value="{{ old('asal_kota', $user->asal_kota) }}">
-            </div>
+                {{-- Email --}}
+                <div>
+                    <label class="block text-gray-600 font-medium mb-1">Email</label>
+                    <input type="email" name="email" value="{{ old('email', $user->email) }}"
+                        class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 px-4 py-2 @error('email') border-red-500 @enderror">
+                    @error('email')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            {{-- Alamat --}}
-            <div>
-                <label class="block font-medium text-gray-700">Alamat</label>
-                <textarea name="alamat" rows="3"
-                    class="w-full border rounded-lg px-4 py-2 mt-1 @error('alamat') border-red-500 @enderror">{{ old('alamat', $user->alamat) }}</textarea>
-                @error('alamat')
-                    <p class="text-red-500 text-sm">{{ $message }}</p>
-                @enderror
-            </div>
+                {{-- No HP --}}
+                <div>
+                    <label class="block text-gray-600 font-medium mb-1">No HP</label>
+                    <input type="text" name="no_hp" value="{{ old('no_hp', $user->no_hp) }}"
+                        class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 px-4 py-2 @error('no_hp') border-red-500 @enderror">
+                    @error('no_hp')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            {{-- Submit --}}
-            <div class="flex justify-end">
-                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
-                    Simpan Perubahan
-                </button>
-            </div>
-        </form>
+                {{-- Asal Kota (AutoComplete) --}}
+                <div class="relative">
+                    <label class="block text-gray-600 font-medium mb-1">Asal Kota</label>
+                    <input type="text" id="asal_kota_input" placeholder="Cari kota..."
+                        value="{{ old('asal_kota', $user->asal_kota) }}"
+                        class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 px-4 py-2 @error('asal_kota') border-red-500 @enderror">
+                    <div id="asal_kota_list"
+                        class="absolute z-50 w-full mt-1 max-h-48 overflow-auto rounded-lg shadow-lg bg-white hidden border border-gray-200">
+                    </div>
+                    <input type="hidden" name="asal_kota" id="asal_kota_hidden"
+                        value="{{ old('asal_kota', $user->asal_kota) }}">
+                    @error('asal_kota')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Alamat --}}
+                <div>
+                    <label class="block text-gray-600 font-medium mb-1">Alamat</label>
+                    <textarea name="alamat" rows="3"
+                        class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 px-4 py-2 @error('alamat') border-red-500 @enderror">{{ old('alamat', $user->alamat) }}</textarea>
+                    @error('alamat')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- Submit --}}
+                <div class="flex justify-end">
+                    <button type="submit"
+                        class="bg-green-600 text-white px-6 py-2 rounded-xl hover:bg-green-700 transition shadow-md">
+                        💾 Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    {{-- Autocomplete Script (sama kaya sebelumnya) --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const input = document.getElementById('asal_kota_input');
@@ -89,11 +95,15 @@
                 if (data.length === 0) {
                     list.innerHTML = '<p class="p-2 text-gray-500">Tidak ada hasil</p>';
                 } else {
-                    list.innerHTML = data.map(city => `
-                <div class="p-2 cursor-pointer hover:bg-green-100" data-name="${city.name}">
-                    <span class="font-medium">${city.name}</span>, <span class="text-gray-500 text-sm">${city.country}</span>
+                    list.innerHTML = data.map(city => {
+                        const fullName = `${city.name}, ${city.country}`;
+                        return `
+                <div class="p-2 cursor-pointer hover:bg-green-100" data-name="${fullName}">
+                    <span class="font-medium">${city.name}</span>,
+                    <span class="text-gray-500 text-sm">${city.country}</span>
                 </div>
-            `).join('');
+            `;
+                    }).join('');
                 }
                 list.classList.remove('hidden');
 
@@ -105,6 +115,7 @@
                 });
             }
 
+
             function selectItem(name) {
                 input.value = name;
                 hidden.value = name;
@@ -115,6 +126,7 @@
             input.addEventListener('input', function() {
                 clearTimeout(timeout);
                 const query = input.value.trim();
+
                 if (query.length === 0) {
                     list.classList.add('hidden');
                     list.innerHTML = '';
@@ -125,7 +137,13 @@
                 timeout = setTimeout(() => {
                     fetch(`/autocomplete-cities?q=${encodeURIComponent(query)}`)
                         .then(res => res.json())
-                        .then(renderList);
+                        .then(renderList)
+                        .catch(err => {
+                            console.error('Error fetching cities:', err);
+                            list.innerHTML =
+                            '<p class="p-2 text-red-500">Gagal memuat data</p>';
+                            list.classList.remove('hidden');
+                        });
                 }, 250);
             });
 
