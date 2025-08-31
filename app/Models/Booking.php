@@ -46,8 +46,7 @@ class Booking extends Model
     protected $appends = [
         'asal_kota_label',
         'jaminan_label',
-        'tanggal_mulai_format',
-        'tanggal_selesai_format',
+        'tanggal_booking_format',
         'total_harga_rp',
         'uang_muka_rp',
         'status_label',

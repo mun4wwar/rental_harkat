@@ -15,7 +15,26 @@
 
                         <!-- Detail mobil -->
                         <div class="p-4 text-center">
-                            <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $mobil->nama_mobil }}</h3>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                                {{ $mobil->nama_mobil }}
+                            </h3>
+
+                            {{-- Label status --}}
+                            @if ($mobil->status === \App\Models\Mobil::STATUS_MAINTENANCE)
+                                <span class="inline-block bg-yellow-500 text-white text-xs px-3 py-1 rounded-full mb-2">
+                                    {{ $mobil->status_text }}
+                                </span>
+                            @elseif ($mobil->status === \App\Models\Mobil::STATUS_RUSAK)
+                                <span class="inline-block bg-red-500 text-white text-xs px-3 py-1 rounded-full mb-2">
+                                    {{ $mobil->status_text }}
+                                </span>
+                            @else
+                                <span
+                                    class="inline-block bg-emerald-500 text-white text-xs px-3 py-1 rounded-full mb-2">
+                                    {{ $mobil->status_text }}
+                                </span>
+                            @endif
+
                             <p class="text-gray-600 text-sm mb-2">
                                 Rp {{ number_format($mobil->harga_sewa, 0, ',', '.') }}/hari
                             </p>
@@ -26,8 +45,13 @@
                                 </span>
                             </p>
 
-                            <!-- Tombol booking opsional -->
-                            @if (Auth::check() && Auth::user()->isRole('Customer'))
+                            {{-- Tombol booking --}}
+                            @if ($mobil->status === \App\Models\Mobil::STATUS_MAINTENANCE)
+                                <button disabled
+                                    class="mt-4 inline-block bg-gray-400 text-white px-5 py-2 rounded-lg text-sm font-medium cursor-not-allowed">
+                                    Tersedia dalam 2-4 jam lagi
+                                </button>
+                            @elseif(Auth::check() && Auth::user()->isRole('Customer'))
                                 <a href="{{ route('booking.create') }}"
                                     class="mt-4 inline-block bg-emerald-500 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-emerald-600 transition">
                                     Booking Sekarang

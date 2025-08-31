@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdateMobilStatusJob;
 use App\Models\BookingDetail;
+use App\Models\Mobil;
 use App\Models\Pembayaran;
 use App\Models\Pengembalian;
 use Carbon\Carbon;
@@ -24,8 +26,10 @@ class PengembalianController extends Controller
         $pelunasan = Pembayaran::with(['booking.user', 'booking.details.mobil'])
             ->where('jenis', 2)
             ->findOrFail($id);
+
         return view('admin.pengembalian.show', compact('pelunasan'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -95,8 +99,8 @@ class PengembalianController extends Controller
                 }
             }
 
-            // Update status mobil jadi tersedia
-            $bookingDetail->mobil->update(['status' => 1]);
+            // Update status mobil jadi maintenance dulu
+            $bookingDetail->mobil->update(['status' => Mobil::STATUS_MAINTENANCE]);
         });
 
         return redirect()->route('admin.pengembalian.index')

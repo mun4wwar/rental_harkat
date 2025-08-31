@@ -34,7 +34,6 @@
                     <th class="border px-4 py-2">Uang Muka</th>
                     <th class="border px-4 py-2">Total Harga</th>
                     <th class="border px-4 py-2">Status</th>
-                    <th class="border px-4 py-2">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,10 +48,6 @@
                         <td class="border px-4 py-2">{{ $booking->uang_muka_rp }}</td>
                         <td class="border px-4 py-2">{{ $booking->total_harga_rp }}</td>
                         <td class="border px-4 py-2">{!! $booking->status_badge !!}</td>
-                        <td class="border px-4 py-2">
-                            <a href="{{ route('admin.booking.edit', $booking->id) }}"
-                                class="text-yellow-600 hover:underline">Edit</a>
-                        </td>
                     </tr>
 
                     {{-- Row buat detail --}}
@@ -65,6 +60,7 @@
                                         <th class="border px-2 py-1">Supir</th>
                                         <th class="border px-2 py-1">Tanggal</th>
                                         <th class="border px-2 py-1">Status Mobil</th>
+                                        <th class="border px-2 py-1">Mulai Sewa</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -82,6 +78,27 @@
                                             <td class="border px-2 py-1">
                                                 {{ $detail->status_label }}
                                             </td>
+                                            <td class="border px-2 py-1">
+                                                @if ($detail->mobil->status === \App\Models\Mobil::STATUS_DIBOOKING)
+                                                    <form
+                                                        action="{{ route('admin.booking.konfirmasiJemput', $detail->id) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Konfirmasi customer sudah jemput mobil ini?')">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit"
+                                                            class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded shadow">
+                                                            ✔ Konfirmasi Jemput
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <span
+                                                        class="px-2 py-1 rounded {{ $detail->mobil->status_badge_class }}">
+                                                        {{ $detail->mobil->status_text }}
+                                                    </span>
+                                                @endif
+                                            </td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>

@@ -9,14 +9,7 @@
                 {{ session('success') }}
             </div>
         @endif
-
-        <div class="mb-4 flex gap-2">
-            <a href="{{ route('admin.booking.create') }}"
-                class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md shadow">
-                + Tambah Booking
-            </a>
-        </div>
-
+        
         <table class="w-full border-collapse">
             <thead>
                 <tr class="bg-gray-100">

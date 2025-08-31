@@ -20,6 +20,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:Admin'])->grou
     Route::resource('supir', SupirController::class);
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('booking', BookingController::class);
+    Route::patch('/booking/{detail}/konfirmasi-jemput', [BookingController::class, 'konfirmasiJemput'])
+        ->name('booking.konfirmasiJemput');
     Route::get('laporan/generate', [LaporanController::class, 'generateLaporanAdmin'])->name('laporan');
     Route::get('pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
     Route::put('pembayaran/{pembayaran}/verifikasi', [PembayaranController::class, 'verifikasi'])->name('pembayaran.verifikasi');

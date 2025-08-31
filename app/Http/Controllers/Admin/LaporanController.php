@@ -22,18 +22,49 @@ class LaporanController extends Controller
         // total pendapatan
         $totalPendapatan = Booking::sum('total_harga');
 
-        // mobil yang paling sering dibooking (top 5)
-        $mobilTerpopuler = BookingDetail::select('mobil_id', DB::raw('COUNT(*) as total'))
+        // rata-rata lama sewa
+        $totalHari = BookingDetail::selectRaw('SUM(DATEDIFF(tanggal_kembali, tanggal_sewa)) as total_hari')->value('total_hari');
+        $rataRataHari = $jumlahBooking > 0 ? round($totalHari / $jumlahBooking) : 0;
+
+        // mobil paling sering dibooking (sekalian total hari sewa per mobil)
+        $mobilPalingSering = BookingDetail::select(
+            'mobil_id',
+            DB::raw('COUNT(*) as jumlah'),
+            DB::raw('SUM(DATEDIFF(tanggal_kembali, tanggal_sewa)) as total_hari'),
+            DB::raw('SUM(
+            CASE 
+                WHEN booking_details.supir_id IS NOT NULL 
+                    THEN mobils.harga_all_in * DATEDIFF(booking_details.tanggal_kembali, booking_details.tanggal_sewa)
+                ELSE mobils.harga_sewa * DATEDIFF(booking_details.tanggal_kembali, booking_details.tanggal_sewa)
+            END
+        ) as total_pendapatan')
+        )
+            ->join('mobils', 'booking_details.mobil_id', '=', 'mobils.id')
             ->groupBy('mobil_id')
-            ->orderByDesc('total')
-            ->with('mobil') // relasi mobil di model BookingDetail
+            ->orderByDesc('jumlah')
             ->take(5)
+            ->with('mobil')
             ->get();
+
+
+        // cari jumlah booking terbanyak
+        $maxBooking = $mobilPalingSering->max('jumlah');
+
+        // ambil semua mobil dengan jumlah terbanyak
+        $mobilTerpopuler = $mobilPalingSering->where('jumlah', $maxBooking);
+
+        // hitung persentase kontribusi tiap mobil
+        foreach ($mobilTerpopuler as $item) {
+            $item->kontribusi = $totalPendapatan > 0
+                ? round(($item->total_pendapatan / $totalPendapatan) * 100, 2)
+                : 0;
+        }
 
         $pdf = Pdf::loadView('laporan.admin', compact(
             'jumlahBooking',
             'jumlahMobil',
             'totalPendapatan',
+            'rataRataHari',
             'mobilTerpopuler'
         ));
 

@@ -25,6 +25,8 @@ class BookingDetail extends Model
     protected $appends = [
         'tanggal_mulai_format',
         'tanggal_selesai_format',
+        'tanggal_mulai_iso',
+        'tanggal_selesai_iso',
         'total_harga_rp',
         'status_label',
     ];
@@ -54,11 +56,16 @@ class BookingDetail extends Model
             ? Carbon::parse($this->tanggal_sewa)->translatedFormat('l, d F Y H:i')
             : null);
     }
-
     protected function tanggalSelesaiFormat(): Attribute
     {
         return Attribute::get(fn() => $this->tanggal_kembali
             ? Carbon::parse($this->tanggal_kembali)->translatedFormat('l, d F Y H:i')
+            : null);
+    }
+    protected function tanggalMulaiIso(): Attribute
+    {
+        return Attribute::get(fn() => $this->tanggal_sewa
+            ? Carbon::parse($this->tanggal_sewa)->format('Y-m-d\TH:i')
             : null);
     }
     protected function tanggalSelesaiIso(): Attribute

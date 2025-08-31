@@ -147,6 +147,24 @@ class BookingController extends Controller
         return view('admin.transaksi.show', compact('transaksi'));
     }
 
+    public function konfirmasiJemput(BookingDetail $detail)
+    {
+        $mobil = $detail->mobil;
+        $booking = $detail->booking;
+
+        if ($mobil->status !== Mobil::STATUS_DIBOOKING) {
+            return back()->with('error', 'Mobil tidak dalam status dibooking.');
+        }
+
+        $mobil->status = Mobil::STATUS_DISEWA;
+        $mobil->save();
+        $booking->status = Booking::STATUS_ONGOING;
+        $booking->save();
+
+        return back()->with('success', 'Mobil berhasil dikonfirmasi sebagai disewa.');
+    }
+
+
     public function edit(Booking $booking)
     {
         $pelanggans = User::where('role', 4);

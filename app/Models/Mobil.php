@@ -2,47 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-/**
- * @property int $status
- * @property string $nama_mobil
- * @property string $plat_nomor
- * @property string $merk
- * @property int $tahun
- * @property int $harga_sewa
- * @property int $harga_all_in
- * @property string $gambar
- * @property int $id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read mixed $status_badge_class
- * @property-read mixed $status_text
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereGambar($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereHargaAllIn($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereHargaSewa($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereMerk($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereNamaMobil($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil wherePlatNomor($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereTahun($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Mobil whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Transaksi> $transaksis
- * @property-read int|null $transaksis_count
- * @mixin \Eloquent
- */
+use Illuminate\Database\Eloquent\Model;
 
 class Mobil extends Model
 {
     use HasFactory;
 
-    protected $table = 'mobils'; // opsional sih, default-nya udah bener
+    protected $table = 'mobils';
+
     protected $fillable = [
         'nama_mobil',
         'tipe_id',
@@ -56,51 +24,90 @@ class Mobil extends Model
         'gambar',
     ];
 
-    public function getStatusTextAttribute()
+    /**
+     * Constants untuk status mobil
+     */
+    public const STATUS_RUSAK       = 0;
+    public const STATUS_TERSEDIA    = 1;
+    public const STATUS_DIBOOKING   = 2;
+    public const STATUS_DISEWA      = 3;
+    public const STATUS_MAINTENANCE = 4;
+
+    /**
+     * Constants untuk status approval
+     */
+    public const APPROVAL_REJECTED = 0;
+    public const APPROVAL_APPROVED = 1;
+    public const APPROVAL_PENDING  = 2;
+
+    /**
+     * Casts untuk fields numerik
+     */
+    protected $casts = [
+        'status'          => 'integer',
+        'status_approval' => 'integer',
+        'harga_sewa'      => 'integer',
+        'harga_all_in'    => 'integer',
+        'tahun'           => 'integer',
+    ];
+
+    /**
+     * Accessors
+     */
+    public function getStatusTextAttribute(): string
     {
         return match ($this->status) {
-            0 => 'Rusak',
-            1 => 'Tersedia',
-            2 => 'Telah dibooking',
-            3 => 'Telah disewa',
-            4 => 'Sedang diservis',
-            default => 'Status tidak diketahui',
+            self::STATUS_RUSAK       => 'Rusak',
+            self::STATUS_TERSEDIA    => 'Tersedia',
+            self::STATUS_DIBOOKING   => 'Telah dibooking',
+            self::STATUS_DISEWA      => 'Telah disewa',
+            self::STATUS_MAINTENANCE => 'Maintenance',
+            default                  => 'Status tidak diketahui',
         };
     }
 
-    public function getStatusBadgeClassAttribute()
+    public function getStatusBadgeClassAttribute(): string
     {
         return match ($this->status) {
-            0 => 'bg-red-100 text-red-800',
-            1 => 'bg-green-100 text-green-800',
-            2 => 'bg-amber-100 text-amber-800',
-            3 => 'bg-blue-100 text-blue-800',
-            4 => 'bg-gray-100 text-gray-800',
-            default => 'bg-gray-100 text-gray-400',
+            self::STATUS_RUSAK       => 'bg-red-100 text-red-800',
+            self::STATUS_TERSEDIA    => 'bg-green-100 text-green-800',
+            self::STATUS_DIBOOKING   => 'bg-amber-100 text-amber-800',
+            self::STATUS_DISEWA      => 'bg-blue-100 text-blue-800',
+            self::STATUS_MAINTENANCE => 'bg-gray-100 text-gray-800',
+            default                  => 'bg-gray-100 text-gray-400',
         };
     }
-    public function getStatusApprovalTextAttribute()
+
+    public function getStatusApprovalTextAttribute(): string
     {
         return match ($this->status_approval) {
-            0 => 'Rejected by SuperAdmin',
-            1 => 'Approved',
-            2 => 'Pending Approval',
-            default => 'Unknown',
+            self::APPROVAL_REJECTED => 'Rejected by SuperAdmin',
+            self::APPROVAL_APPROVED => 'Approved',
+            self::APPROVAL_PENDING  => 'Pending Approval',
+            default                 => 'Unknown',
         };
     }
 
     public function getHargaPerHari(bool $pakaiSupir = false): int
     {
-        return $pakaiSupir ? ($this->harga_all_in ?? 0) : ($this->harga_sewa ?? 0);
+        return $pakaiSupir
+            ? ($this->harga_all_in ?? 0)
+            : ($this->harga_sewa ?? 0);
     }
+
+    /**
+     * Relasi
+     */
     public function images()
     {
         return $this->hasMany(MobilImage::class);
     }
+
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class);
     }
+
     public function bookingDetails()
     {
         return $this->hasMany(BookingDetail::class);
@@ -110,8 +117,22 @@ class Mobil extends Model
     {
         return $this->belongsTo(TipeMobil::class, 'tipe_id');
     }
+
     public function approvals()
     {
         return $this->morphMany(Approval::class, 'approvable');
+    }
+
+    /**
+     * Query scopes
+     */
+    public function scopeAvailable($query)
+    {
+        return $query->where('status', self::STATUS_TERSEDIA);
+    }
+
+    public function scopeApproved($query)
+    {
+        return $query->where('status_approval', self::APPROVAL_APPROVED);
     }
 }

@@ -16,6 +16,7 @@ class MobilSeeder extends Seeder
         Mobil::insert([
             [
                 'nama_mobil' => 'New Avanza',
+                'tipe_id' => 1,
                 'plat_nomor' => 'AB 1234 CD',
                 'merk' => 'Toyota',
                 'tahun' => 2022,
@@ -25,6 +26,7 @@ class MobilSeeder extends Seeder
             ],
             [
                 'nama_mobil' => 'New Agya',
+                'tipe_id' => 1,
                 'plat_nomor' => 'AB 5678 EF',
                 'merk' => 'Toyota',
                 'tahun' => 2022,
@@ -34,6 +36,7 @@ class MobilSeeder extends Seeder
             ],
             [
                 'nama_mobil' => 'Raize',
+                'tipe_id' => 2,
                 'plat_nomor' => 'AB 8789 EF',
                 'merk' => 'Toyota',
                 'tahun' => 2022,
@@ -43,6 +46,7 @@ class MobilSeeder extends Seeder
             ],
             [
                 'nama_mobil' => 'New BR-V',
+                'tipe_id' => 2,
                 'plat_nomor' => 'AB 9101 GH',
                 'merk' => 'Honda',
                 'tahun' => 2021,
@@ -52,6 +56,7 @@ class MobilSeeder extends Seeder
             ],
             [
                 'nama_mobil' => 'New Innova Reborn',
+                'tipe_id' => 1,
                 'plat_nomor' => 'B 8879 OKL',
                 'merk' => 'Toyota',
                 'tahun' => 2022,
@@ -61,6 +66,7 @@ class MobilSeeder extends Seeder
             ],
             [
                 'nama_mobil' => 'New Fortuner GR',
+                'tipe_id' => 3,
                 'plat_nomor' => 'B 2367 UYT',
                 'merk' => 'Toyota',
                 'tahun' => 2022,
@@ -70,6 +76,7 @@ class MobilSeeder extends Seeder
             ],
             [
                 'nama_mobil' => 'New Brio',
+                'tipe_id' => 1,
                 'plat_nomor' => 'F 9886 UK',
                 'merk' => 'Honda',
                 'tahun' => 2023,

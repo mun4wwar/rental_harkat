@@ -16,8 +16,8 @@
                 <select id="pilihMobil" class="w-full border rounded px-3 py-2">
                     <option value="">-- Pilih Mobil --</option>
                     @foreach ($pelunasan->booking->details as $detail)
-                        <option value="{{ $detail->id }}" data-mulai="{{ $detail->tanggalMulaiFormat }}"
-                            data-selesai="{{ $detail->tanggalSelesaiIso }}">
+                        <option value="{{ $detail->id }}" data-mulai="{{ $detail->tanggal_mulai_format }}"
+                            data-selesai="{{ $detail->tanggal_selesai_iso }}">
                             {{ $detail->mobil->nama_mobil }}
                         </option>
                     @endforeach

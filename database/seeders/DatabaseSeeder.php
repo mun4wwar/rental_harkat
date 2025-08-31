@@ -49,10 +49,10 @@ class DatabaseSeeder extends Seeder
 
         // Seeder lainnya
         $this->call([
+            TipeMobilSeeder::class,
             MobilSeeder::class,
             SupirSeeder::class,
             CitiesSeeder::class,
-            TipeMobilSeeder::class,
             BookingExpiredSeeder::class,
         ]);
     }

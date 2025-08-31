@@ -9,8 +9,7 @@ class LandingController extends Controller
 {
     public function index()
     {
-        $mobils = Mobil::where('status', 1)
-            ->where('status_approval', 1)
+        $mobils = Mobil::where('status', '<>', 0)->where('status_approval', 1)
             ->get();
         $user = Auth::user();
         return view('main-content', compact('mobils', 'user'));
