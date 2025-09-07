@@ -17,16 +17,22 @@
                     'match' => 'admin',
                 ],
                 [
-                    'route' => 'admin.mobil.index',
-                    'icon' => 'car',
-                    'label' => 'Manajemen Mobil',
-                    'match' => 'admin/mobil',
-                ],
-                [
                     'route' => 'admin.tipe-mobil.index',
                     'icon' => 'car',
                     'label' => 'Manajemen Tipe mobil',
                     'match' => 'admin/tipe-mobil',
+                ],
+                [
+                    'route' => 'admin.master-mobils.index',
+                    'icon' => 'car',
+                    'label' => 'Manajemen Master Mobil',
+                    'match' => 'admin/master-mobils',
+                ],
+                [
+                    'route' => 'admin.mobil.index',
+                    'icon' => 'car',
+                    'label' => 'Manajemen Mobil',
+                    'match' => 'admin/mobil',
                 ],
                 [
                     'route' => 'admin.supir.index',

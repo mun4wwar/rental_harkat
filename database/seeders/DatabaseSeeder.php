@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\MasterMobil;
+use App\Models\Mobil;
+use App\Models\TipeMobil;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -46,11 +49,16 @@ class DatabaseSeeder extends Seeder
                 $u
             );
         }
+        TipeMobil::factory()->count(4)->create();
+
+        // Generate master mobil
+        MasterMobil::factory(7)->create();
+
+        // Generate unit mobil
+        Mobil::factory(10)->create();
 
         // Seeder lainnya
         $this->call([
-            TipeMobilSeeder::class,
-            MobilSeeder::class,
             SupirSeeder::class,
             CitiesSeeder::class,
             BookingExpiredSeeder::class,

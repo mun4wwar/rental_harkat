@@ -1,5 +1,5 @@
 @php
-    $isEdit = isset($mobil);
+    $isEdit = isset($mobilData);
 @endphp
 @if ($errors->any())
     <div class="mb-4 text-red-600 bg-red-100 border border-red-300 rounded p-4">
@@ -15,41 +15,35 @@
 {{-- Nama Mobil --}}
 <div>
     <label for="nama_mobil" class="block text-sm font-medium text-gray-700">Nama Mobil</label>
-    <input type="text" name="nama_mobil" id="nama_mobil"
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        value="{{ old('nama_mobil', $mobil->nama_mobil ?? '') }}" required>
-</div>
-
-{{-- Tipe Mobil --}}
-<div>
-    <label for="tipe_id" class="block text-sm font-medium text-gray-700">Tipe Mobil</label>
-    <select name="tipe_id" id="tipe_id"
+    <select name="master_mobil_id" id="master_mobil_id"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         required>
-        <option value="">-- Pilih Tipe Mobil --</option>
-        @foreach ($tipeMobil as $type)
-            <option value="{{ $type->id }}"
-                {{ old('tipe_id', $mobil->tipe_id ?? '') == $type->id ? 'selected' : '' }}>
-                {{ $type->nama_tipe }}
+        <option value="">-- Pilih Mobil --</option>
+        @foreach ($masterMobils as $m)
+            <option value="{{ $m->id }}"
+                {{ old('master_mobil_id', $mobilData->master_mobil_id ?? '') == $m->id ? 'selected' : '' }}>
+                {{ $m->nama }}
             </option>
         @endforeach
     </select>
 </div>
 
 {{-- Plat Nomor --}}
-{{-- <div>
+<div>
     <label for="plat_nomor" class="block text-sm font-medium text-gray-700">Plat Nomor</label>
     <input type="text" name="plat_nomor" id="plat_nomor"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        value="{{ old('plat_nomor', $mobil->plat_nomor ?? '') }}">
-</div> --}}
+        value="{{ old('plat_nomor', $mobilData->plat_nomor ?? '') }}" placeholder="Contoh: AB 1234 CD"
+        pattern="^[A-Z]{1,2}\s\d{1,4}\s[A-Z]{1,3}$" title="Format plat nomor: AB 1234 CD"
+        style="text-transform: uppercase;">
+</div>
 
 {{-- Merk --}}
 <div>
     <label for="merk" class="block text-sm font-medium text-gray-700">Merk</label>
     <input type="text" name="merk" id="merk"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        value="{{ old('merk', $mobil->merk ?? '') }}" required>
+        value="{{ old('merk', $mobilData->merk ?? '') }}" required>
 </div>
 
 {{-- Tahun --}}
@@ -57,7 +51,7 @@
     <label for="tahun" class="block text-sm font-medium text-gray-700">Tahun</label>
     <input type="number" name="tahun" id="tahun"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        value="{{ old('tahun', $mobil->tahun ?? '') }}" required>
+        value="{{ old('tahun', $mobilData->tahun ?? '') }}" required>
 </div>
 
 {{-- Harga Sewa --}}
@@ -65,7 +59,7 @@
     <label for="harga_sewa" class="block text-sm font-medium text-gray-700">Harga Sewa</label>
     <input type="number" name="harga_sewa" id="harga_sewa"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        value="{{ old('harga_sewa', $mobil->harga_sewa ?? '') }}" required>
+        value="{{ old('harga_sewa', $mobilData->harga_sewa ?? '') }}" required>
 </div>
 
 {{-- Harga Sewa All In --}}
@@ -73,31 +67,15 @@
     <label for="harga_all_in" class="block text-sm font-medium text-gray-700">Harga Sewa ALL IN</label>
     <input type="number" name="harga_all_in" id="harga_all_in"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        value="{{ old('harga_all_in', $mobil->harga_all_in ?? '') }}" required>
+        value="{{ old('harga_all_in', $mobilData->harga_all_in ?? '') }}">
 </div>
-
-{{-- Status (hanya tampil kalau edit) --}}
-@if ($isEdit)
-    <div>
-        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-        <select name="status" id="status"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            <option>--Pilih Status--</option>
-            <option value="0" {{ $mobil->status == 0 ? 'selected' : '' }}>Rusak</option>
-            <option value="1" {{ $mobil->status == 1 ? 'selected' : '' }}>Tersedia</option>
-            <option value="2" {{ $mobil->status == 2 ? 'selected' : '' }}>Telah dibooking</option>
-            <option value="3" {{ $mobil->status == 3 ? 'selected' : '' }}>Telah disewa</option>
-            <option value="4" {{ $mobil->status == 4 ? 'selected' : '' }}>Sedang diservis</option>
-        </select>
-    </div>
-@endif
 
 {{-- Cover Image --}}
 <div>
     <label for="gambar" class="block text-sm font-medium text-gray-700">Cover Image</label>
     <input type="file" name="gambar" id="gambar"
         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        @if (!isset($mobil)) required @endif>
+        @if (!isset($mobilData)) required @endif>
 </div>
 
 {{-- Additional Images --}}
@@ -110,11 +88,9 @@
 
 
 {{-- Tombol Submit --}}
-<div class="flex justify-end space-x-2">
-    <a href="{{ route('admin.mobil.index') }}"
-        class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Batal</a>
-    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-        {{ isset($mobil) ? 'Update' : 'Simpan' }}
+<div class="mt-6">
+    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700">
+        {{ $submitButtonText }}
     </button>
 </div>
 <script>
@@ -137,6 +113,22 @@
             img.className = 'w-32 h-20 object-cover mr-2 mb-2';
             previewContainer.appendChild(img);
         });
+    });
+</script>
+{{-- Auto format plat nomor --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let input = document.getElementById('plat_nomor');
+        if (input) {
+            input.addEventListener('input', function(e) {
+                let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                let formatted = value.replace(/^([A-Z]{0,2})(\d{0,4})([A-Z]{0,3}).*/, function(_, p1,
+                    p2, p3) {
+                    return [p1, p2, p3].filter(Boolean).join(' ');
+                });
+                e.target.value = formatted;
+            });
+        }
     });
 </script>
 

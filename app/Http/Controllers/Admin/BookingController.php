@@ -153,6 +153,12 @@ class BookingController extends Controller
         $booking = $detail->booking;
 
         if ($mobil->status !== Mobil::STATUS_DIBOOKING) {
+            if (request()->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mobil tidak dalam status dibooking.'
+                ], 400);
+            }
             return back()->with('error', 'Mobil tidak dalam status dibooking.');
         }
 
@@ -161,7 +167,19 @@ class BookingController extends Controller
         $booking->status = Booking::STATUS_ONGOING;
         $booking->save();
 
-        return back()->with('success', 'Mobil berhasil dikonfirmasi sebagai disewa.');
+        $customerName = $booking->user->name ?? '-';
+        $mobilName = $mobil->masterMobil->nama ?? '-';
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Mobil $mobilName berhasil dijemput oleh $customerName!",
+                'mobil_status_text' => $mobil->status_text,
+                'mobil_status_badge_class' => $mobil->status_badge_class
+            ]);
+        }
+
+        return back()->with('successSwal', "Mobil $mobilName berhasil dijemput oleh $customerName!");
     }
 
 

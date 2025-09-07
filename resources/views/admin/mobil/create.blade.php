@@ -6,7 +6,10 @@
 
         <form action="{{ route('admin.mobil.store') }}" method="POST" enctype="multipart/form-data"
             class="space-y-6 bg-white p-6 shadow-md rounded">
-            @include('admin.mobil.form')
+            @include('admin.mobil.form', [
+                'mobilData' => new App\Models\Mobil(),
+                'submitButtonText' => 'Simpan',
+            ])
         </form>
     </div>
 @endsection

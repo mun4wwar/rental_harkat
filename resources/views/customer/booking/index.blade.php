@@ -73,7 +73,7 @@
                                     <tbody>
                                         @foreach ($booking->details as $detail)
                                             <tr>
-                                                <td class="border px-2 py-1">{{ $detail->mobil->nama_mobil ?? '-' }}</td>
+                                                <td class="border px-2 py-1">{{ $detail->mobil->masterMobil->nama ?? '-' }}</td>
                                                 <td class="border px-2 py-1">
                                                     {{ $detail->supir ? $detail->supir->user->name : 'Tanpa Supir' }}
                                                 </td>

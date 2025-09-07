@@ -12,8 +12,7 @@ class Mobil extends Model
     protected $table = 'mobils';
 
     protected $fillable = [
-        'nama_mobil',
-        'tipe_id',
+        'master_mobil_id',
         'plat_nomor',
         'merk',
         'tahun',
@@ -98,6 +97,11 @@ class Mobil extends Model
     /**
      * Relasi
      */
+    public function masterMobil()
+    {
+        return $this->belongsTo(MasterMobil::class, 'master_mobil_id');
+    }
+
     public function images()
     {
         return $this->hasMany(MobilImage::class);

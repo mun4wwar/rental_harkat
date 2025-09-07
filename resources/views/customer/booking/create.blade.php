@@ -115,8 +115,8 @@
                     @foreach ($mobils as $mobil)
                         <option value="{{ $mobil->id }}" data-harga="{{ $mobil->harga_sewa }}"
                             data-harga-allin="{{ $mobil->harga_all_in }}">
-                            {{ $mobil->nama_mobil }} - Rp{{ number_format($mobil->harga_sewa, 0, ',', '.') }}/hari |
-                            Include Supir: Rp{{ number_format($mobil->harga_all_in, 0, ',', '.') }}/hari
+                            {{ $mobil->masterMobil->nama }} - Rp{{ number_format($mobil->harga_sewa, 0, ',', '.') }}/hari |
+                            Include Supir: Rp{{ number_format($mobil->harga_all_in ?? $mobil->harga_sewa, 0, ',', '.') }}/hari
                         </option>
                     @endforeach
                 </select>

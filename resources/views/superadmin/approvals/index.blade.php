@@ -45,7 +45,7 @@
                             {{-- Data --}}
                             <td class="px-4 py-3">
                                 @if ($approval->approvable_type === 'App\\Models\\Mobil')
-                                    <strong>{{ $approval->approvable->nama_mobil }}</strong><br>
+                                    <strong>{{ $approval->approvable->masterMobil->nama }}</strong><br>
                                     {{ $approval->approvable->merk }} - {{ $approval->approvable->plat_nomor }}
                                 @elseif($approval->approvable_type === 'App\\Models\\Supir')
                                     <strong>{{ $approval->approvable->nama }}</strong><br>

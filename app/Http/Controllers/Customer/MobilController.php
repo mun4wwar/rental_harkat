@@ -15,16 +15,19 @@ class MobilController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Mobil::with('type')->where('status', 1);
+        $query = Mobil::with('masterMobil.tipe')
+            ->where('status', '<>', 0)->where('status_approval', 1);
 
-        // Search
+        // Search by nama master mobil
         if ($request->filled('search')) {
-            $query->where('nama_mobil', 'like', '%' . $request->search . '%');
+            $query->whereHas('masterMobil', function ($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->search . '%');
+            });
         }
 
-        // Filter tipe
+        // Filter by tipe
         if ($request->filled('type')) {
-            $query->whereHas('type', function ($q) use ($request) {
+            $query->whereHas('masterMobil.tipe', function ($q) use ($request) {
                 $q->where('nama_tipe', $request->type);
             });
         }
@@ -32,12 +35,14 @@ class MobilController extends Controller
         $mobils = $query->paginate(8)->withQueryString();
         $tipeMobils = TipeMobil::all();
         $user = Auth::user();
-        // Kalau AJAX, return partial view
+
         if ($request->ajax()) {
             return view('customer.mobil.partials.list-mobil', compact('mobils'))->render();
         }
+
         return view('customer.mobil.index', compact('mobils', 'tipeMobils', 'user'));
     }
+
 
     /**
      * Show the form for creating a new resource.

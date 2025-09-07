@@ -18,7 +18,7 @@
                     @foreach ($pelunasan->booking->details as $detail)
                         <option value="{{ $detail->id }}" data-mulai="{{ $detail->tanggal_mulai_format }}"
                             data-selesai="{{ $detail->tanggal_selesai_iso }}">
-                            {{ $detail->mobil->nama_mobil }}
+                            {{ $detail->mobil->masterMobil->nama }}
                         </option>
                     @endforeach
                 </select>

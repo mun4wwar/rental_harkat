@@ -99,6 +99,7 @@ class PengembalianController extends Controller
                 }
             }
 
+            $bookingDetail->update(['status' => 3]);
             // Update status mobil jadi maintenance dulu
             $bookingDetail->mobil->update(['status' => Mobil::STATUS_MAINTENANCE]);
         });

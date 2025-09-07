@@ -14,7 +14,11 @@ class TipeMobil extends Model
     ];
 
     public function mobils()
-{
-    return $this->hasMany(Mobil::class);
-}
+    {
+        return $this->hasMany(Mobil::class);
+    }
+    public function masterMobils()
+    {
+        return $this->hasMany(MasterMobil::class, 'tipe_id');
+    }
 }

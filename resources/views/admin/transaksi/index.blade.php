@@ -66,7 +66,8 @@
                                 <tbody>
                                     @foreach ($booking->details as $detail)
                                         <tr>
-                                            <td class="border px-2 py-1">{{ $detail->mobil->nama_mobil ?? '-' }}</td>
+                                            <td class="border px-2 py-1">{{ $detail->mobil->masterMobil->nama ?? '-' }}
+                                            </td>
                                             <td class="border px-2 py-1">
                                                 <x-pakai-supir-label :pakaiSupir="$detail->pakai_supir" :supir="$detail->supir"
                                                     :detail="$detail" />
@@ -82,12 +83,13 @@
                                                 @if ($detail->mobil->status === \App\Models\Mobil::STATUS_DIBOOKING)
                                                     <form
                                                         action="{{ route('admin.booking.konfirmasiJemput', $detail->id) }}"
-                                                        method="POST"
-                                                        onsubmit="return confirm('Konfirmasi customer sudah jemput mobil ini?')">
+                                                        method="POST" class="konfirmasi-jemput-form">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <button type="submit"
-                                                            class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded shadow">
+                                                        <button type="button"
+                                                            class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded shadow konfirmasi-jemput-btn"
+                                                            data-customer="{{ $booking->user->name ?? '-' }}"
+                                                            data-nama="{{ $detail->mobil->masterMobil->nama ?? '-' }}">
                                                             ✔ Konfirmasi Jemput
                                                         </button>
                                                     </form>
@@ -98,7 +100,6 @@
                                                     </span>
                                                 @endif
                                             </td>
-
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -110,3 +111,83 @@
         </table>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.konfirmasi-jemput-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    let form = this.closest('form');
+                    let url = form.action;
+                    let csrfToken = form.querySelector('input[name="_token"]').value;
+                    let namaMobil = this.dataset.nama;
+                    let namaCustomer = this.dataset.customer;
+
+                    Swal.fire({
+                        title: 'Konfirmasi Jemput',
+                        html: `Yakin customer <b>${namaCustomer}</b> sudah jemput mobil <b>${namaMobil}</b>?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#10B981',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, konfirmasi!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(url, {
+                                    method: 'PATCH',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken,
+                                        'Accept': 'application/json'
+                                    },
+                                    body: JSON.stringify({})
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Toast sukses
+                                        Swal.fire({
+                                            toast: true,
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: `Mobil ${namaMobil} berhasil dijemput oleh ${namaCustomer}!`,
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true
+                                        });
+
+                                        // Update status span
+                                        let statusSpan = btn.closest('td')
+                                            .querySelector('span');
+                                        if (statusSpan) {
+                                            statusSpan.textContent = data
+                                                .mobil_status_text;
+                                            statusSpan.className =
+                                                `px-2 py-1 rounded ${data.mobil_status_badge_class}`;
+                                        }
+
+                                        // Highlight row detail
+                                        let detailRow = btn.closest('tr');
+                                        detailRow.classList.add('bg-green-50');
+                                        setTimeout(() => detailRow.classList.remove(
+                                            'bg-green-50'), 1200);
+
+                                        // Disable tombol supaya gak diklik lagi
+                                        btn.disabled = true;
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops!',
+                                            text: data.message ||
+                                                'Terjadi kesalahan.',
+                                        });
+                                    }
+                                })
+                                .catch(err => console.error(err));
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+@endpush
