@@ -10,6 +10,10 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Customer\MobilController;
 
+// Fallback GET /login → default redirect ke login customer
+Route::get('/login', function () {
+    return redirect()->route('login.form', ['role' => 'customer']);
+})->name('login');
 Route::get('/', [LandingController::class, 'index'])->name('landing-page');
 Route::resource('mobil', MobilController::class);
 // Login universal untuk semua role

@@ -9,11 +9,29 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            if ($request->is('superadmin*')) return '/login/superadmin';
-            if ($request->is('admin*')) return '/login/admin';
-            if ($request->is('supir*')) return '/supir/login';
-            // if ($request->is('home') || $request->is('customer*')) return '/login/customer';
-            return '/landing-page'; // fallback
+
+            // Superadmin area
+            if ($request->is('superadmin*')) {
+                return route('login.form', ['role' => 'superadmin']);
+            }
+
+            // Admin area
+            if ($request->is('admin*')) {
+                return route('login.form', ['role' => 'admin']);
+            }
+
+            // Supir area
+            if ($request->is('supir*')) {
+                return route('login.form', ['role' => 'supir']);
+            }
+
+            // Customer area atau Google callback
+            if ($request->is('customer*') || $request->is('auth/google/callback')) {
+                return route('login.form', ['role' => 'customer']);
+            }
+
+            // Default fallback (misalnya landing page umum)
+            return '/landing-page';
         }
     }
 }
