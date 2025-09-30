@@ -5,7 +5,7 @@
 
             <!-- Gambar Mobil + Badge -->
             <div class="relative bg-gray-50 flex items-center justify-center h-48">
-                <img src="{{ Storage::url($mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
+                <img src="{{ asset('storage/gambar_mobil/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
                     class="object-contain max-h-full p-3">
 
                 <!-- Badge tipe mobil -->
