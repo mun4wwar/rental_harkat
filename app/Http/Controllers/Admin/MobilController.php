@@ -4,26 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MasterMobil;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
 use App\Models\Mobil;
 use App\Models\TipeMobil;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class MobilController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $mobils = Mobil::with('images')->get();
         return view('admin.mobil.index', compact('mobils'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $tipeMobil = TipeMobil::all();
@@ -31,9 +24,6 @@ class MobilController extends Controller
         return view('admin.mobil.create', compact('tipeMobil', 'masterMobils'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -41,7 +31,7 @@ class MobilController extends Controller
             'master_mobil_id' => 'required|exists:master_mobils,id',
             'plat_nomor' => [
                 'required',
-                'unique:mobils,plat_nomor,' . ($mobil->id ?? 'NULL'),
+                'unique:mobils,plat_nomor',
                 'regex:/^[A-Z]{1,2}\s\d{1,4}\s[A-Z]{1,3}$/'
             ],
             'merk' => 'required',
@@ -53,26 +43,31 @@ class MobilController extends Controller
         ]);
 
         $data = $request->except('gambar', 'images');
-
-        if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('gambar_mobil', 'public');
-        }
         $data['status_approval'] = 2;
+
+        // Upload gambar utama ke public/storage/gambar_mobil
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/gambar_mobil'), $filename);
+            $data['gambar'] = $filename;
+        }
 
         $mobil = Mobil::create($data);
 
-        // Additional images
+        // Upload additional images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $img) {
-                $path = $img->store('mobil_images', 'public');
-                $mobil->images()->create(['image_path' => $path]);
+                $filename = time() . '_' . $img->getClientOriginalName();
+                $img->move(public_path('storage/mobil_images'), $filename);
+                $mobil->images()->create(['image_path' => $filename]);
             }
         }
 
-        // ✅ Buat request approval
+        // Approval request
         $mobil->approvals()->create([
             'requested_by' => $user->id,
-            'status' => 2, // pending
+            'status' => 2,
             'old_data' => null,
             'new_data' => $mobil,
         ]);
@@ -80,33 +75,22 @@ class MobilController extends Controller
         return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil ditambahkan, menunggu approval super admin.");
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Mobil $mobil)
     {
-        $mobil->load('images'); // eager load
+        $mobil->load('images');
         return view('admin.mobil.show', compact('mobil'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Mobil $mobil)
     {
-        $mobilData = $mobil; // ini instance mobil yang mau diedit
-        $mobilData->load('images'); // load relasi gambar
-
+        $mobilData = $mobil;
+        $mobilData->load('images');
         $tipeMobil = TipeMobil::all();
-        $masterMobils = MasterMobil::all(); // ini list master mobil buat dropdown
+        $masterMobils = MasterMobil::all();
 
         return view('admin.mobil.edit', compact('mobilData', 'masterMobils', 'tipeMobil'));
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Mobil $mobil)
     {
         $user = Auth::user();
@@ -114,7 +98,7 @@ class MobilController extends Controller
             'master_mobil_id' => 'required|exists:master_mobils,id',
             'plat_nomor' => [
                 'required',
-                'unique:mobils,plat_nomor,' . ($mobil->id ?? 'NULL'),
+                'unique:mobils,plat_nomor,' . $mobil->id,
                 'regex:/^[A-Z]{1,2}\s\d{1,4}\s[A-Z]{1,3}$/'
             ],
             'merk' => 'required',
@@ -125,52 +109,40 @@ class MobilController extends Controller
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:8192',
         ]);
 
-        // 1) snapshot data lama
-        $old = $mobil->only([
-            'master_mobil_id',
-            'plat_nomor',
-            'merk',
-            'tahun',
-            'harga_sewa',
-            'harga_all_in',
-            'status',
-            'gambar'
-        ]);
+        // Snapshot data lama
+        $old = $mobil->only(['master_mobil_id', 'plat_nomor', 'merk', 'tahun', 'harga_sewa', 'harga_all_in', 'status', 'gambar']);
 
         $data = $request->except('gambar', 'images');
-        if ($request->hasFile('gambar')) {
-            if ($mobil->gambar) {
-                Storage::disk('public')->delete($mobil->gambar);
-            }
-            $data['gambar'] = $request->file('gambar')->store('gambar_mobil', 'public');
-        }
         $data['status_approval'] = 2;
+
+        // Upload gambar utama
+        if ($request->hasFile('gambar')) {
+            if ($mobil->gambar && file_exists(public_path('storage/gambar_mobil/' . $mobil->gambar))) {
+                unlink(public_path('storage/gambar_mobil/' . $mobil->gambar));
+            }
+            $file = $request->file('gambar');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/gambar_mobil'), $filename);
+            $data['gambar'] = $filename;
+        }
 
         $mobil->update($data);
 
-        // Additional images
+        // Upload additional images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $img) {
-                $path = $img->store('mobil_images', 'public');
-                $mobil->images()->create(['image_path' => $path]);
+                $filename = time() . '_' . $img->getClientOriginalName();
+                $img->move(public_path('storage/mobil_images'), $filename);
+                $mobil->images()->create(['image_path' => $filename]);
             }
         }
 
-        // 4) simpan approval snapshot
+        // Approval snapshot
         $mobil->approvals()->create([
             'requested_by' => $user->id,
             'status' => 2,
             'old_data' => $old,
-            'new_data' => $mobil->only([
-                'master_mobil_id',
-                'plat_nomor',
-                'merk',
-                'tahun',
-                'harga_sewa',
-                'harga_all_in',
-                'status',
-                'gambar'
-            ]),
+            'new_data' => $mobil->only(['master_mobil_id', 'plat_nomor', 'merk', 'tahun', 'harga_sewa', 'harga_all_in', 'status', 'gambar']),
         ]);
 
         return redirect()->route('admin.mobil.index')->with('success', "Mobil berhasil diupdate, menunggu approval super admin.");
