@@ -11,7 +11,7 @@
                         <!-- Gambar mobil -->
                         <div class="p-4">
                             @if ($m->mobils->count())
-                                <img src="{{ asset('storage/' . $m->mobils->first()->gambar) }}" alt="{{ $m->nama }}"
+                                <img src="{{ asset('storage/gambar_mobil' . $m->mobils->first()->gambar) }}" alt="{{ $m->nama }}"
                                     class="w-full h-40 object-contain">
                             @else
                                 <img src="{{ asset('images/no-car.png') }}" alt="{{ $m->nama }}"
