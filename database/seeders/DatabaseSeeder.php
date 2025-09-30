@@ -29,18 +29,6 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 2,
             ],
-            [
-                'name' => 'Supir User',
-                'email' => 'supir@example.com',
-                'password' => Hash::make('password'),
-                'role' => 3,
-            ],
-            [
-                'name' => 'Customer User',
-                'email' => 'customer@example.com',
-                'password' => Hash::make('password'),
-                'role' => 4,
-            ],
         ];
 
         foreach ($users as $u) {
@@ -59,9 +47,7 @@ class DatabaseSeeder extends Seeder
 
         // Seeder lainnya
         $this->call([
-            SupirSeeder::class,
             CitiesSeeder::class,
-            BookingExpiredSeeder::class,
         ]);
     }
 }
