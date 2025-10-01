@@ -7,28 +7,33 @@
         <div class="bg-white shadow rounded-lg overflow-hidden">
             {{-- Gambar --}}
             <div class="md:flex">
-                <div class="md:w-1/2 p-4">
+                <div class="md:w-1/2 p-4 flex flex-col items-center">
                     {{-- Cover Image --}}
                     @if ($mobil->gambar)
-                        <img src="{{ asset('public/gambar_mobil/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
-                            class="w-full h-64 object-cover rounded mb-4 shadow">
+                        <div class="w-full bg-white rounded-xl shadow-md p-4 flex justify-center">
+                            <img src="{{ asset('public/gambar_mobil/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
+                                class="max-h-72 object-contain rounded-lg">
+                        </div>
                     @else
-                        <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded mb-4">
-                            <span class="text-gray-500">Cover image tidak tersedia</span>
+                        <div class="w-full h-64 bg-gray-100 flex items-center justify-center rounded-xl shadow-inner">
+                            <span class="text-gray-400">Cover image tidak tersedia</span>
                         </div>
                     @endif
 
                     {{-- Galeri Additional Images --}}
                     @if ($mobil->images->count())
-                        <h3 class="text-lg font-semibold mb-2">Galeri Tambahan</h3>
-                        <div class="flex flex-wrap gap-2">
+                        <h3 class="text-lg font-semibold mt-4 mb-2 self-start">Galeri Tambahan</h3>
+                        <div class="grid grid-cols-3 gap-3 w-full">
                             @foreach ($mobil->images as $img)
-                                <img src="{{ asset('public/gambar_mobil_additionals/' . $img->image_path) }}" alt="Additional Image"
-                                    class="w-24 h-16 object-cover rounded shadow-sm">
+                                <div class="bg-white rounded-lg shadow p-1 flex items-center justify-center">
+                                    <img src="{{ asset('public/gambar_mobil_additionals/' . $img->image_path) }}"
+                                        alt="Additional Image" class="w-full h-24 object-contain rounded">
+                                </div>
                             @endforeach
                         </div>
                     @endif
                 </div>
+
 
                 {{-- Detail Info --}}
                 <div class="md:w-1/2 p-4 flex flex-col justify-between">

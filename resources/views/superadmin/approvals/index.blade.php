@@ -144,9 +144,20 @@
                                             @if ($val != $oldVal)
                                                 <li>
                                                     <strong>{{ ucfirst(str_replace('_', ' ', $key)) }}:</strong>
-                                                    <span class="text-red-600 line-through">{{ $oldVal ?? '-' }}</span>
-                                                    →
-                                                    <span class="text-green-600">{{ $val }}</span>
+                                                    {{-- Kalo field gambar, tampilkan preview --}}
+                                                    @if (Str::contains($key, 'gambar'))
+                                                        @if ($oldVal)
+                                                            <img src="{{ asset('public/gambar_mobil/' . $oldVal) }}" alt="Old Image"
+                                                                class="h-20 inline-block rounded border">
+                                                            →
+                                                        @endif
+                                                        <img src="{{ asset('public/gambar_mobil/' . $val) }}" alt="New Image"
+                                                            class="h-20 inline-block rounded border">
+                                                    @else
+                                                        <span class="text-red-600 line-through">{{ $oldVal ?? '-' }}</span>
+                                                        →
+                                                        <span class="text-green-600">{{ $val }}</span>
+                                                    @endif
                                                 </li>
                                             @endif
                                         @endforeach
