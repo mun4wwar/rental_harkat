@@ -45,7 +45,7 @@ class MobilController extends Controller
         $data = $request->except('gambar', 'images');
         $data['status_approval'] = 2;
 
-        // Upload gambar utama ke public/storage/gambar_mobil
+        // Upload gambar utama ke public/gambar_mobil
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
