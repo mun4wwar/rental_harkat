@@ -7,11 +7,10 @@
                 <div class="swiper-slide">
                     <div
                         class="backdrop-blur-xl bg-white/30 border border-white/20 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transform transition duration-500">
-
                         <!-- Gambar mobil -->
                         <div class="p-4">
                             @if ($m->mobils->count())
-                                <img src="{{ asset('storage/gambar_mobil' . $m->mobils->first()->gambar) }}" alt="{{ $m->nama }}"
+                                <img src="{{ Storage::url($m->mobils->first()->gambar) }}" alt="{{ $m->nama }}"
                                     class="w-full h-40 object-contain">
                             @else
                                 <img src="{{ asset('images/no-car.png') }}" alt="{{ $m->nama }}"
