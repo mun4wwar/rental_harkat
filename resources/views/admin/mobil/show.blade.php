@@ -10,7 +10,7 @@
                 <div class="md:w-1/2 p-4">
                     {{-- Cover Image --}}
                     @if ($mobil->gambar)
-                        <img src="{{ Storage::url($mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
+                        <img src="{{ asset('storage/gambar_mobil/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
                             class="w-full h-64 object-cover rounded mb-4 shadow">
                     @else
                         <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded mb-4">
