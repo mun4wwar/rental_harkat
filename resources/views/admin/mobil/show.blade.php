@@ -10,7 +10,7 @@
                 <div class="md:w-1/2 p-4">
                     {{-- Cover Image --}}
                     @if ($mobil->gambar)
-                        <img src="{{ asset('storage/gambar_mobil/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
+                        <img src="{{ asset('gambar_mobil/' . $mobil->gambar) }}" alt="{{ $mobil->nama_mobil }}"
                             class="w-full h-64 object-cover rounded mb-4 shadow">
                     @else
                         <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded mb-4">
@@ -23,7 +23,7 @@
                         <h3 class="text-lg font-semibold mb-2">Galeri Tambahan</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach ($mobil->images as $img)
-                                <img src="{{ Storage::url($img->image_path) }}" alt="Additional Image"
+                                <img src="{{ asset('gambar_mobil_additionals/' . $img->image_path) }}" alt="Additional Image"
                                     class="w-24 h-16 object-cover rounded shadow-sm">
                             @endforeach
                         </div>

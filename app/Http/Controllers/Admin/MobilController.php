@@ -49,7 +49,7 @@ class MobilController extends Controller
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('storage/gambar_mobil'), $filename);
+            $file->move(public_path('gambar_mobil'), $filename);
             $data['gambar'] = $filename;
         }
 
@@ -59,7 +59,7 @@ class MobilController extends Controller
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $img) {
                 $filename = time() . '_' . $img->getClientOriginalName();
-                $img->move(public_path('storage/mobil_images'), $filename);
+                $img->move(public_path('mobil_images_additionals'), $filename);
                 $mobil->images()->create(['image_path' => $filename]);
             }
         }
@@ -117,12 +117,12 @@ class MobilController extends Controller
 
         // Upload gambar utama
         if ($request->hasFile('gambar')) {
-            if ($mobil->gambar && file_exists(public_path('storage/gambar_mobil/' . $mobil->gambar))) {
-                unlink(public_path('storage/gambar_mobil/' . $mobil->gambar));
+            if ($mobil->gambar && file_exists(public_path('gambar_mobil/' . $mobil->gambar))) {
+                unlink(public_path('gambar_mobil/' . $mobil->gambar));
             }
             $file = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('storage/gambar_mobil'), $filename);
+            $file->move(public_path('gambar_mobil'), $filename);
             $data['gambar'] = $filename;
         }
 
@@ -132,7 +132,7 @@ class MobilController extends Controller
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $img) {
                 $filename = time() . '_' . $img->getClientOriginalName();
-                $img->move(public_path('storage/mobil_images'), $filename);
+                $img->move(public_path('mobil_images_additionals'), $filename);
                 $mobil->images()->create(['image_path' => $filename]);
             }
         }
