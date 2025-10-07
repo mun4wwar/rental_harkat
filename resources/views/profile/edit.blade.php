@@ -70,6 +70,33 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+                
+                {{-- Ganti Password --}}
+                <div class="pt-4 border-t border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-3">🔐 Ganti Password</h2>
+
+                    <div class="space-y-4">
+                        {{-- Password Baru --}}
+                        <div>
+                            <label class="block text-gray-600 font-medium mb-1">Password Baru</label>
+                            <input type="password" name="password"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 px-4 py-2 @error('password') border-red-500 @enderror"
+                                placeholder="Masukkan password baru">
+                            @error('password')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        {{-- Konfirmasi Password --}}
+                        <div>
+                            <label class="block text-gray-600 font-medium mb-1">Konfirmasi Password</label>
+                            <input type="password" name="password_confirmation"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:ring-green-500 focus:border-green-500 px-4 py-2"
+                                placeholder="Ulangi password baru">
+                        </div>
+                    </div>
+                </div>
+
 
                 {{-- Submit --}}
                 <div class="flex justify-end">
@@ -141,7 +168,7 @@
                         .catch(err => {
                             console.error('Error fetching cities:', err);
                             list.innerHTML =
-                            '<p class="p-2 text-red-500">Gagal memuat data</p>';
+                                '<p class="p-2 text-red-500">Gagal memuat data</p>';
                             list.classList.remove('hidden');
                         });
                 }, 250);
