@@ -37,7 +37,7 @@
             <h3 class="text-base font-semibold mb-3">Hit us On</h3>
             <ul class="space-y-2 text-sm">
                 <li class="flex items-center gap-2">
-                    <i data-lucide="map-pin" class="w-12 h-12 text-emerald-500"></i>
+                    <i class="fa-solid fa-location-dot text-lg text-emerald-500"></i>
                     <span>Jl. KH Ali maksum, No.04, RT.001/RW.000, Ds. Palemsewu, Kel. Panggungharjo, Kec. Sewon, Kab.
                         Bantul, DIY 55188</span>
                 </li>
