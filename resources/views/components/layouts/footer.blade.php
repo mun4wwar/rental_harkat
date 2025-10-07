@@ -38,19 +38,20 @@
             <ul class="space-y-2 text-sm">
                 <li class="flex items-center gap-2">
                     <i data-lucide="map-pin" class="w-6 h-6 text-emerald-500"></i>
-                    <span>Jl. Contoh Alamat No. 123, Yogyakarta</span>
+                    <span>Jl. KH Ali maksum, No.04, RT.001/RW.000, Ds. Palemsewu, Kel. Panggungharjo, Kec. Sewon, Kab.
+                        Bantul, DIY 55188</span>
                 </li>
                 <li class="flex items-center gap-2">
                     <i class="fa-brands fa-whatsapp text-xl text-emerald-500"></i>
-                    <span>+62 812-3456-7890</span>
+                    <span>+62 852-2252-1995</span>
                 </li>
                 <li class="flex items-center gap-2">
                     <i class="fa-brands fa-instagram text-xl text-emerald-500"></i>
-                    <span>@sewamobiljogja_harkattransport</span>
+                    <span>coming soon</span>
                 </li>
                 <li class="flex items-center gap-2">
                     <i class="fa-brands fa-tiktok text-xl text-emerald-500"></i>
-                    <span>@harkat_transport</span>
+                    <span>@harkat_tourtravel</span>
                 </li>
             </ul>
         </div>
