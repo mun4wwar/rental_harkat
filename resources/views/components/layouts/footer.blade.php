@@ -59,7 +59,7 @@
 
     <!-- Bottom Footer -->
     <div class="border-t border-gray-300 py-4 text-center text-xs text-gray-500">
-        <a href="#" class="text-blue-600 hover:underline">about Harkat Rental</a> <br>
+        <a href="{{ auth('web')->check() ? url('/home') : url('/') }}" class="text-blue-600 hover:underline">about Harkat Rental</a> <br>
         &copy; {{ date('Y') }} Harkat Rent Car. All rights reserved.
     </div>
 </footer>
